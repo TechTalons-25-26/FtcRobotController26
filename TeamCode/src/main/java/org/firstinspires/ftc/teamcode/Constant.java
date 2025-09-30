@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
+import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.ftc.localization.constants.PinpointConstants;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -38,11 +39,11 @@ public class Constants {
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(5.75)
-            .strafePodX(6.0)
+            .forwardPodY(0.2)
+            .strafePodX(-5.75)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("HOTTIE")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
 }
