@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Outtake_Stuff #284 - 0.38", group = "test drive")
-public class Outtake_Stuff extends LinearOpMode {
+public class Outtake_Full extends LinearOpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
