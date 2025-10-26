@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name="Mecanum Drive Test", group="Iterative Opmode")
 
-public class MecanumTest extends OpMode {
+public class Mecanum_Drive extends OpMode {
     // initialize motors
     private DcMotor frontLeft;
     private DcMotor frontRight;
