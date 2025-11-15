@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 @TeleOp(name = "Intake/Outtake with Conveyor", group = "test drive")
 public class IntakeAndOuttakeAndConveyor extends LinearOpMode {
@@ -16,9 +17,10 @@ public class IntakeAndOuttakeAndConveyor extends LinearOpMode {
     private DcMotor rightWheel;
 
     private DcMotor intakeMotor;
-    private Servo axon;
+    private CRServo conveyor;
+    private Servo outtakeAngle;
 
-    private DcMotor conveyorMotor;
+    //private DcMotor conveyorMotor;
 
 
     double wheelSpeed = 0.38;
@@ -30,14 +32,14 @@ public class IntakeAndOuttakeAndConveyor extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-      
+
         leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
         rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
-        
+
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
-      //  axon = hardwareMap.get(Servo.class, "axon");
-    
+        conveyor = hardwareMap.get(CRServo.class, "conveyor");
+        outtakeAngle = hardwareMap.get(Servo.class, "outtakeAngle");
+
         rightWheel.setDirection(DcMotor.Direction.REVERSE);
         /*
 
@@ -75,7 +77,7 @@ public class IntakeAndOuttakeAndConveyor extends LinearOpMode {
         */
 
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        conveyorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //conveyorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         waitForStart();
@@ -115,24 +117,26 @@ public class IntakeAndOuttakeAndConveyor extends LinearOpMode {
                 leftWheel.setPower(leftWheelPower * wheelSpeed);
                 leftWheel.setPower(leftWheelPower * wheelSpeed);
                 double maxConveyorPower = 0.5; // <-- set your desired max power
-                conveyorMotor.setPower(leftWheelPower * maxConveyorPower);
+                //conveyorMotor.setPower(leftWheelPower * maxConveyorPower);
+                conveyor.setPower(leftWheelPower * maxConveyorPower);
 
                 telemetry.addData("Outtake & Conveyor power: ", leftWheelPower);
                 telemetry.update();
             }
-            
+
             double drive = -gamepad2.left_stick_y;
             leftWheel.setPower(drive * wheelSpeed);
             rightWheel.setPower(drive * wheelSpeed);
 
-             
+
             //Intake spins with right stick
             while(gamepad2.right_stick_y > 0 || gamepad2.right_stick_y <= 0) {
                 double maxIntakePower = 0.5;
                 double intakePower = -gamepad2.right_stick_y;
                 intakeMotor.setPower(intakePower * maxIntakePower);
                 double maxConveyorPower = 0.5; // <-- set your desired max power
-                conveyorMotor.setPower(intakePower * maxConveyorPower);
+                //conveyorMotor.setPower(intakePower * maxConveyorPower);
+                conveyor.setPower(intakePower * maxConveyorPower);
 
                 telemetry.addData("Intake & Conveyor power: ", intakePower);
                 telemetry.update();
