@@ -9,12 +9,18 @@ import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(8.3);
+            .mass(8.3)
+            .forwardZeroPowerAcceleration(-47.452)
+            .lateralZeroPowerAcceleration(-62.223)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.075, 0, 0, 0));
+
+
+
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
@@ -36,6 +42,7 @@ public class Constants {
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .xVelocity(68.7494)
             .yVelocity(57.7388);
+
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(0)
