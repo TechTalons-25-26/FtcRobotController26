@@ -9,7 +9,7 @@ import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.pedropathing.control.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
@@ -17,7 +17,8 @@ public class Constants {
             .mass(8.3)
             .forwardZeroPowerAcceleration(-47.452)
             .lateralZeroPowerAcceleration(-62.223)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.075, 0, 0, 0));
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.075, 0, 0, 0))
+            .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0.02, 0.01));
 
 
 
