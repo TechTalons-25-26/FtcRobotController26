@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -18,9 +19,14 @@ public class Constants {
             .forwardZeroPowerAcceleration(-47.452)
             .lateralZeroPowerAcceleration(-62.223)
             .translationalPIDFCoefficients(new PIDFCoefficients(0.075, 0, 0, 0))
-            .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0.02, 0.01));
+            .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0.02, 0.01))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.025,0.0,0.002,0.6,0.01))
+            .centripetalScaling(0.00042);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1.6, 1);
+
+
+
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
@@ -40,6 +46,7 @@ public class Constants {
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .xVelocity(68.7494)
             .yVelocity(57.7388);
+
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(0)
