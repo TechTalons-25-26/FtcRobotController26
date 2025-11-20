@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
-@TeleOp(name = "TeleOp1", group = "test drive")
+@TeleOp(name = "TeleOp2", group = "test drive")
 public class TeleOp1 extends LinearOpMode {
 
     private DcMotor frontLeft;
@@ -110,6 +110,7 @@ public class TeleOp1 extends LinearOpMode {
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
+        breakWheels();
     }
 
     // Intake In
@@ -182,5 +183,9 @@ public class TeleOp1 extends LinearOpMode {
             telemetry.addData("position", follower.getPose());
         }
         lastB = gamepad2.b;
+    }
+
+    public void breakWheels() {
+        wheelSpeed = 0;
     }
 }
