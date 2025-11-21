@@ -190,6 +190,12 @@ public class TeleOp1 extends LinearOpMode {
 
             telemetry.addData("Moving to target", targetPose);
             telemetry.update();
+            boolean movedToTarget = false;
+            if(currentPose == targetPose) {
+                movedToTarget = true;
+                telemetry.addData("Moved to target", currentPose);
+                telemetry.update();
+            }
         }
         lastB = gamepad2.b;
     }
