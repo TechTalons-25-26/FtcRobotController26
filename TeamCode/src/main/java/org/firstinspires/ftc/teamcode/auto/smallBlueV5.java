@@ -67,14 +67,14 @@ public class smallBlueV5 extends OpMode {
         public PathChain Path11;
 
         public Paths(Follower follower) {
-            Path2 = follower
+            Path1 = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(56.000, 8.000), new Pose(56.000, 12.000))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-72))
                     .build();
-
+            
             Path2 = follower
                     .pathBuilder()
                     .addPath(
