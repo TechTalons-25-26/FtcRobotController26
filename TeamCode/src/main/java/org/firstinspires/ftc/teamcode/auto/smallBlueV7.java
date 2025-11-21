@@ -13,9 +13,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "smallBlueV5")
+@Autonomous(name = "smallBlueV7", group = "Autonomous")
 @Configurable // Panels
-public class smallBlueV5 extends OpMode {
+public class smallBlueV7 extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pedro Pathing follower instance
     private int pathState; // Current autonomous path state (state machine)
@@ -27,7 +27,7 @@ public class smallBlueV5 extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(56, 8, Math.toRadians(-90)));
+        follower.setStartingPose(new Pose(56, 8, Math.toRadians(270)));
 
         paths = new Paths(follower); // Build paths
 
@@ -37,6 +37,7 @@ public class smallBlueV5 extends OpMode {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
+
     }
 
     @Override
@@ -53,7 +54,6 @@ public class smallBlueV5 extends OpMode {
     }
 
     public static class Paths {
-
         public PathChain Path1;
         public PathChain Path2;
         public PathChain Path3;
@@ -65,6 +65,8 @@ public class smallBlueV5 extends OpMode {
         public PathChain Path9;
         public PathChain Path10;
         public PathChain Path11;
+        public PathChain Path12;
+        public PathChain Path13;
 
         public Paths(Follower follower) {
             Path1 = follower
@@ -72,7 +74,7 @@ public class smallBlueV5 extends OpMode {
                     .addPath(
                             new BezierLine(new Pose(56.000, 8.000), new Pose(56.000, 12.000))
                     )
-                    .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-72))
+                    .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(288))
                     .build();
 
             Path2 = follower
@@ -80,10 +82,19 @@ public class smallBlueV5 extends OpMode {
                     .addPath(
                             new BezierLine(new Pose(56.000, 12.000), new Pose(48.000, 36.000))
                     )
-                    .setLinearHeadingInterpolation(Math.toRadians(-72), Math.toRadians(180))
+                    .setTangentHeadingInterpolation()
+                    .setReversed()
                     .build();
 
             Path3 = follower
+                    .pathBuilder()
+                    .addPath(
+                            new BezierLine(new Pose(48.000, 36.000), new Pose(48.000, 36.000))
+                    )
+                    .setLinearHeadingInterpolation(Math.toRadians(288), Math.toRadians(180))
+                    .build();
+
+            Path4 = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(48.000, 36.000), new Pose(24.000, 36.000))
@@ -91,7 +102,7 @@ public class smallBlueV5 extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
 
-            Path4 = follower
+            Path5 = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -105,7 +116,7 @@ public class smallBlueV5 extends OpMode {
                     .setReversed()
                     .build();
 
-            Path5 = follower
+            Path6 = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -118,7 +129,7 @@ public class smallBlueV5 extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
 
-            Path6 = follower
+            Path7 = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(48.000, 60.000), new Pose(24.000, 60.000))
@@ -126,7 +137,7 @@ public class smallBlueV5 extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
 
-            Path7 = follower
+            Path8 = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(24.000, 60.000), new Pose(48.000, 60.000))
@@ -135,7 +146,7 @@ public class smallBlueV5 extends OpMode {
                     .setReversed()
                     .build();
 
-            Path8 = follower
+            Path9 = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -149,28 +160,37 @@ public class smallBlueV5 extends OpMode {
                     .setReversed()
                     .build();
 
-            Path9 = follower
+            Path10 = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(60.000, 84.000), new Pose(60.000, 84.000))
                     )
-                    .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
-                    .build();
-
-            Path10 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(60.000, 84.000), new Pose(24.000, 84.000))
-                    )
-                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .setLinearHeadingInterpolation(Math.toRadians(310), Math.toRadians(180))
                     .build();
 
             Path11 = follower
                     .pathBuilder()
                     .addPath(
+                            new BezierLine(new Pose(60.000, 84.000), new Pose(24.000, 84.000))
+                    )
+                    .setTangentHeadingInterpolation()
+                    .build();
+
+            Path12 = follower
+                    .pathBuilder()
+                    .addPath(
                             new BezierLine(new Pose(24.000, 84.000), new Pose(60.000, 84.000))
                     )
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
+                    .setTangentHeadingInterpolation()
+                    .setReversed()
+                    .build();
+
+            Path13 = follower
+                    .pathBuilder()
+                    .addPath(
+                            new BezierLine(new Pose(60.000, 84.000), new Pose(60.000, 84.000))
+                    )
+                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(310))
                     .build();
         }
     }
@@ -288,10 +308,23 @@ public class smallBlueV5 extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
 
+                    follower.followPath(paths.Path12);
+                    setPathState(12);
+                }
+                break;
+            case 12:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path13);
+                    setPathState(13);
+                }
+                break;
+            case 13:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
+                if(!follower.isBusy()) {
                     setPathState(-1);
                 }
                 break;
-
         }
         return pathState;
     }
@@ -300,4 +333,3 @@ public class smallBlueV5 extends OpMode {
         pathTimer.resetTimer();
     }
 }
-
