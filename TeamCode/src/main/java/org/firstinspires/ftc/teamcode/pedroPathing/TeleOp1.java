@@ -36,7 +36,7 @@ public class TeleOp1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
+        //startTele();
         // Hardware mapping
         leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
         rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
@@ -73,6 +73,7 @@ public class TeleOp1 extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            startTele();
             mecanumWheels();
             intakeIn();
             intakeOut();
@@ -80,8 +81,12 @@ public class TeleOp1 extends LinearOpMode {
             outtakeAngleControl();
             moveToTargetB();
         }
-    }
 
+
+    }
+    public void startTele() {
+        follower.startTeleopDrive();
+    }
     // Mecanum drive
     public void mecanumWheels() {
         double y = -gamepad1.left_stick_y;
