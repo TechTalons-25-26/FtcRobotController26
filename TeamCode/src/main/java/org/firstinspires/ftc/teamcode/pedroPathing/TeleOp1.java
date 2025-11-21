@@ -173,6 +173,8 @@ public class TeleOp1 extends LinearOpMode {
     public void moveToTargetB() {
         if (gamepad2.b && !lastB) {
             Pose currentPose = follower.getPose();
+            telemetry.addData("Current Pose", currentPose);
+            telemetry.update();
             follower.setStartingPose(currentPose);
 
             // Create a BezierLine curve from current pose to target pose
