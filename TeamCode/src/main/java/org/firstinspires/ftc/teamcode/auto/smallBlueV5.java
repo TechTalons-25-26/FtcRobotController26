@@ -27,7 +27,7 @@ public class smallBlueV5 extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(56, 8, Math.toRadians(90)));
+        follower.setStartingPose(new Pose(56, 8, Math.toRadians(-90)));
 
         paths = new Paths(follower); // Build paths
 
@@ -74,7 +74,7 @@ public class smallBlueV5 extends OpMode {
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-72))
                     .build();
-            
+
             Path2 = follower
                     .pathBuilder()
                     .addPath(
