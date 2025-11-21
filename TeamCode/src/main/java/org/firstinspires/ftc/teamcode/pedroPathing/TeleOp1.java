@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,70 +9,66 @@ import com.qualcomm.robotcore.hardware.CRServo;
 // PedroPathing imports
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.paths.Path;
 
 @TeleOp(name = "TeleOp2", group = "test drive")
 public class TeleOp1 extends LinearOpMode {
 
-    private DcMotor frontLeft;
-    private DcMotor frontRight;
-    private DcMotor backLeft;
-    private DcMotor backRight;
-    private DcMotor leftWheel;
-    private DcMotor rightWheel;
-
+    private DcMotor frontLeft, frontRight, backLeft, backRight;
+    private DcMotor leftWheel, rightWheel;
     private DcMotor intakeMotor;
     private CRServo conveyor;
     private Servo outtakeAngle;
 
-    // PedroPathing objects
     private Follower follower;
-    // target pose to move to when pressing B
-    private final Pose targetPose = new Pose(50, 50, Math.toRadians(0)); // example target
 
     double wheelSpeed = 0.38;
-    double axonPosition = 0;  // start centered
-    double step = 0.01; // how much to move each press
+    double axonPosition = 0; // start centered
+    double step = 0.01; // servo step
 
     boolean lastA = false;
     boolean lastY = false;
-    boolean lastB = false;  // track B button
+    boolean lastB = false; // track B button
+
+    // target pose for pressing B
+    private final Pose targetPose = new Pose(43.570, 99.198, Math.toRadians(143)); // example target
 
     @Override
     public void runOpMode() {
 
+        // Hardware mapping
         leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
         rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
-
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
         conveyor = hardwareMap.get(CRServo.class, "conveyor");
         outtakeAngle = hardwareMap.get(Servo.class, "outtakeAngle");
-
-        rightWheel.setDirection(DcMotor.Direction.REVERSE);
-
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
+        // Motor directions
+        rightWheel.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
 
+        // Zero power behavior
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Initialize PedroPathing follower
-        follower = Constants.createFollower(hardwareMap); // make sure you have your Constants class
-        follower.setStartingPose(new Pose(0, 0, 0)); // initial dummy starting pose
-
-        telemetry.addData("Version 1", "Uploaded");
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(new Pose(0, 0, 0)); // initial pose
 
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
         waitForStart();
 
@@ -81,7 +78,7 @@ public class TeleOp1 extends LinearOpMode {
             intakeOut();
             outtakeOut();
             outtakeAngleControl();
-            moveToTarget();  // our new function
+            moveToTargetB();
         }
     }
 
@@ -100,7 +97,7 @@ public class TeleOp1 extends LinearOpMode {
                 Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
 
         if (maxPower > 1.0) {
-            frontLeftPower /= maxPower * 2;  // scaled down
+            frontLeftPower /= maxPower * 2;
             frontRightPower /= maxPower * 2;
             backLeftPower /= maxPower * 2;
             backRightPower /= maxPower * 2;
@@ -110,7 +107,6 @@ public class TeleOp1 extends LinearOpMode {
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
-        breakWheels();
     }
 
     // Intake In
@@ -172,20 +168,30 @@ public class TeleOp1 extends LinearOpMode {
         lastY = gamepad2.y;
     }
 
-    // NEW: move robot to a fixed position using PedroPathing + set outtake to 0.14
-    public void moveToTarget() {
+    // NEW: Move robot to target pose when pressing B
+    // NEW: Move robot to target pose when pressing B
+    public void moveToTargetB() {
         if (gamepad2.b && !lastB) {
-            telemetry.addData("position", follower.getPose());
-            Pose currentPose = follower.getPose(); // your dual odometry + pinpoint
+            Pose currentPose = follower.getPose();
             follower.setStartingPose(currentPose);
-            follower.setPose(targetPose);
+
+            // Create a BezierLine curve from current pose to target pose
+            BezierLine curve = new BezierLine(currentPose, targetPose);
+
+            // Create a Path using the curve
+            Path movePath = new Path(curve);
+            movePath.setLinearHeadingInterpolation(currentPose.getHeading(), targetPose.getHeading());
+
+            // Start following the path
+            follower.followPath(movePath);
+
+            // Move outtake servo
             outtakeAngle.setPosition(0.14);
-            telemetry.addData("position", follower.getPose());
+
+            telemetry.addData("Moving to target", targetPose);
+            telemetry.update();
         }
         lastB = gamepad2.b;
     }
 
-    public void breakWheels() {
-        wheelSpeed = 0;
-    }
 }
