@@ -16,13 +16,11 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 @Autonomous(name = "smallBlueV4", group = "Autonomous")
 @Configurable // Panels
 public class smallBlueV4 extends OpMode {
-
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pedro Pathing follower instance
     private int pathState; // Current autonomous path state (state machine)
     private Paths paths; // Paths defined in the Paths class
     private Timer pathTimer, actionTimer, opmodeTimer;
-
 
     @Override
     public void init() {

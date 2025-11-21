@@ -32,7 +32,11 @@ public class smallRedV2 extends OpMode {
         paths = new Paths(follower); // Build paths
 
         panelsTelemetry.debug("Status", "Initialized");
-        panelsTelemetry.update(telemetry);
+
+        pathTimer = new Timer();
+        opmodeTimer = new Timer();
+        opmodeTimer.resetTimer();
+
     }
 
     @Override
