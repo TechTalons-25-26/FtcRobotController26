@@ -12,7 +12,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
 
-@TeleOp(name = "TeleOp2", group = "test drive")
+@TeleOp(name = "TeleOp4", group = "test drive")
 public class TeleOp1 extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
@@ -23,10 +23,13 @@ public class TeleOp1 extends LinearOpMode {
 
     private Follower follower;
 
+
+
+
     double wheelSpeed = 0.38;
     double axonPosition = 0; // start centered
     double step = 0.01; // servo step
-
+    private boolean movingToTarget = false;
     boolean lastA = false;
     boolean lastY = false;
     boolean lastB = false; // track B button
@@ -36,7 +39,7 @@ public class TeleOp1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        //startTele();
+
         // Hardware mapping
         leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
         rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
@@ -73,7 +76,9 @@ public class TeleOp1 extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            startTele();
+            Pose currentPose = follower.getPose();
+            telemetry.addData("Current Pose", currentPose);
+            telemetry.update();
             mecanumWheels();
             intakeIn();
             intakeOut();
@@ -81,12 +86,8 @@ public class TeleOp1 extends LinearOpMode {
             outtakeAngleControl();
             moveToTargetB();
         }
-
-
     }
-    public void startTele() {
-        follower.startTeleopDrive();
-    }
+
     // Mecanum drive
     public void mecanumWheels() {
         double y = -gamepad1.left_stick_y;
@@ -176,35 +177,36 @@ public class TeleOp1 extends LinearOpMode {
     // NEW: Move robot to target pose when pressing B
     // NEW: Move robot to target pose when pressing B
     public void moveToTargetB() {
-        if (gamepad2.b && !lastB) {
+        // Start the path when B is first pressed
+        if (gamepad2.b && !lastB && !movingToTarget) {
             Pose currentPose = follower.getPose();
-            telemetry.addData("Current Pose", currentPose);
-            telemetry.update();
             follower.setStartingPose(currentPose);
 
-            // Create a BezierLine curve from current pose to target pose
             BezierLine curve = new BezierLine(currentPose, targetPose);
-
-            // Create a Path using the curve
             Path movePath = new Path(curve);
             movePath.setLinearHeadingInterpolation(currentPose.getHeading(), targetPose.getHeading());
 
-            // Start following the path
             follower.followPath(movePath);
 
-            // Move outtake servo
             outtakeAngle.setPosition(0.14);
+            movingToTarget = true;
 
-            telemetry.addData("Moving to target", targetPose);
+            telemetry.addData("Started moving to target", targetPose);
             telemetry.update();
-            boolean movedToTarget = false;
-            if(currentPose == targetPose) {
-                movedToTarget = true;
-                telemetry.addData("Moved to target", currentPose);
+        }
+
+        // Update the follower if we are moving
+        if (movingToTarget) {
+            follower.update();
+            if (!follower.isBusy()) {
+                movingToTarget = false;
+                telemetry.addData("Arrived at target", follower.getPose());
                 telemetry.update();
             }
         }
+
         lastB = gamepad2.b;
     }
+
 
 }
