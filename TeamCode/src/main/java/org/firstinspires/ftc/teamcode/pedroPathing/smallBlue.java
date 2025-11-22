@@ -12,7 +12,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
 
-@TeleOp(name = "TeleOp676767", group = "test drive")
+@TeleOp(name = "TeleOp67676767", group = "test drive")
 public class NewTeleOp extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
@@ -24,7 +24,7 @@ public class NewTeleOp extends LinearOpMode {
     private Follower follower;
 
     double wheelSpeed = 0.38;
-    double axonPosition = 0; // start centered
+    double axonPosition = 0.15; // start centered
     double step = 0.01; // servo step
 
     private boolean movingToTarget = false;
@@ -158,6 +158,11 @@ public class NewTeleOp extends LinearOpMode {
         backLeftPower = Math.max(-1, Math.min(1, backLeftPower));
         backRightPower = Math.max(-1, Math.min(1, backRightPower));
 
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         frontLeft.setPower(frontLeftPower);
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
@@ -172,12 +177,23 @@ public class NewTeleOp extends LinearOpMode {
         double rt = gamepad2.right_trigger;   // intake in
         boolean rb = gamepad2.right_bumper;   // intake out
         double lt = gamepad2.left_trigger;    // outtake
+        boolean lb = gamepad2.left_bumper;    // outtake
 
         double intakePower = 0.0;
         double conveyorPower = 0.0;
         double outtakeWheelPower = 0.0;
 
         // PRIORITY: outtake (lt) > intake in (rt) > intake out (rb)
+        if (lb) {
+            outtakeWheelPower = 1;  // set wheel speed
+            leftWheel.setPower(outtakeWheelPower);
+            rightWheel.setPower(outtakeWheelPower);
+
+            intakeMotor.setPower(0);
+            conveyor.setPower(0);
+
+            telemetry.addData("Mode", "OUTTAKE WHEELS ONLY");
+        }
         if (lt > 0.05) {
             // OUTTAKE: use leftWheel/rightWheel + conveyor
             outtakeWheelPower = lt * wheelSpeed;
@@ -232,6 +248,8 @@ public class NewTeleOp extends LinearOpMode {
     public void conveyorMove(double power) {
         double maxConveyorPower = 0.7;
         conveyor.setPower(power * maxConveyorPower);
+
+
     }
 
     // Servo control
