@@ -12,7 +12,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
 
-@TeleOp(name = "TeleOp6767", group = "test drive")
+@TeleOp(name = "TeleOp676767", group = "test drive")
 public class NewTeleOp extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
@@ -109,6 +109,7 @@ public class NewTeleOp extends LinearOpMode {
 
                     telemetry.addData("Arrived at target", currentPose);
                 }
+                follower.update();
 
             }
             /*else {
@@ -145,17 +146,24 @@ public class NewTeleOp extends LinearOpMode {
                         Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
 
         if (maxPower > 1.0) {
-            frontLeftPower /= maxPower * 2;
-            frontRightPower /= maxPower * 2;
-            backLeftPower /= maxPower * 2;
-            backRightPower /= maxPower * 2;
+            frontLeftPower /= maxPower;
+            frontRightPower /= maxPower;
+            backLeftPower /= maxPower;
+            backRightPower /= maxPower;
         }
+
+        // Clip to [-1, 1]
+        frontLeftPower = Math.max(-1, Math.min(1, frontLeftPower));
+        frontRightPower = Math.max(-1, Math.min(1, frontRightPower));
+        backLeftPower = Math.max(-1, Math.min(1, backLeftPower));
+        backRightPower = Math.max(-1, Math.min(1, backRightPower));
 
         frontLeft.setPower(frontLeftPower);
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
     }
+
 
     // Intake / outtake
     public void handleIntakeAndOuttake() {
