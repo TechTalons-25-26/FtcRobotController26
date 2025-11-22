@@ -11,7 +11,7 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+//import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "smallRed", group = "Autonomous")
 @Configurable // Panels
@@ -295,38 +295,16 @@ public class smallRed extends OpMode {
                 break;
             case 9:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
 
-                    follower.followPath(paths.Path10);
-                    setPathState(10);
-                }
-                break;
-            case 10:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
+                    Pose finalPose = follower.getPose();
 
-                    follower.followPath(paths.Path11);
-                    setPathState(11);
-                }
-                break;
-            case 11:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
-
-                    follower.followPath(paths.Path12);
-                    setPathState(12);
-                }
-                break;
-            case 12:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
-                    follower.followPath(paths.Path13);
-                    setPathState(13);
-                }
-                break;
-            case 13:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
+                    PoseStorage.currentPose = finalPose;
+                    panelsTelemetry.debug("Final X", finalPose.getX());
+                    panelsTelemetry.debug("Final Y", finalPose.getY());
+                    panelsTelemetry.debug("Final Heading", finalPose.getHeading());
+                    panelsTelemetry.update(telemetry);
                     setPathState(-1);
                 }
                 break;
