@@ -289,7 +289,7 @@ public class smallBlueV82 extends OpMode {
                 }
                 break;
             case 50:
-                if (pathTimer.getElapsedTimeSeconds() > 0.5) {
+                if (pathTimer.getElapsedTimeSeconds() > 3) {
                     follower.followPath(paths.Path6);
                     setPathState(6);   // go to the normal next state
                 }
