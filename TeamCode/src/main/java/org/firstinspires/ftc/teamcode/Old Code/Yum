@@ -1,0 +1,42 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+@TeleOp(name = "Yum", group = "Test Drive")
+public class SFDAS extends LinearOpMode {
+
+    private DcMotor leftIntake;
+    private DcMotor rightIntake;
+
+    double wheelSpeed = 1.0; // adjust if needed
+
+    @Override
+    public void runOpMode() {
+        leftIntake = hardwareMap.get(DcMotor.class, "frontLeft");
+        rightIntake = hardwareMap.get(DcMotor.class, "frontRight");
+
+        // Reverse one motor if needed (depends on wiring)
+        rightIntake.setDirection(DcMotor.Direction.REVERSE);
+
+        telemetry.addLine("Ready to start");
+        telemetry.update();
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+            // Read stick value directly
+            double intakePower = -gamepad2.left_stick_y * wheelSpeed;
+
+            // Optional deadzone
+            if (Math.abs(intakePower) < 0.05) intakePower = 0;
+
+            leftIntake.setPower(intakePower);
+            rightIntake.setPower(intakePower);
+
+            telemetry.addData("Intake Power", intakePower);
+            telemetry.update();
+        }
+    }
+}
