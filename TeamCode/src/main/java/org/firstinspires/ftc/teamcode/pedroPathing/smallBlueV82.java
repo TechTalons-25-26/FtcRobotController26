@@ -11,18 +11,37 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "smallBlueV8 4", group = "Autonomous")
 @Configurable // Panels
 public class smallBlueV82 extends OpMode {
+    // ----- Drive Motors -----
+    private DcMotor frontLeft, frontRight, backLeft, backRight;
+    private DcMotor leftWheel, rightWheel;
+    // ----- Mechanisms -----
+    private DcMotor intakeMotor;
+    private CRServo conveyor;
+    private Servo outtakeAngle;
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pedro Pathing follower instance
     private int pathState; // Current autonomous path state (state machine)
     private Paths paths; // Paths defined in the Paths class
     private Timer pathTimer, actionTimer, opmodeTimer;
+    // ----- Timed Mechanisms -----
+    private long intakeEndTime = 0;
+    private long conveyorEndTime = 0;
+    private long outtakeEndTime = 0;
     @Override
     public void init() {
+        robotSetup();
+        // Update timed mechanisms
+        updateMechanisms();
+
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         follower = Constants.createFollower(hardwareMap);
@@ -245,8 +264,8 @@ public class smallBlueV82 extends OpMode {
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    /* Score Sample */
-
+                    rollIntake(0.7,5000);
+                    rollConveyor(1,5000);
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(paths.Path4);
                     setPathState(4);
@@ -275,8 +294,8 @@ public class smallBlueV82 extends OpMode {
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
-                    /* Grab Sample */
-
+                    rollIntake(0.7,5000);
+                    rollConveyor(1,5000);
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path7);
                     setPathState(7);
@@ -366,5 +385,72 @@ public class smallBlueV82 extends OpMode {
     public void setPathState(int pState) {
         pathState = pState;
         pathTimer.resetTimer();
+    }
+
+    private void robotSetup() {
+        leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
+        rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
+        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
+        conveyor = hardwareMap.get(CRServo.class, "conveyor");
+        outtakeAngle = hardwareMap.get(Servo.class, "outtakeAngle");
+
+        rightWheel.setDirection(DcMotor.Direction.REVERSE);
+
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        backRight = hardwareMap.get(DcMotor.class, "backRight");
+
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+
+        stopWheelMotors();
+
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+    private void stopWheelMotors() {
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+    }
+    // ----- Timed Mechanism Methods -----
+    public void rollIntake(double speed, long durationMS) {
+        intakeMotor.setPower(speed);
+        intakeEndTime = System.currentTimeMillis() + durationMS;
+    }
+
+    public void rollConveyor(double speed, long durationMS) {
+        conveyor.setPower(speed);
+        conveyorEndTime = System.currentTimeMillis() + durationMS;
+    }
+
+    public void rollOuttake(double speed, long durationMS) {
+        leftWheel.setPower(speed);
+        rightWheel.setPower(speed);
+        outtakeEndTime = System.currentTimeMillis() + durationMS;
+    }
+
+    private void updateMechanisms() {
+        if (System.currentTimeMillis() > intakeEndTime) {
+            intakeMotor.setPower(0);
+            intakeEndTime = 0;
+        }
+
+        if (System.currentTimeMillis() > conveyorEndTime) {
+            conveyor.setPower(0);
+            conveyorEndTime = 0;
+        }
+
+        if (System.currentTimeMillis() > outtakeEndTime) {
+            leftWheel.setPower(0);
+            rightWheel.setPower(0);
+            outtakeEndTime = 0;
+        }
     }
 }
