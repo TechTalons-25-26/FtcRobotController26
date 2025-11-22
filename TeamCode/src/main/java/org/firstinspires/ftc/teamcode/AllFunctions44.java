@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-@TeleOp(name = "All Functions 39", group = "test drive")
+@TeleOp(name = "All Functions 44", group = "test drive")
 public class AllFunctions5 extends LinearOpMode {
 
     private DcMotor frontLeft;
@@ -24,7 +24,7 @@ public class AllFunctions5 extends LinearOpMode {
     //private DcMotor conveyorMotor;
 
 
-    double wheelSpeed = 0.4;
+    double wheelSpeed = 0.38;
     double axonPosition = 0.15;  // start centered
     double step = 0.01; // how much to move each press
 
@@ -137,7 +137,7 @@ public class AllFunctions5 extends LinearOpMode {
 
         // PRIORITY: outtake (lt) > intake in (rt) > intake out (rb)
         if (lb) {
-            outtakeWheelPower = 0.4;  // set wheel speed
+            outtakeWheelPower = 1;  // set wheel speed
             leftWheel.setPower(outtakeWheelPower);
             rightWheel.setPower(outtakeWheelPower);
 
@@ -171,8 +171,8 @@ public class AllFunctions5 extends LinearOpMode {
 
         } else if (rb) {
             // INTAKE OUT (reverse)
-            intakePower = -maxIntakePower; // constant speed out
-            conveyorPower = 1.0;           // spit pieces out
+            intakePower = -0.5; // constant speed out
+            conveyorPower = 0.7;           // spit pieces out
 
             leftWheel.setPower(0);
             rightWheel.setPower(0);
