@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+//import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "smallBlueV8 4", group = "Autonomous")
 @Configurable // Panels
@@ -283,12 +283,15 @@ public class smallBlueV82 extends OpMode {
                 break;
             case 5:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy()) {
-                    /* Score Sample */
-
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                if (!follower.isBusy()) {
+                    pathTimer.resetTimer();  // start pause timer
+                    setPathState(50);        // go to pause
+                }
+                break;
+            case 50:
+                if (pathTimer.getElapsedTimeSeconds() > 0.5) {
                     follower.followPath(paths.Path6);
-                    setPathState(6);
+                    setPathState(6);   // go to the normal next state
                 }
                 break;
             case 6:
