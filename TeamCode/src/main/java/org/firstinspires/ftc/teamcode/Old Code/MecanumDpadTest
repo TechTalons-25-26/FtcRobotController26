@@ -1,0 +1,63 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+@TeleOp(name = "MecanumDpadTest", group = "Test")
+public class MecanumTestdPad extends LinearOpMode {
+
+    DcMotor frontLeft, frontRight, backLeft, backRight;
+
+    @Override
+    public void runOpMode() {
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        backRight = hardwareMap.get(DcMotor.class, "backRight");
+
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+
+
+        // Set the zero power behavior to BRAKE for all motors
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+            double fl = 0, fr = 0, bl = 0, br = 0;
+            double x = -0.5;
+            if (gamepad1.dpad_up) {          // forward
+                fl = x; fr = x; bl = x; br = x;
+            } else if (gamepad1.dpad_down) { // backward
+                fl = -x; fr = -x; bl = -x; br = -x;
+            } else if (gamepad1.dpad_right) { // strafe right
+                fl = x; fr = -x; bl = -x; br = x;
+            } else if (gamepad1.dpad_left) {  // strafe left
+                fl = -x; fr = x; bl = x; br = -x;
+            }
+
+            frontLeft.setPower(fl);
+            frontRight.setPower(fr);
+            backLeft.setPower(bl);
+            backRight.setPower(br);
+
+            telemetry.addData("FL", fl);
+            telemetry.addData("FR", fr);
+            telemetry.addData("BL", bl);
+            telemetry.addData("BR", br);
+            telemetry.update();
+        }
+    }
+}
