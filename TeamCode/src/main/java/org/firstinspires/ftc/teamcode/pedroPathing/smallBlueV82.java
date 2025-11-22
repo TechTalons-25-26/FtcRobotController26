@@ -121,7 +121,7 @@ public class smallBlueV82 extends OpMode {
             Path4 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 36.000), new Pose(24.000, 36.000))
+                            new BezierLine(new Pose(48.000, 36.000), new Pose(0.000, 36.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -130,7 +130,7 @@ public class smallBlueV82 extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(24.000, 36.000),
+                                    new Pose(0.000, 36.000),
                                     new Pose(52.600, 36.460),
                                     new Pose(67.000, 76.100),
                                     new Pose(60.000, 84.000)
@@ -156,7 +156,7 @@ public class smallBlueV82 extends OpMode {
             Path7 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 60.000), new Pose(24.000, 60.000))
+                            new BezierLine(new Pose(48.000, 60.000), new Pose(0.000, 60.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -164,7 +164,7 @@ public class smallBlueV82 extends OpMode {
             Path8 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(24.000, 60.000), new Pose(48.000, 60.000))
+                            new BezierLine(new Pose(0.000, 60.000), new Pose(48.000, 60.000))
                     )
                     .setTangentHeadingInterpolation()
                     .setReversed()
