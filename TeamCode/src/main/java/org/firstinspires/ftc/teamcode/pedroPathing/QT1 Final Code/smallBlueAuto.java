@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 //import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "A--> FINAL Blue Small Triangle 1", group = "Autonomous")
+@Autonomous(name = "A--> FINAL Blue Small Triangle 6767", group = "Autonomous")
 @Configurable // Panels
 public class smallBlueV82 extends OpMode {
     // ----- Drive Motors -----
@@ -123,7 +123,7 @@ public class smallBlueV82 extends OpMode {
             Path4 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 36.000), new Pose(9.807, 36.000))
+                            new BezierLine(new Pose(48.000, 36.000), new Pose(7.807, 36.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -158,7 +158,7 @@ public class smallBlueV82 extends OpMode {
             Path7 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 60.000), new Pose(9.807, 60.000))
+                            new BezierLine(new Pose(48.000, 60.000), new Pose(8.3, 60.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -277,21 +277,40 @@ public class smallBlueV82 extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
                 if(!follower.isBusy()) {
                     /* Grab Sample */
+                    /*rollOuttake(0.38, 4999);
+                    rollConveyor(1, 4999);
+
+                    */
+
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path5);
-                    setPathState(5);
+                    setPathState(50);
                 }
                 break;
             case 5:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if (!follower.isBusy()) {
-                    pathTimer.resetTimer();  // start pause timer
-                    setPathState(50);        // go to pause
+                    /*
+                    rollOuttake(0.38, 4999);
+                    rollConveyor(1, 4999);
+                    */
+
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    follower.followPath(paths.Path6);
+                    setPathState(6);
+                    // go to pause
                     //rollOuttake(0.38, 5);
                 }
                 break;
-            case 50:
+            case 50: // 0.5 second pause
+                rollOuttake(0.38, 4999);
+                rollConveyor(1, 4999);
+                if (pathTimer.getElapsedTimeSeconds() > 7) {
+                    follower.followPath(paths.Path6);
+                    setPathState(5);
+                }
+                break;
+            /*case 50:
                 rollIntake(-0.5, 50);
                 rollConveyor(1, 50);
                 rollOuttake(0.38, 4999);
@@ -301,7 +320,7 @@ public class smallBlueV82 extends OpMode {
                     follower.followPath(paths.Path6);
                     setPathState(6);   // go to the normal next state
                 }
-                break;
+                break;*/
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
@@ -326,8 +345,11 @@ public class smallBlueV82 extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
                     /* Grab Sample */
+                    /*
                     rollOuttake(0.38, 4999);
                     rollConveyor(1, 4999);
+                    */
+
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path9);
                     setPathState(9);
@@ -336,6 +358,8 @@ public class smallBlueV82 extends OpMode {
             case 9:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
+                    rollOuttake(0.38, 4999);
+                    rollConveyor(1, 4999);
 
                     Pose finalPose = follower.getPose();
 
