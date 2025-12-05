@@ -17,9 +17,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
-//import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "FINAL AUTO - Red Small Triangle 4", group = "Autonomous")
+@Autonomous(name = "smallRedOldV1", group = "Autonomous")
 @Configurable // Panels
 public class smallRedOldV1 extends OpMode {
     // ----- Drive Motors -----
