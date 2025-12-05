@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pedroPathing;
+package org.firstinspires.ftc.teamcode.auto.qt2Auto.smallBlue;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -15,11 +15,13 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-//import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "A--> FINAL Blue Small Triangle 67676767", group = "Autonomous")
+import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+@Autonomous(name = "smallBlueV1", group = "Autonomous")
 @Configurable // Panels
-public class smallBlueV83 extends OpMode {
+public class smallBlueV1 extends OpMode {
     // ----- Drive Motors -----
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
@@ -527,9 +529,4 @@ public class smallBlueV83 extends OpMode {
 
 }
 
-/*
- * if (!wheels.are busy) {
- *  dcmotor.break}
- *
- * */
 
