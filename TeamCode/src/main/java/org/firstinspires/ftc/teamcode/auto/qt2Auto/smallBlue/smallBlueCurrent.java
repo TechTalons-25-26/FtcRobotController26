@@ -89,6 +89,7 @@ public class smallBlueCurrent extends OpMode {
         public PathChain Path11;
         public PathChain Path12;
         public PathChain Path13;
+        public PathChain Path14;
 
         public Paths(Follower follower) {
             Path1 = follower
@@ -124,7 +125,7 @@ public class smallBlueCurrent extends OpMode {
             Path4 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 36.000), new Pose(7.807, 36.000))
+                            new BezierLine(new Pose(48.000, 36.000), new Pose(8.000, 36.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -159,7 +160,7 @@ public class smallBlueCurrent extends OpMode {
             Path7 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 60.000), new Pose(8.3, 60.000))
+                            new BezierLine(new Pose(48.000, 60.000), new Pose(8.000, 60.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -190,7 +191,7 @@ public class smallBlueCurrent extends OpMode {
             Path10 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(60.000, 84.000), new Pose(60.001, 84.000))
+                            new BezierLine(new Pose(60.000, 84.000), new Pose(60.000, 84.000))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(310), Math.toRadians(180))
                     .build();
@@ -217,10 +218,24 @@ public class smallBlueCurrent extends OpMode {
 
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(60.000, 84.000), new Pose(60.001, 84.000))
+                            new BezierLine(new Pose(60.000, 84.000), new Pose(60.000, 84.000))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(310))
                     .build();
+
+/*            Path14 = follower
+
+                    .pathBuilder()
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(60.000,84.000),
+                                    new Pose(75.200,67.600),
+                                    new Pose(24.000,68.000)
+                            )
+                    )
+                    .setTangentHeadingInterpolation()
+                    .build();
+ */
         }
     }
 

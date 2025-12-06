@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto.bigBlue;
+package org.firstinspires.ftc.teamcode.auto.qt2Auto.smallBlue;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "bigBlueCurrent", group = "Autonomous")
 @Configurable // Panels
-public class bigBlueCurrent extends OpMode {
+public class smallBlueFuture extends OpMode {
 
   private TelemetryManager panelsTelemetry; // Panels Telemetry instance
   public Follower follower; // Pedro Pathing follower instance
