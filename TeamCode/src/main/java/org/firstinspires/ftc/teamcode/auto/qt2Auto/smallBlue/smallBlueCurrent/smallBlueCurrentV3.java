@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto.smallBlue.smallBlueOld;
+package org.firstinspires.ftc.teamcode.auto.qt2Auto.smallBlue.smallBlueCurrent;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -18,9 +18,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
-@Autonomous(name = "smallBlueOldV1", group = "Autonomous")
+@Autonomous(name = "smallBlueV2", group = "Autonomous")
 @Configurable // Panels
-public class smallBlueOldV1 extends OpMode {
+public class smallBlueCurrentV3 extends OpMode {
     // ----- Drive Motors -----
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
@@ -44,7 +44,7 @@ public class smallBlueOldV1 extends OpMode {
         //updateMechanisms();
 
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        outtakeAngle.setPosition(0.14);
+        outtakeAngle.setPosition(0.13);
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(56, 8, Math.toRadians(270)));
@@ -124,7 +124,7 @@ public class smallBlueOldV1 extends OpMode {
             Path4 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 36.000), new Pose(9.807, 36.000))
+                            new BezierLine(new Pose(48.000, 36.000), new Pose(7.807, 36.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -159,7 +159,7 @@ public class smallBlueOldV1 extends OpMode {
             Path7 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 60.000), new Pose(9.807, 60.000))
+                            new BezierLine(new Pose(48.000, 60.000), new Pose(8.3, 60.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -258,6 +258,8 @@ public class smallBlueOldV1 extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
                     /* Grab Sample */
+                    rollIntake(1,5000);
+                    rollConveyor(1,3500);
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path3);
@@ -267,32 +269,58 @@ public class smallBlueOldV1 extends OpMode {
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    rollIntake(0.9,5000);
-                    rollConveyor(1,5000);
+                    //rollIntake(1,5000);
+                    rollConveyor(1,500);
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(paths.Path4);
                     setPathState(4);
+                    // rollConveyor(1, 6999);
                 }
                 break;
             case 4:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
                 if(!follower.isBusy()) {
                     /* Grab Sample */
+                    /*rollOuttake(0.38, 4999);
+                    rollConveyor(1, 4999);
+
+                    */
+                    rollIntake(-0.9, 300);
+                    rollConveyor(-1, 800);
+
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path5);
-                    setPathState(5);
+                    setPathState(50);
                 }
                 break;
             case 5:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if (!follower.isBusy()) {
-                    pathTimer.resetTimer();  // start pause timer
-                    setPathState(50);        // go to pause
+                    wheelsAreBusy();
+                    /*
+                    rollOuttake(0.38, 4999);
+                    rollConveyor(1, 4999);
+                    */
+                    rollConveyor(1, 4999);
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                    follower.followPath(paths.Path6);
+                    setPathState(6);
+                    // go to pause
                     //rollOuttake(0.38, 5);
                 }
                 break;
-            case 50:
+            case 50: // 0.5 second pause
+                wheelsAreBusy();
+               /* rollOuttake(0.38, 6999);
+                rollConveyor(1, 6999);
+                */
+
+                if (pathTimer.getElapsedTimeSeconds() > 7) {
+                    follower.followPath(paths.Path6);
+                    setPathState(5);
+                }
+                break;
+            /*case 50:
                 rollIntake(-0.5, 50);
                 rollConveyor(1, 50);
                 rollOuttake(0.38, 4999);
@@ -302,12 +330,15 @@ public class smallBlueOldV1 extends OpMode {
                     follower.followPath(paths.Path6);
                     setPathState(6);   // go to the normal next state
                 }
-                break;
+                break;*/
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
-                    rollIntake(0.9,5000);
-                    rollConveyor(1,5000);
+                    //leftWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    //ightWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    rollIntake(1,5000);
+                    rollConveyor(1,3500);
+
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path7);
                     setPathState(7);
@@ -327,8 +358,13 @@ public class smallBlueOldV1 extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
                     /* Grab Sample */
+                    /*
                     rollOuttake(0.38, 4999);
                     rollConveyor(1, 4999);
+                    */
+                    rollIntake(-0.9, 300);
+                    rollConveyor(-1, 800);
+
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path9);
                     setPathState(9);
@@ -337,6 +373,12 @@ public class smallBlueOldV1 extends OpMode {
             case 9:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
+                    /*
+                    rollOuttake(0.38, 6999);
+                    rollConveyor(1, 6999);
+                    */
+
+                    wheelsAreBusy();
 
                     Pose finalPose = follower.getPose();
 
@@ -466,4 +508,24 @@ public class smallBlueOldV1 extends OpMode {
             outtakeEndTime = 0;
         }
     }
+
+    public void wheelsAreBusy() {
+        if(frontLeft.getPower() > 0 && frontRight.getPower() > 0 && backLeft.getPower() > 0 && backRight.getPower() > 0) {
+            //rollOuttake(0,3000);
+            leftWheel.setPower(0);
+            rightWheel.setPower(0);
+            leftWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            //rollIntake(0,2500);
+            //rollConveyor(0,3000);
+            conveyor.setPower(0);
+
+        } else {
+            rollOuttake(0.38, 6999);
+            rollConveyor(1, 6999);
+        }
+    }
+
 }
+
+

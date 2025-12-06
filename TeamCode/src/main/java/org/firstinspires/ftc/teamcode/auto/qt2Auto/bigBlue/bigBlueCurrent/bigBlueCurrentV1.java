@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.auto.qt2Auto.bigBlue.bigBlueCurrent;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "Pedro Pathing Autonomous", group = "Autonomous")
 @Configurable // Panels
-public class bigBluePath extends OpMode {
+public class bigBlueCurrentV1 extends OpMode {
 
   private TelemetryManager panelsTelemetry; // Panels Telemetry instance
   public Follower follower; // Pedro Pathing follower instance
@@ -77,7 +77,7 @@ public class bigBluePath extends OpMode {
           new BezierLine(new Pose(60.000, 84.000), new Pose(16.000, 84.000))
         )
         .setTangentHeadingInterpolation()
-        .setReversed(true)
+        .setReversed()
         .build();
 
       Path3 = follower
@@ -111,7 +111,7 @@ public class bigBluePath extends OpMode {
           )
         )
         .setTangentHeadingInterpolation()
-        .setReversed(true)
+        .setReversed()
         .build();
 
       Path6 = follower
@@ -120,7 +120,7 @@ public class bigBluePath extends OpMode {
           new BezierLine(new Pose(41.000, 60.000), new Pose(15.000, 60.000))
         )
         .setTangentHeadingInterpolation()
-        .setReversed(true)
+        .setReversed()
         .build();
 
       Path7 = follower
@@ -154,7 +154,7 @@ public class bigBluePath extends OpMode {
           )
         )
         .setTangentHeadingInterpolation()
-        .setReversed(true)
+        .setReversed()
         .build();
 
       Path10 = follower
@@ -163,7 +163,7 @@ public class bigBluePath extends OpMode {
           new BezierLine(new Pose(43.000, 37.100), new Pose(16.000, 36.400))
         )
         .setTangentHeadingInterpolation()
-        .setReversed(true)
+        .setReversed()
         .build();
 
       Path11 = follower

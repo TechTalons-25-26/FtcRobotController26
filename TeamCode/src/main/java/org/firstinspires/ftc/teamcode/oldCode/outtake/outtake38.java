@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldCode.outtake;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "0.35 Speed", group = "test drive")
-public class DoubleYum extends LinearOpMode {
+public class outtake38 extends LinearOpMode {
 
     private DcMotor leftWheel;
     private DcMotor rightWheel;
     private Servo axon;
 
-    double wheelSpeed = 0.35;
+    double wheelSpeed = 0.38;
     double axonPosition = 0;  // start centered
     double step = 0.01;         // how much to move each press
 

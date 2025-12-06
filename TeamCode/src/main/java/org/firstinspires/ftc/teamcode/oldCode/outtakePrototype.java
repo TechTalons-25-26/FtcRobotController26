@@ -1,24 +1,24 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Yum", group = "Test Drive")
-public class SFDAS extends LinearOpMode {
+public class outtakePrototype extends LinearOpMode {
 
-    private DcMotor leftIntake;
-    private DcMotor rightIntake;
+    private DcMotor leftOuttake;
+    private DcMotor rightOuttake;
 
     double wheelSpeed = 1.0; // adjust if needed
 
     @Override
     public void runOpMode() {
-        leftIntake = hardwareMap.get(DcMotor.class, "frontLeft");
-        rightIntake = hardwareMap.get(DcMotor.class, "frontRight");
+        leftOuttake = hardwareMap.get(DcMotor.class, "frontLeft");
+        rightOuttake = hardwareMap.get(DcMotor.class, "frontRight");
 
         // Reverse one motor if needed (depends on wiring)
-        rightIntake.setDirection(DcMotor.Direction.REVERSE);
+        rightOuttake.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addLine("Ready to start");
         telemetry.update();
@@ -32,8 +32,8 @@ public class SFDAS extends LinearOpMode {
             // Optional deadzone
             if (Math.abs(intakePower) < 0.05) intakePower = 0;
 
-            leftIntake.setPower(intakePower);
-            rightIntake.setPower(intakePower);
+            leftOuttake.setPower(intakePower);
+            rightOuttake.setPower(intakePower);
 
             telemetry.addData("Intake Power", intakePower);
             telemetry.update();

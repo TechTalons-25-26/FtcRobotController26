@@ -1,5 +1,5 @@
 // code for the intake wheels as well
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldCode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 @TeleOp(name = "Backup Teleop (Don't Run)", group = "A")
-public class BackupTeleop extends LinearOpMode {
+public class intoTheDeepBackupTeleOp extends LinearOpMode {
     /*All DcMotors*/
     private DcMotor intakeSlide;
     private DcMotor bucketSlide;

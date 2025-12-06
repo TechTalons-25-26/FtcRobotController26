@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "MecanumDpadTest", group = "Test")
-public class MecanumTestdPad extends LinearOpMode {
+public class mecanumDpadTest extends LinearOpMode {
 
     DcMotor frontLeft, frontRight, backLeft, backRight;
 

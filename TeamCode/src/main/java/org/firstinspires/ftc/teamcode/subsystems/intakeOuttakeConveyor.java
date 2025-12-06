@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 @TeleOp(name = "Intake/Outtake with Conveyor", group = "test drive")
-public class IntakeAndOuttakeAndConveyor extends LinearOpMode {
+public class intakeOuttakeConveyor extends LinearOpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -15,7 +15,6 @@ public class IntakeAndOuttakeAndConveyor extends LinearOpMode {
     private DcMotor backRight;
     private DcMotor leftWheel;
     private DcMotor rightWheel;
-
     private DcMotor intakeMotor;
     private CRServo conveyor;
     private Servo outtakeAngle;

@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "Leatherbys", group = "test drive")
-public class Combines extends LinearOpMode {
+@TeleOp(name = "ALTOGETHER 26", group = "test drive")
+public class allTogether26 extends LinearOpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -14,11 +14,15 @@ public class Combines extends LinearOpMode {
     private DcMotor backRight;
     private DcMotor leftWheel;
     private DcMotor rightWheel;
+
+    private DcMotor intakeMotor;
     private Servo axon;
+
 
     double wheelSpeed = 0.38;
     double axonPosition = 0.8;  // start centered
-    double step = 0.01;         // how much to move each press
+    double step = 0.01; // how much to move each press
+    double intakePower = 0.0;
 
     boolean lastA = false;
     boolean lastY = false;
@@ -27,6 +31,7 @@ public class Combines extends LinearOpMode {
     public void runOpMode() {
         leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
         rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
+        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
         axon = hardwareMap.get(Servo.class, "axon");
 
         rightWheel.setDirection(DcMotor.Direction.REVERSE);
@@ -59,6 +64,9 @@ public class Combines extends LinearOpMode {
         telemetry.addData("Version 1", "Uploaded");
         telemetry.addData("Status", "Initialized");
 
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         waitForStart();
 
@@ -75,7 +83,7 @@ public class Combines extends LinearOpMode {
 
             double maxPower = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
 
-            if (maxPower > 1.0) {
+            if (maxPower > 0.85) {
                 frontLeftPower = frontLeftPower / maxPower * 0.5;
                 frontRightPower = frontRightPower / maxPower * 0.5;
                 backLeftPower = backLeftPower / maxPower * 0.5;
@@ -113,6 +121,17 @@ public class Combines extends LinearOpMode {
 
             telemetry.addData("Axon Position", axonPosition);
             telemetry.addData("Drive Power", drive);
+            telemetry.update();
+
+            // Right trigger = forward, Left trigger = reverse
+            double forward = gamepad1.right_trigger;
+            double backward = gamepad1.left_trigger;
+
+            intakePower = forward - backward;  // positive = forward, negative = backward
+
+            intakeMotor.setPower(intakePower);
+
+            telemetry.addData("Intake Power", intakePower);
             telemetry.update();
         }
     }
