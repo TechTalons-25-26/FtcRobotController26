@@ -117,32 +117,23 @@ public class allFunctions extends LinearOpMode {
 
     }
     public void intakeIn() {
-        while(gamepad2.right_trigger > 0) {
-            double maxIntakePower = 0.7;
-            double intakePower = gamepad2.right_trigger;
-            intakeMotor.setPower(0.7);
-            //intakeMotor.setPower(intakePower * maxIntakePower);
-            //conveyorMove(-intakePower);
-            conveyorMove(-0.7);
-
-            telemetry.addData("Intake & Conveyor power: ", intakePower);
-            telemetry.update();
+        if (gamepad2.right_trigger > 0.5) {
+            double power = gamepad2.right_trigger;
+            intakeMotor.setPower(power);   // FULL POWER
+            conveyor.setPower(-power);     // FULL POWER
+        } else {
+            intakeMotor.setPower(0);
+            conveyor.setPower(0);
         }
-        intakeMotor.setPower(0);
-        conveyor.setPower(0);
     }
     public void intakeOut() {
-        while (gamepad2.right_bumper) {
-            double maxIntakePower = 0.7;
-            double intakePower = -0.7;
-            intakeMotor.setPower(intakePower * maxIntakePower);
-            conveyorMove(-intakePower);
-
-            telemetry.addData("Intake & Conveyor power: ", intakePower);
-            telemetry.update();
+        if (gamepad2.right_bumper) {
+            intakeMotor.setPower(-1);   // FULL REVERSE
+            conveyor.setPower(1);       // FULL REVERSE
+        } else {
+            intakeMotor.setPower(0);
+            conveyor.setPower(0);
         }
-        intakeMotor.setPower(0);
-        conveyor.setPower(0);
     }
     public void outtakeOut() {
         while(gamepad2.left_trigger > 0) {
