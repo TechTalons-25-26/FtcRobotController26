@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-@TeleOp(name = "All Functions 44", group = "test drive")
+@TeleOp(name = "allFunctionsV6.java", group = "test drive")
 public class AllFunctions44 extends LinearOpMode {
 
     private DcMotor frontLeft;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-@TeleOp(name = "All Functions 31", group = "test drive")
-public class AllFunctions3 extends LinearOpMode {
+public class allFunctionsV2 extends LinearOpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -118,23 +117,32 @@ public class AllFunctions3 extends LinearOpMode {
 
     }
     public void intakeIn() {
-        if (gamepad2.right_trigger > 0.5) {
-            double power = gamepad2.right_trigger;
-            intakeMotor.setPower(power);   // FULL POWER
-            conveyor.setPower(-power);     // FULL POWER
-        } else {
-            intakeMotor.setPower(0);
-            conveyor.setPower(0);
+        while(gamepad2.right_trigger > 0) {
+            double maxIntakePower = 0.7;
+            double intakePower = gamepad2.right_trigger;
+            intakeMotor.setPower(0.7);
+            //intakeMotor.setPower(intakePower * maxIntakePower);
+            //conveyorMove(-intakePower);
+            conveyorMove(-0.7);
+
+            telemetry.addData("Intake & Conveyor power: ", intakePower);
+            telemetry.update();
         }
+        intakeMotor.setPower(0);
+        conveyor.setPower(0);
     }
     public void intakeOut() {
-        if (gamepad2.right_bumper) {
-            intakeMotor.setPower(-1);   // FULL REVERSE
-            conveyor.setPower(1);       // FULL REVERSE
-        } else {
-            intakeMotor.setPower(0);
-            conveyor.setPower(0);
+        while (gamepad2.right_bumper) {
+            double maxIntakePower = 0.7;
+            double intakePower = -0.7;
+            intakeMotor.setPower(intakePower * maxIntakePower);
+            conveyorMove(-intakePower);
+
+            telemetry.addData("Intake & Conveyor power: ", intakePower);
+            telemetry.update();
         }
+        intakeMotor.setPower(0);
+        conveyor.setPower(0);
     }
     public void outtakeOut() {
         while(gamepad2.left_trigger > 0) {

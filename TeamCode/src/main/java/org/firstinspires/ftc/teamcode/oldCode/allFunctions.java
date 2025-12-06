@@ -5,8 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "ALTOGETHER 26", group = "test drive")
-public class allTogether26 extends LinearOpMode {
+public class allFunctions extends LinearOpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;

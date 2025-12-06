@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-@TeleOp(name = "All Functions 26", group = "test drive")
-public class AllFunctions extends LinearOpMode {
+public class allFunctionsV6 extends LinearOpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -15,7 +14,6 @@ public class AllFunctions extends LinearOpMode {
     private DcMotor backRight;
     private DcMotor leftWheel;
     private DcMotor rightWheel;
-
     private DcMotor intakeMotor;
     private CRServo conveyor;
     private Servo outtakeAngle;
@@ -24,12 +22,17 @@ public class AllFunctions extends LinearOpMode {
     //private DcMotor conveyorMotor;
 
 
-    double wheelSpeed = 0.4;
+    double wheelSpeed = 0.38;
     double axonPosition = 0.15;  // start centered
     double step = 0.01; // how much to move each press
 
     boolean lastA = false;
     boolean lastY = false;
+
+    boolean rightBumper = false;
+
+
+
 
     @Override
     public void runOpMode() {
@@ -82,9 +85,10 @@ public class AllFunctions extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            intakeIn();
-            intakeOut();
-            outtakeOut();
+            handleIntakeAndOuttake();
+            //intakeIn();
+            //intakeOut();
+            //outtakeOut();
             mecanumWheels();
             outtakeAngle();
 
@@ -117,14 +121,85 @@ public class AllFunctions extends LinearOpMode {
         backRight.setPower(backRightPower);
 
     }
-    public void intakeIn() {
+    public void handleIntakeAndOuttake() {
+        double maxIntakePower = 0.7;
+
+        double rt = gamepad2.right_trigger;   // intake in
+        boolean rb = gamepad2.right_bumper;   // intake out
+        double lt = gamepad2.left_trigger;    // outtake
+        boolean lb = gamepad2.left_bumper;    // outtake
+
+        double intakePower = 0.0;
+        double conveyorPower = 0.0;
+        double outtakeWheelPower = 0.0;
+
+        // PRIORITY: outtake (lt) > intake in (rt) > intake out (rb)
+        if (lb) {
+            outtakeWheelPower = 1;  // set wheel speed
+            leftWheel.setPower(outtakeWheelPower);
+            rightWheel.setPower(outtakeWheelPower);
+
+            intakeMotor.setPower(0);
+            conveyor.setPower(0);
+
+            telemetry.addData("Mode", "OUTTAKE WHEELS ONLY");
+        }
+        if (lt > 0.05) {
+            // OUTTAKE: use leftWheel/rightWheel + conveyor
+            outtakeWheelPower = -lt * wheelSpeed;
+            leftWheel.setPower(-outtakeWheelPower);
+            rightWheel.setPower(-outtakeWheelPower);
+
+            intakePower = 0.0;
+            conveyorPower = -lt;   // feed game pieces out
+
+            telemetry.addData("Mode", "OUTTAKE");
+            telemetry.addData("Outtake trigger", lt);
+
+        } else if (rt > 0.05) {
+            // INTAKE IN: intake motor + conveyor reverse
+            intakePower = rt * maxIntakePower; // full speed from trigger
+            conveyorPower = -rt;
+
+            leftWheel.setPower(0);
+            rightWheel.setPower(0);
+
+            telemetry.addData("Mode", "INTAKE IN");
+            telemetry.addData("Intake trigger", rt);
+
+        } else if (rb) {
+            // INTAKE OUT (reverse)
+            intakePower = -0.5; // constant speed out
+            conveyorPower = 0.7;           // spit pieces out
+
+            leftWheel.setPower(0);
+            rightWheel.setPower(0);
+
+            telemetry.addData("Mode", "INTAKE OUT (RB)");
+        } else {
+            // NOTHING PRESSED: stop everything
+            intakePower = 0.0;
+            conveyorPower = 0.0;
+            leftWheel.setPower(0);
+            rightWheel.setPower(0);
+
+            telemetry.addData("Mode", "OFF");
+        }
+
+        // Actually apply powers
+        intakeMotor.setPower(intakePower);
+        conveyorMove(conveyorPower);
+
+        telemetry.addData("Intake power", intakePower);
+        telemetry.addData("Conveyor power", conveyorPower);
+    }
+
+    /*public void intakeIn() {
         while(gamepad2.right_trigger > 0) {
             double maxIntakePower = 0.7;
             double intakePower = gamepad2.right_trigger;
-            intakeMotor.setPower(0.7);
-            //intakeMotor.setPower(intakePower * maxIntakePower);
-            //conveyorMove(-intakePower);
-            conveyorMove(-0.7);
+            intakeMotor.setPower(intakePower * maxIntakePower);
+            conveyorMove(-intakePower);
 
             telemetry.addData("Intake & Conveyor power: ", intakePower);
             telemetry.update();
@@ -133,7 +208,7 @@ public class AllFunctions extends LinearOpMode {
         conveyor.setPower(0);
     }
     public void intakeOut() {
-        while (gamepad2.right_bumper) {
+        while (gamepad2.right_bumper && !rightBumper) {
             double maxIntakePower = 0.7;
             double intakePower = -0.7;
             intakeMotor.setPower(intakePower * maxIntakePower);
@@ -144,6 +219,8 @@ public class AllFunctions extends LinearOpMode {
         }
         intakeMotor.setPower(0);
         conveyor.setPower(0);
+
+        rightBumper = gamepad2.right_bumper;
     }
     public void outtakeOut() {
         while(gamepad2.left_trigger > 0) {
@@ -159,6 +236,8 @@ public class AllFunctions extends LinearOpMode {
         rightWheel.setPower(0);
         conveyor.setPower(0);
     }
+    */
+
     public void conveyorMove(double power) {
         double maxConveyorPower = 0.7; // <-- set your desired max power
         //conveyorMotor.setPower(intakePower * maxConveyorPower);
