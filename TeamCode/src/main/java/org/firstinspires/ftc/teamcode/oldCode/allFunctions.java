@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 public class allFunctions extends LinearOpMode {
 
@@ -15,25 +16,32 @@ public class allFunctions extends LinearOpMode {
     private DcMotor rightWheel;
 
     private DcMotor intakeMotor;
-    private Servo axon;
+    private CRServo conveyor;
+    private Servo outtakeAngle;
 
 
-    double wheelSpeed = 0.38;
-    double axonPosition = 0.8;  // start centered
+    //private DcMotor conveyorMotor;
+
+
+    double wheelSpeed = 0.4;
+    double axonPosition = 0.15;  // start centered
     double step = 0.01; // how much to move each press
-    double intakePower = 0.0;
 
     boolean lastA = false;
     boolean lastY = false;
 
     @Override
     public void runOpMode() {
+
         leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
         rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
+
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        axon = hardwareMap.get(Servo.class, "axon");
+        conveyor = hardwareMap.get(CRServo.class, "conveyor");
+        outtakeAngle = hardwareMap.get(Servo.class, "outtakeAngle");
 
         rightWheel.setDirection(DcMotor.Direction.REVERSE);
+
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
@@ -42,6 +50,7 @@ public class allFunctions extends LinearOpMode {
 
 
         // Set the direction that the motors will be moving
+
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -54,85 +63,126 @@ public class allFunctions extends LinearOpMode {
 
 
         // Set the zero power behavior to BRAKE for all motors
+
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+
         // Add telemetry data to indicate that the robot is initialized
+
         telemetry.addData("Version 1", "Uploaded");
         telemetry.addData("Status", "Initialized");
 
-        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (opModeIsActive()) {
-            double y = -gamepad1.left_stick_y; // Forward/backward movement (Y is reversed)
-            double x = gamepad1.left_stick_x * 1.1; // Left/right movement (scaled to counteract imperfect strafing)
-            double rx = gamepad1.right_stick_x; // Rotation
+            intakeIn();
+            intakeOut();
+            outtakeOut();
+            mecanumWheels();
+            outtakeAngle();
 
-            // Calculate the power for each motor
-            double frontLeftPower = (y + x + rx)  ;
-            double frontRightPower = (y - x - rx) ;
-            double backLeftPower = (y - x + rx) ;
-            double backRightPower = (y + x - rx) ;
+        }
+    }
+    public void mecanumWheels() {
+        double y = -gamepad1.left_stick_y; // Forward/backward movement (Y is reversed)
+        double x = gamepad1.left_stick_x * 1.1; // Left/right movement (scaled to counteract imperfect strafing)
+        double rx = gamepad1.right_stick_x; // Rotation
 
-            double maxPower = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
+        // Calculate the power for each motor
+        double frontLeftPower = (y + x + rx)  ;
+        double frontRightPower = (y - x - rx) ;
+        double backLeftPower = (y - x + rx) ;
+        double backRightPower = (y + x - rx) ;
 
-            if (maxPower > 0.85) {
-                frontLeftPower = frontLeftPower / maxPower * 0.5;
-                frontRightPower = frontRightPower / maxPower * 0.5;
-                backLeftPower = backLeftPower / maxPower * 0.5;
-                backRightPower = backRightPower / maxPower * 0.5;
-            }
+        double maxPower = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
 
-            // Set the power to the motors
-            frontLeft.setPower(frontLeftPower);
-            frontRight.setPower(frontRightPower);
-            backLeft.setPower(backLeftPower);
-            backRight.setPower(backRightPower);
+        if (maxPower > 1.0) {
+            frontLeftPower = frontLeftPower / maxPower * 0.5;
+            frontRightPower = frontRightPower / maxPower * 0.5;
+            backLeftPower = backLeftPower / maxPower * 0.5;
+            backRightPower = backRightPower / maxPower * 0.5;
+        }
 
+        // Set the power to the motors
+        frontLeft.setPower(frontLeftPower);
+        frontRight.setPower(frontRightPower);
+        backLeft.setPower(backLeftPower);
+        backRight.setPower(backRightPower);
 
-            // Drive using left stick
-            double drive = -gamepad2.left_stick_y;
-            leftWheel.setPower(drive * wheelSpeed);
-            rightWheel.setPower(drive * wheelSpeed);
+    }
+    public void intakeIn() {
+        while(gamepad2.right_trigger > 0) {
+            double maxIntakePower = 0.7;
+            double intakePower = gamepad2.right_trigger;
+            intakeMotor.setPower(0.7);
+            //intakeMotor.setPower(intakePower * maxIntakePower);
+            //conveyorMove(-intakePower);
+            conveyorMove(-0.7);
 
-            // Increment servo position on button press
-            if (gamepad2.a && !lastA) {
-                axonPosition += step;
-            } else if (gamepad2.y && !lastY) {
-                axonPosition -= step;
-            }
-
-            // Clamp servo position between 0 and 1
-            axonPosition = Math.max(0, Math.min(1, axonPosition));
-
-            // Update servo
-            axon.setPosition(axonPosition);
-
-            // Save button states for next loop
-            lastA = gamepad2.a;
-            lastY = gamepad2.y;
-
-            telemetry.addData("Axon Position", axonPosition);
-            telemetry.addData("Drive Power", drive);
-            telemetry.update();
-
-            // Right trigger = forward, Left trigger = reverse
-            double forward = gamepad1.right_trigger;
-            double backward = gamepad1.left_trigger;
-
-            intakePower = forward - backward;  // positive = forward, negative = backward
-
-            intakeMotor.setPower(intakePower);
-
-            telemetry.addData("Intake Power", intakePower);
+            telemetry.addData("Intake & Conveyor power: ", intakePower);
             telemetry.update();
         }
+        intakeMotor.setPower(0);
+        conveyor.setPower(0);
+    }
+    public void intakeOut() {
+        while (gamepad2.right_bumper) {
+            double maxIntakePower = 0.7;
+            double intakePower = -0.7;
+            intakeMotor.setPower(intakePower * maxIntakePower);
+            conveyorMove(-intakePower);
+
+            telemetry.addData("Intake & Conveyor power: ", intakePower);
+            telemetry.update();
+        }
+        intakeMotor.setPower(0);
+        conveyor.setPower(0);
+    }
+    public void outtakeOut() {
+        while(gamepad2.left_trigger > 0) {
+            double leftWheelPower = -gamepad2.left_trigger;
+            leftWheel.setPower(-leftWheelPower * wheelSpeed);
+            rightWheel.setPower(-leftWheelPower * wheelSpeed);
+            conveyorMove(leftWheelPower);
+
+            telemetry.addData("Outtake & Conveyor power: ", leftWheelPower);
+            telemetry.update();
+        }
+        leftWheel.setPower(0);
+        rightWheel.setPower(0);
+        conveyor.setPower(0);
+    }
+    public void conveyorMove(double power) {
+        double maxConveyorPower = 0.7; // <-- set your desired max power
+        //conveyorMotor.setPower(intakePower * maxConveyorPower);
+        conveyor.setPower(power * maxConveyorPower);
+    }
+
+    public void outtakeAngle (){
+        if (gamepad2.a && !lastA) {
+            axonPosition += step;
+        } else if (gamepad2.y && !lastY) {
+            axonPosition -= step;
+        }
+
+        // Clamp servo position between 0 and 1
+        axonPosition = Math.max(0, Math.min(1, axonPosition));
+
+        // Update servo
+        outtakeAngle.setPosition(axonPosition);
+
+        // Save button states for next loop
+        lastA = gamepad2.a;
+        lastY = gamepad2.y;
+
+        telemetry.addData("Axon Position", axonPosition);
+        telemetry.update();
     }
 
 }
