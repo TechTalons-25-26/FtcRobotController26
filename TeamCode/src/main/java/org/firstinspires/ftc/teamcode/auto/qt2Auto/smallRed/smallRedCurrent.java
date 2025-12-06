@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto.smallBlue.smallBlueCurrent;
+package org.firstinspires.ftc.teamcode.auto.qt2Auto.smallRed;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -18,9 +18,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
-@Autonomous(name = "smallBlueV2", group = "Autonomous")
+@Autonomous(name = "smallRedOldV1", group = "Autonomous")
 @Configurable // Panels
-public class smallBlueCurrentV3 extends OpMode {
+public class smallRedCurrent extends OpMode {
     // ----- Drive Motors -----
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
@@ -31,7 +31,7 @@ public class smallBlueCurrentV3 extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pedro Pathing follower instance
     private int pathState; // Current autonomous path state (state machine)
-    private Paths paths; // Paths defined in the Paths class
+    private PathsR paths; // Paths defined in the Paths class
     private Timer pathTimer, actionTimer, opmodeTimer;
     // ----- Timed Mechanisms -----
     private long intakeEndTime = 0;
@@ -40,16 +40,16 @@ public class smallBlueCurrentV3 extends OpMode {
     @Override
     public void init() {
         robotSetup();
-        // Update timed mechanisms
         //updateMechanisms();
 
+        outtakeAngle.setPosition(0.14);
+
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        outtakeAngle.setPosition(0.13);
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(56, 8, Math.toRadians(270)));
+        follower.setStartingPose(new Pose(88, 8, Math.toRadians(270)));
 
-        paths = new Paths(follower); // Build paths
+        paths = new PathsR(follower); // Build paths
 
         panelsTelemetry.debug("Status", "Initialized");
         panelsTelemetry.update(telemetry);
@@ -72,9 +72,11 @@ public class smallBlueCurrentV3 extends OpMode {
         panelsTelemetry.debug("Y", follower.getPose().getY());
         panelsTelemetry.debug("Heading", follower.getPose().getHeading());
         panelsTelemetry.update(telemetry);
+        telemetry.addData("outtake Angle:", outtakeAngle);
+        telemetry.update();
     }
 
-    public static class Paths {
+    public static class PathsR {
 
         public PathChain Path1;
         public PathChain Path2;
@@ -90,11 +92,11 @@ public class smallBlueCurrentV3 extends OpMode {
         public PathChain Path12;
         public PathChain Path13;
 
-        public Paths(Follower follower) {
+        public PathsR(Follower follower) {
             Path1 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(56.000, 8.000), new Pose(56.000, 12.000))
+                            new BezierLine(new Pose(88.000, 8.000), new Pose(88.000, 12.000))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(288))
                     .build();
@@ -103,9 +105,9 @@ public class smallBlueCurrentV3 extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(56.000, 12.000),
-                                    new Pose(50.400, 29.200),
-                                    new Pose(58.800, 36.120),
+                                    new Pose(88.000, 12.000),
+                                    new Pose(93.600, 29.200),
+                                    new Pose(85.200, 36.120),
                                     new Pose(72.000, 36.000)
                             )
                     )
@@ -116,7 +118,7 @@ public class smallBlueCurrentV3 extends OpMode {
             Path3 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(72.000, 36.000), new Pose(48.000, 36.000))
+                            new BezierLine(new Pose(72.000, 36.000), new Pose(96.000, 36.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -124,7 +126,7 @@ public class smallBlueCurrentV3 extends OpMode {
             Path4 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 36.000), new Pose(7.807, 36.000))
+                            new BezierLine(new Pose(96.000, 36.000), new Pose(136.400, 36.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -133,10 +135,10 @@ public class smallBlueCurrentV3 extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(7.807, 36.000),
-                                    new Pose(52.600, 36.460),
-                                    new Pose(67.000, 76.100),
-                                    new Pose(60.000, 84.000)
+                                    new Pose(136.400, 36.000),
+                                    new Pose(91.400, 36.460),
+                                    new Pose(77.000, 76.100),
+                                    new Pose(84.000, 84.000)
                             )
                     )
                     .setTangentHeadingInterpolation()
@@ -147,10 +149,10 @@ public class smallBlueCurrentV3 extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(60.000, 84.000),
-                                    new Pose(69.730, 72.590),
-                                    new Pose(64.520, 60.150),
-                                    new Pose(48.000, 60.000)
+                                    new Pose(84.000, 84.000),
+                                    new Pose(74.270, 72.590),
+                                    new Pose(79.480, 60.150),
+                                    new Pose(96.000, 60.000)
                             )
                     )
                     .setTangentHeadingInterpolation()
@@ -159,7 +161,7 @@ public class smallBlueCurrentV3 extends OpMode {
             Path7 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(48.000, 60.000), new Pose(8.3, 60.000))
+                            new BezierLine(new Pose(96.000, 60.000), new Pose(136.400, 60.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -167,7 +169,7 @@ public class smallBlueCurrentV3 extends OpMode {
             Path8 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(7.807, 60.000), new Pose(48.000, 60.000))
+                            new BezierLine(new Pose(136.400, 60.000), new Pose(96.000, 60.000))
                     )
                     .setTangentHeadingInterpolation()
                     .setReversed()
@@ -177,28 +179,28 @@ public class smallBlueCurrentV3 extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(48.000, 60.000),
-                                    new Pose(64.520, 60.150),
-                                    new Pose(69.730, 72.590),
-                                    new Pose(60.000, 84.000)
+                                    new Pose(96.000, 60.000),
+                                    new Pose(79.480, 60.150),
+                                    new Pose(74.270, 72.590),
+                                    new Pose(84.000, 84.000)
                             )
                     )
                     .setTangentHeadingInterpolation()
                     .setReversed()
                     .build();
-/*
+            /*
             Path10 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(60.000, 84.000), new Pose(60.001, 84.000))
+                            new BezierLine(new Pose(84.000, 84.000), new Pose(84.000, 84.000))
                     )
-                    .setLinearHeadingInterpolation(Math.toRadians(310), Math.toRadians(180))
+                    .setLinearHeadingInterpolation(Math.toRadians(230), Math.toRadians(180))
                     .build();
 
             Path11 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(60.001, 84.000), new Pose(24.000, 84.000))
+                            new BezierLine(new Pose(84.000, 84.000), new Pose(120.000, 84.000))
                     )
                     .setTangentHeadingInterpolation()
                     .build();
@@ -206,21 +208,23 @@ public class smallBlueCurrentV3 extends OpMode {
             Path12 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(24.000, 84.000), new Pose(60.000, 84.000))
+                            new BezierLine(new Pose(120.000, 84.000), new Pose(84.000, 84.000))
                     )
                     .setTangentHeadingInterpolation()
                     .setReversed()
                     .build();
 
-            */
-            Path13 = follower
 
+
+            Path13 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(60.000, 84.000), new Pose(60.001, 84.000))
+                            new BezierLine(new Pose(84.000, 84.000), new Pose(84.000, 84.000))
                     )
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(310))
+                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(230))
                     .build();
+
+             */
         }
     }
 
@@ -229,9 +233,6 @@ public class smallBlueCurrentV3 extends OpMode {
             case 0:
                 follower.followPath(paths.Path1);
                 setPathState(1);
-                telemetry.addLine("Path 1 Completed");
-                telemetry.update();
-
                 break;
             case 1:
 
@@ -244,22 +245,16 @@ public class smallBlueCurrentV3 extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
                     /* Score Preload */
-                    telemetry.addLine("Path 2 Started");
-                    telemetry.update();
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(paths.Path2);
                     setPathState(2);
-                    telemetry.addLine("Path 2 Completed");
-                    telemetry.update();
                 }
                 break;
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
                     /* Grab Sample */
-                    rollIntake(1,5000);
-                    rollConveyor(1,3500);
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path3);
@@ -269,75 +264,50 @@ public class smallBlueCurrentV3 extends OpMode {
             case 3:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    //rollIntake(1,5000);
-                    rollConveyor(1,500);
+                    /* Score Sample */
+                    rollIntake(0.9,5000);
+                    rollConveyor(1,5000);
+
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(paths.Path4);
                     setPathState(4);
-                    // rollConveyor(1, 6999);
                 }
                 break;
             case 4:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
                 if(!follower.isBusy()) {
                     /* Grab Sample */
-                    /*rollOuttake(0.38, 4999);
-                    rollConveyor(1, 4999);
-
-                    */
-                    rollIntake(-0.9, 300);
-                    rollConveyor(-1, 800);
-
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path5);
-                    setPathState(50);
-                }
-                break;
-            case 5:
-                if (!follower.isBusy()) {
-                    wheelsAreBusy();
-                    /*
-                    rollOuttake(0.38, 4999);
-                    rollConveyor(1, 4999);
-                    */
-                    rollConveyor(1, 4999);
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(paths.Path6);
-                    setPathState(6);
-                    // go to pause
-                    //rollOuttake(0.38, 5);
-                }
-                break;
-            case 50: // 0.5 second pause
-                wheelsAreBusy();
-               /* rollOuttake(0.38, 6999);
-                rollConveyor(1, 6999);
-                */
-
-                if (pathTimer.getElapsedTimeSeconds() > 7) {
-                    follower.followPath(paths.Path6);
                     setPathState(5);
                 }
                 break;
-            /*case 50:
+            case 5:
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
+                if (!follower.isBusy()) {
+                    pathTimer.resetTimer();  // start pause timer
+                    setPathState(50);        // go to pause
+                    //rollOuttake(0.38, 50);
+                }
+                break;
+            case 50:
                 rollIntake(-0.5, 50);
-                rollConveyor(1, 50);
+                rollConveyor(-1, 50);
                 rollOuttake(0.38, 4999);
                 rollConveyor(-1, 4999);
                 if (pathTimer.getElapsedTimeSeconds() > 5) {
-                    //rollOuttake(0.38, 5);
+
                     follower.followPath(paths.Path6);
                     setPathState(6);   // go to the normal next state
                 }
-                break;*/
+                break;
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
-                    //leftWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    //ightWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    rollIntake(1,5000);
-                    rollConveyor(1,3500);
+                    /* Grab Sample */
+                    rollIntake(0.9,5000);
+                    rollConveyor(1,5000);
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path7);
@@ -358,13 +328,8 @@ public class smallBlueCurrentV3 extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
                     /* Grab Sample */
-                    /*
                     rollOuttake(0.38, 4999);
-                    rollConveyor(1, 4999);
-                    */
-                    rollIntake(-0.9, 300);
-                    rollConveyor(-1, 800);
-
+                    rollConveyor(-1, 4999);
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     follower.followPath(paths.Path9);
                     setPathState(9);
@@ -372,55 +337,8 @@ public class smallBlueCurrentV3 extends OpMode {
                 break;
             case 9:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
-                    /*
-                    rollOuttake(0.38, 6999);
-                    rollConveyor(1, 6999);
-                    */
 
-                    wheelsAreBusy();
-
-                    Pose finalPose = follower.getPose();
-
-                    PoseStorage.currentPose = finalPose;
-                    panelsTelemetry.debug("Final X", finalPose.getX());
-                    panelsTelemetry.debug("Final Y", finalPose.getY());
-                    panelsTelemetry.debug("Final Heading", finalPose.getHeading());
-                    panelsTelemetry.update(telemetry);
-
-                    setPathState(-1);
-                }
-                break;
-
-            /*
-            case 10:
-                // This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position
-                if(!follower.isBusy()) {
-
-                    follower.followPath(paths.Path11);
-                    setPathState(11);
-                }
-                break;
-            case 11:
-                // This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position
-                if(!follower.isBusy()) {
-
-                    follower.followPath(paths.Path12);
-                    setPathState(12);
-                }
-                break;
-            case 12:
-                // This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position
-                if(!follower.isBusy()) {
-                    follower.followPath(paths.Path13);
-                    setPathState(13);
-                }
-                break;
-
-
-
-            case 13:
-                //This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position
+                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
                 if(!follower.isBusy()) {
                     Pose finalPose = follower.getPose();
 
@@ -429,11 +347,9 @@ public class smallBlueCurrentV3 extends OpMode {
                     panelsTelemetry.debug("Final Y", finalPose.getY());
                     panelsTelemetry.debug("Final Heading", finalPose.getHeading());
                     panelsTelemetry.update(telemetry);
-
                     setPathState(-1);
                 }
                 break;
-                */
         }
         return pathState;
     }
@@ -508,24 +424,4 @@ public class smallBlueCurrentV3 extends OpMode {
             outtakeEndTime = 0;
         }
     }
-
-    public void wheelsAreBusy() {
-        if(frontLeft.getPower() > 0 && frontRight.getPower() > 0 && backLeft.getPower() > 0 && backRight.getPower() > 0) {
-            //rollOuttake(0,3000);
-            leftWheel.setPower(0);
-            rightWheel.setPower(0);
-            leftWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            //rollIntake(0,2500);
-            //rollConveyor(0,3000);
-            conveyor.setPower(0);
-
-        } else {
-            rollOuttake(0.38, 6999);
-            rollConveyor(1, 6999);
-        }
-    }
-
 }
-
-
