@@ -14,7 +14,6 @@ public class allFunctions extends LinearOpMode {
     private DcMotor backRight;
     private DcMotor leftWheel;
     private DcMotor rightWheel;
-
     private DcMotor intakeMotor;
     private CRServo conveyor;
     private Servo outtakeAngle;
@@ -23,7 +22,7 @@ public class allFunctions extends LinearOpMode {
     //private DcMotor conveyorMotor;
 
 
-    double wheelSpeed = 0.4;
+    double wheelSpeed = 0.38;
     double axonPosition = 0.15;  // start centered
     double step = 0.01; // how much to move each press
 
@@ -128,12 +127,23 @@ public class allFunctions extends LinearOpMode {
         double rt = gamepad2.right_trigger;   // intake in
         boolean rb = gamepad2.right_bumper;   // intake out
         double lt = gamepad2.left_trigger;    // outtake
+        boolean lb = gamepad2.left_bumper;    // outtake
 
         double intakePower = 0.0;
         double conveyorPower = 0.0;
         double outtakeWheelPower = 0.0;
 
         // PRIORITY: outtake (lt) > intake in (rt) > intake out (rb)
+        if (lb) {
+            outtakeWheelPower = 1;  // set wheel speed
+            leftWheel.setPower(outtakeWheelPower);
+            rightWheel.setPower(outtakeWheelPower);
+
+            intakeMotor.setPower(0);
+            conveyor.setPower(0);
+
+            telemetry.addData("Mode", "OUTTAKE WHEELS ONLY");
+        }
         if (lt > 0.05) {
             // OUTTAKE: use leftWheel/rightWheel + conveyor
             outtakeWheelPower = -lt * wheelSpeed;
@@ -159,8 +169,8 @@ public class allFunctions extends LinearOpMode {
 
         } else if (rb) {
             // INTAKE OUT (reverse)
-            intakePower = -maxIntakePower; // constant speed out
-            conveyorPower = 1.0;           // spit pieces out
+            intakePower = -0.5; // constant speed out
+            conveyorPower = 0.7;           // spit pieces out
 
             leftWheel.setPower(0);
             rightWheel.setPower(0);
