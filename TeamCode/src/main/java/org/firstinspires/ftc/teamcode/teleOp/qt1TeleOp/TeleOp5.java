@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.qt1Teleop;
+package org.firstinspires.ftc.teamcode.teleOp.qt1TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -14,8 +14,8 @@ import com.pedropathing.paths.Path;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@TeleOp(name = "TeleOp6", group = "test drive")
-public class TeleOp6 extends LinearOpMode {
+@TeleOp(name = "TeleOp5", group = "test drive")
+public class TeleOp5 extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
@@ -25,16 +25,18 @@ public class TeleOp6 extends LinearOpMode {
 
     private Follower follower;
 
+
+
+
     double wheelSpeed = 0.38;
     double axonPosition = 0; // start centered
     double step = 0.01; // servo step
-
     private boolean movingToTarget = false;
     boolean lastA = false;
     boolean lastY = false;
     boolean lastB = false; // track B button
 
-    // target pose for pressing B (make sure units match your field config)
+    // target pose for pressing B
     private final Pose targetPose = new Pose(43.570, 99.198, Math.toRadians(143)); // example target
 
     @Override
@@ -66,7 +68,7 @@ public class TeleOp6 extends LinearOpMode {
 
         // Initialize PedroPathing follower
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(0, 0, 0)); // initial pose (only set ONCE)
+        follower.setStartingPose(new Pose(0, 0, 0)); // initial pose
 
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -76,45 +78,25 @@ public class TeleOp6 extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-
-            // ALWAYS keep follower/localizer updated
-            follower.update();
-
             Pose currentPose = follower.getPose();
             telemetry.addData("Current Pose", currentPose);
-
+            //telemetry.update();
             if (movingToTarget) {
-                // Pedro is driving – check if we arrived
-
-                double dx = currentPose.getX() - targetPose.getX();
-                double dy = currentPose.getY() - targetPose.getY();
-                double distToTarget = Math.hypot(dx, dy);
-
-                telemetry.addData("Distance to target", distToTarget);
-
-                // Stop when Pedro says path is done OR we're close enough
-                if (!follower.isBusy() || distToTarget < 2.0) { // 2 units tolerance
-                    movingToTarget = false;
-
-                    // Make sure drive motors are stopped
-                    frontLeft.setPower(0);
-                    frontRight.setPower(0);
-                    backLeft.setPower(0);
-                    backRight.setPower(0);
-
-                    telemetry.addData("Arrived at target", currentPose);
+                follower.update();
+                if (!follower.isBusy()) {
+                    movingToTarget = false; // done with path
+                    telemetry.addData("Arrived at target", follower.getPose());
                 }
-
             } else {
-                // Normal driver control when not following a path
+                // Normal driver control
                 mecanumWheels();
             }
 
             // Mechanisms can run in both modes
             handleIntakeAndOuttake();
             outtakeAngleControl();
+            //moveToTargetB();
             checkStartPathWithB();
-
             telemetry.update();
         }
     }
@@ -130,9 +112,8 @@ public class TeleOp6 extends LinearOpMode {
         double backLeftPower = y - x + rx;
         double backRightPower = y + x - rx;
 
-        double maxPower = Math.max(Math.abs(frontLeftPower),
-                Math.max(Math.abs(frontRightPower),
-                        Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
+        double maxPower = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(frontRightPower),
+                Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
 
         if (maxPower > 1.0) {
             frontLeftPower /= maxPower * 2;
@@ -147,7 +128,7 @@ public class TeleOp6 extends LinearOpMode {
         backRight.setPower(backRightPower);
     }
 
-    // Intake / outtake
+    // Intake In
     public void handleIntakeAndOuttake() {
         double maxIntakePower = 0.7;
 
@@ -231,24 +212,27 @@ public class TeleOp6 extends LinearOpMode {
         lastY = gamepad2.y;
     }
 
-    // Start the path when B is first pressed
-    public void checkStartPathWithB() {
-        if (gamepad2.b && !lastB && !movingToTarget) {
-            Pose currentPose = follower.getPose();
+    // NEW: Move robot to target pose when pressing B
+    // NEW: Move robot to target pose when pressing
+        // Start the path when B is first pressed
+        public void checkStartPathWithB() {
+            if (gamepad2.b && !lastB && !movingToTarget) {
+                Pose currentPose = follower.getPose();
+                follower.setStartingPose(currentPose);
 
-            // Build a path from current pose to target
-            BezierLine curve = new BezierLine(currentPose, targetPose);
-            Path movePath = new Path(curve);
-            movePath.setLinearHeadingInterpolation(currentPose.getHeading(), targetPose.getHeading());
+                BezierLine curve = new BezierLine(currentPose, targetPose);
+                Path movePath = new Path(curve);
+                movePath.setLinearHeadingInterpolation(currentPose.getHeading(), targetPose.getHeading());
 
-            follower.followPath(movePath);
+                follower.followPath(movePath);
 
-            outtakeAngle.setPosition(0.14);
-            movingToTarget = true;
+                outtakeAngle.setPosition(0.14);
+                movingToTarget = true;
 
-            telemetry.addData("Started moving to target", targetPose);
+                telemetry.addData("Started moving to target", targetPose);
+            }
+
+            lastB = gamepad2.b;
         }
 
-        lastB = gamepad2.b;
     }
-}

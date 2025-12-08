@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.qt1Teleop;
+package org.firstinspires.ftc.teamcode.teleOp.qt2TeleOp.blueTeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,9 +13,10 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
-@TeleOp(name = "TeleOp8", group = "test drive")
-public class TeleOp8 extends LinearOpMode {
+@TeleOp(name = "blueTeleOp")
+public class blueTeleOp extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
@@ -25,8 +26,8 @@ public class TeleOp8 extends LinearOpMode {
 
     private Follower follower;
 
-    double wheelSpeed = 0.38;
-    double axonPosition = 0; // start centered
+    double wheelSpeed = 0.4;
+    double axonPosition = 0.14; // start centered
     double step = 0.01; // servo step
 
     private boolean movingToTarget = false;
@@ -35,7 +36,7 @@ public class TeleOp8 extends LinearOpMode {
     boolean lastB = false; // track B button
 
     // target pose for pressing B (make sure units match your field config)
-    private final Pose targetPose = new Pose(43.570, 99.198, Math.toRadians(143)); // example target
+    private final Pose targetPose = new Pose(60.055, 85.424, Math.toRadians(-43.052)); // example target
 
     @Override
     public void runOpMode() {
@@ -66,7 +67,11 @@ public class TeleOp8 extends LinearOpMode {
 
         // Initialize PedroPathing follower
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(0, 0, 0)); // initial pose (only set ONCE)
+        follower.setStartingPose(PoseStorage.currentPose);
+        telemetry.addData("Starting X", PoseStorage.currentPose.getX());
+        telemetry.addData("Starting Y", PoseStorage.currentPose.getY());
+        telemetry.addData("Starting Heading", PoseStorage.currentPose.getHeading());
+        telemetry.update();// initial pose (only set ONCE)
 
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -77,14 +82,19 @@ public class TeleOp8 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            telemetry.addData("Axon position", axonPosition);
+            telemetry.update();
             // ALWAYS keep follower/localizer updated
-            follower.update();
+            //follower.update();
 
-            Pose currentPose = follower.getPose();
-            telemetry.addData("Current Pose", currentPose);
+            //Pose currentPose = follower.getPose();
+            //telemetry.addData("Current Pose", currentPose);
 
             if (movingToTarget) {
                 // Pedro is driving – check if we arrived
+                follower.update();
+                Pose currentPose = follower.getPose();
+                telemetry.addData("Current Pose", currentPose);
 
                 double dx = currentPose.getX() - targetPose.getX();
                 double dy = currentPose.getY() - targetPose.getY();
@@ -93,7 +103,7 @@ public class TeleOp8 extends LinearOpMode {
                 telemetry.addData("Distance to target", distToTarget);
 
                 // Stop when Pedro says path is done OR we're close enough
-                if (!follower.isBusy() || distToTarget < 50) { // 2 units tolerance
+                if (!follower.isBusy() || distToTarget < 2.0) { // 2 units tolerance
                     movingToTarget = false;
 
                     // Make sure drive motors are stopped
@@ -104,9 +114,15 @@ public class TeleOp8 extends LinearOpMode {
 
                     telemetry.addData("Arrived at target", currentPose);
                 }
+                follower.update();
 
-            } else {
+            }
+            /*else {
                 // Normal driver control when not following a path
+                mecanumWheels();
+            }
+            */
+            if(!movingToTarget) {
                 mecanumWheels();
             }
 
@@ -135,17 +151,29 @@ public class TeleOp8 extends LinearOpMode {
                         Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
 
         if (maxPower > 1.0) {
-            frontLeftPower /= maxPower * 2;
-            frontRightPower /= maxPower * 2;
-            backLeftPower /= maxPower * 2;
-            backRightPower /= maxPower * 2;
+            frontLeftPower /= maxPower;
+            frontRightPower /= maxPower;
+            backLeftPower /= maxPower;
+            backRightPower /= maxPower;
         }
+
+        // Clip to [-1, 1]
+        frontLeftPower = Math.max(-1, Math.min(1, frontLeftPower));
+        frontRightPower = Math.max(-1, Math.min(1, frontRightPower));
+        backLeftPower = Math.max(-1, Math.min(1, backLeftPower));
+        backRightPower = Math.max(-1, Math.min(1, backRightPower));
+
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontLeft.setPower(frontLeftPower);
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
     }
+
 
     // Intake / outtake
     public void handleIntakeAndOuttake() {
@@ -154,12 +182,23 @@ public class TeleOp8 extends LinearOpMode {
         double rt = gamepad2.right_trigger;   // intake in
         boolean rb = gamepad2.right_bumper;   // intake out
         double lt = gamepad2.left_trigger;    // outtake
+        boolean lb = gamepad2.left_bumper;    // outtake
 
         double intakePower = 0.0;
         double conveyorPower = 0.0;
         double outtakeWheelPower = 0.0;
 
         // PRIORITY: outtake (lt) > intake in (rt) > intake out (rb)
+        if (lb) {
+            outtakeWheelPower = 0.8;  // set wheel speed
+            leftWheel.setPower(outtakeWheelPower);
+            rightWheel.setPower(outtakeWheelPower);
+
+            intakeMotor.setPower(0);
+            conveyor.setPower(0);
+
+            telemetry.addData("Mode", "OUTTAKE WHEELS ONLY");
+        }
         if (lt > 0.05) {
             // OUTTAKE: use leftWheel/rightWheel + conveyor
             outtakeWheelPower = lt * wheelSpeed;
@@ -214,6 +253,8 @@ public class TeleOp8 extends LinearOpMode {
     public void conveyorMove(double power) {
         double maxConveyorPower = 0.7;
         conveyor.setPower(power * maxConveyorPower);
+
+
     }
 
     // Servo control
@@ -233,7 +274,9 @@ public class TeleOp8 extends LinearOpMode {
 
     // Start the path when B is first pressed
     public void checkStartPathWithB() {
-        if (gamepad2.b && !lastB && !movingToTarget) {
+        boolean justPressedB = gamepad1.b && !lastB;
+        if (justPressedB && !movingToTarget) {
+            //removed && !lastB
             Pose currentPose = follower.getPose();
 
             // Build a path from current pose to target
@@ -249,6 +292,6 @@ public class TeleOp8 extends LinearOpMode {
             telemetry.addData("Started moving to target", targetPose);
         }
 
-        lastB = gamepad2.b;
+        lastB = gamepad1.b;
     }
 }

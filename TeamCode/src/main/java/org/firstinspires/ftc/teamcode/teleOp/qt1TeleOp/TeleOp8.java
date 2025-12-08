@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.qt1Teleop;
+package org.firstinspires.ftc.teamcode.teleOp.qt1TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,10 +13,9 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
-@TeleOp(name = "TeleOp4", group = "test drive")
-public class NewTeleOp extends LinearOpMode {
+@TeleOp(name = "TeleOp8", group = "test drive")
+public class TeleOp8 extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
@@ -67,11 +66,7 @@ public class NewTeleOp extends LinearOpMode {
 
         // Initialize PedroPathing follower
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(PoseStorage.currentPose);
-        telemetry.addData("Starting X", PoseStorage.currentPose.getX());
-        telemetry.addData("Starting Y", PoseStorage.currentPose.getY());
-        telemetry.addData("Starting Heading", PoseStorage.currentPose.getHeading());
-        telemetry.update();// initial pose (only set ONCE)
+        follower.setStartingPose(new Pose(0, 0, 0)); // initial pose (only set ONCE)
 
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -98,7 +93,7 @@ public class NewTeleOp extends LinearOpMode {
                 telemetry.addData("Distance to target", distToTarget);
 
                 // Stop when Pedro says path is done OR we're close enough
-                if (!follower.isBusy() || distToTarget < 2.0) { // 2 units tolerance
+                if (!follower.isBusy() || distToTarget < 50) { // 2 units tolerance
                     movingToTarget = false;
 
                     // Make sure drive motors are stopped

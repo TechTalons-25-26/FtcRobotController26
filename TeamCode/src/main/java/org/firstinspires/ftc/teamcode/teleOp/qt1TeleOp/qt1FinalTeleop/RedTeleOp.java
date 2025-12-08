@@ -1,20 +1,22 @@
-package org.firstinspires.ftc.teamcode.teleop.qt2Teleop.blueTeleop;
+package org.firstinspires.ftc.teamcode.teleOp.qt1TeleOp.qt1FinalTeleop;
 
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
+
+// PedroPathing imports
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.paths.Path;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
-@TeleOp(name = "A BLUE", group = "test drive")
-public class BlueTeleOp extends LinearOpMode {
+@TeleOp(name = "A RED", group = "test drive")
+public class RedTeleOp extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
@@ -34,7 +36,7 @@ public class BlueTeleOp extends LinearOpMode {
     boolean lastB = false; // track B button
 
     // target pose for pressing B (make sure units match your field config)
-    private final Pose targetPose = new Pose(60.055, 85.424, Math.toRadians(-43.052)); // example target
+    private final Pose targetPose = new Pose(83.959, 86.004, Math.toRadians(-2.226)); // example target
 
     @Override
     public void runOpMode() {
@@ -80,8 +82,6 @@ public class BlueTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            telemetry.addData("Axon position", axonPosition);
-            telemetry.update();
             // ALWAYS keep follower/localizer updated
             //follower.update();
 
@@ -99,6 +99,9 @@ public class BlueTeleOp extends LinearOpMode {
                 double distToTarget = Math.hypot(dx, dy);
 
                 telemetry.addData("Distance to target", distToTarget);
+                telemetry.addData("Current X", currentPose.getX());
+                telemetry.addData("Current Y", currentPose.getY());
+                telemetry.addData("Current Heading", PoseStorage.currentPose.getHeading());
 
                 // Stop when Pedro says path is done OR we're close enough
                 if (!follower.isBusy() || distToTarget < 2.0) { // 2 units tolerance

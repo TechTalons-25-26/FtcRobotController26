@@ -1,20 +1,22 @@
-package org.firstinspires.ftc.teamcode.teleop.qt2Teleop.redTeleop;
+package org.firstinspires.ftc.teamcode.teleOp.qt1TeleOp;
 
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
+
+// PedroPathing imports
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.paths.Path;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
-@TeleOp(name = "A RED", group = "test drive")
-public class RedTeleOp extends LinearOpMode {
+@TeleOp(name = "TeleOp4", group = "test drive")
+public class NewTeleOp extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
@@ -24,8 +26,8 @@ public class RedTeleOp extends LinearOpMode {
 
     private Follower follower;
 
-    double wheelSpeed = 0.4;
-    double axonPosition = 0.14; // start centered
+    double wheelSpeed = 0.38;
+    double axonPosition = 0; // start centered
     double step = 0.01; // servo step
 
     private boolean movingToTarget = false;
@@ -34,7 +36,7 @@ public class RedTeleOp extends LinearOpMode {
     boolean lastB = false; // track B button
 
     // target pose for pressing B (make sure units match your field config)
-    private final Pose targetPose = new Pose(83.959, 86.004, Math.toRadians(-2.226)); // example target
+    private final Pose targetPose = new Pose(43.570, 99.198, Math.toRadians(143)); // example target
 
     @Override
     public void runOpMode() {
@@ -81,25 +83,19 @@ public class RedTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             // ALWAYS keep follower/localizer updated
-            //follower.update();
+            follower.update();
 
-            //Pose currentPose = follower.getPose();
-            //telemetry.addData("Current Pose", currentPose);
+            Pose currentPose = follower.getPose();
+            telemetry.addData("Current Pose", currentPose);
 
             if (movingToTarget) {
                 // Pedro is driving – check if we arrived
-                follower.update();
-                Pose currentPose = follower.getPose();
-                telemetry.addData("Current Pose", currentPose);
 
                 double dx = currentPose.getX() - targetPose.getX();
                 double dy = currentPose.getY() - targetPose.getY();
                 double distToTarget = Math.hypot(dx, dy);
 
                 telemetry.addData("Distance to target", distToTarget);
-                telemetry.addData("Current X", currentPose.getX());
-                telemetry.addData("Current Y", currentPose.getY());
-                telemetry.addData("Current Heading", PoseStorage.currentPose.getHeading());
 
                 // Stop when Pedro says path is done OR we're close enough
                 if (!follower.isBusy() || distToTarget < 2.0) { // 2 units tolerance
@@ -113,15 +109,9 @@ public class RedTeleOp extends LinearOpMode {
 
                     telemetry.addData("Arrived at target", currentPose);
                 }
-                follower.update();
 
-            }
-            /*else {
+            } else {
                 // Normal driver control when not following a path
-                mecanumWheels();
-            }
-            */
-            if(!movingToTarget) {
                 mecanumWheels();
             }
 
@@ -150,29 +140,17 @@ public class RedTeleOp extends LinearOpMode {
                         Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
 
         if (maxPower > 1.0) {
-            frontLeftPower /= maxPower;
-            frontRightPower /= maxPower;
-            backLeftPower /= maxPower;
-            backRightPower /= maxPower;
+            frontLeftPower /= maxPower * 2;
+            frontRightPower /= maxPower * 2;
+            backLeftPower /= maxPower * 2;
+            backRightPower /= maxPower * 2;
         }
-
-        // Clip to [-1, 1]
-        frontLeftPower = Math.max(-1, Math.min(1, frontLeftPower));
-        frontRightPower = Math.max(-1, Math.min(1, frontRightPower));
-        backLeftPower = Math.max(-1, Math.min(1, backLeftPower));
-        backRightPower = Math.max(-1, Math.min(1, backRightPower));
-
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontLeft.setPower(frontLeftPower);
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
     }
-
 
     // Intake / outtake
     public void handleIntakeAndOuttake() {
@@ -181,23 +159,12 @@ public class RedTeleOp extends LinearOpMode {
         double rt = gamepad2.right_trigger;   // intake in
         boolean rb = gamepad2.right_bumper;   // intake out
         double lt = gamepad2.left_trigger;    // outtake
-        boolean lb = gamepad2.left_bumper;    // outtake
 
         double intakePower = 0.0;
         double conveyorPower = 0.0;
         double outtakeWheelPower = 0.0;
 
         // PRIORITY: outtake (lt) > intake in (rt) > intake out (rb)
-        if (lb) {
-            outtakeWheelPower = 0.8;  // set wheel speed
-            leftWheel.setPower(outtakeWheelPower);
-            rightWheel.setPower(outtakeWheelPower);
-
-            intakeMotor.setPower(0);
-            conveyor.setPower(0);
-
-            telemetry.addData("Mode", "OUTTAKE WHEELS ONLY");
-        }
         if (lt > 0.05) {
             // OUTTAKE: use leftWheel/rightWheel + conveyor
             outtakeWheelPower = lt * wheelSpeed;
@@ -252,8 +219,6 @@ public class RedTeleOp extends LinearOpMode {
     public void conveyorMove(double power) {
         double maxConveyorPower = 0.7;
         conveyor.setPower(power * maxConveyorPower);
-
-
     }
 
     // Servo control
@@ -273,9 +238,7 @@ public class RedTeleOp extends LinearOpMode {
 
     // Start the path when B is first pressed
     public void checkStartPathWithB() {
-        boolean justPressedB = gamepad1.b && !lastB;
-        if (justPressedB && !movingToTarget) {
-            //removed && !lastB
+        if (gamepad2.b && !lastB && !movingToTarget) {
             Pose currentPose = follower.getPose();
 
             // Build a path from current pose to target
@@ -291,6 +254,6 @@ public class RedTeleOp extends LinearOpMode {
             telemetry.addData("Started moving to target", targetPose);
         }
 
-        lastB = gamepad1.b;
+        lastB = gamepad2.b;
     }
 }

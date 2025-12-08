@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.qt1Teleop.qt1FinalTeleop;
+package org.firstinspires.ftc.teamcode.teleOp.qt1TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,8 +15,8 @@ import com.pedropathing.paths.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
-@TeleOp(name = "A RED", group = "test drive")
-public class RedTeleOp extends LinearOpMode {
+@TeleOp(name = "TeleOp67676767", group = "test drive")
+public class smallBlueTeleOp extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
@@ -26,8 +26,8 @@ public class RedTeleOp extends LinearOpMode {
 
     private Follower follower;
 
-    double wheelSpeed = 0.4;
-    double axonPosition = 0.14; // start centered
+    double wheelSpeed = 0.38;
+    double axonPosition = 0.15; // start centered
     double step = 0.01; // servo step
 
     private boolean movingToTarget = false;
@@ -36,7 +36,7 @@ public class RedTeleOp extends LinearOpMode {
     boolean lastB = false; // track B button
 
     // target pose for pressing B (make sure units match your field config)
-    private final Pose targetPose = new Pose(83.959, 86.004, Math.toRadians(-2.226)); // example target
+    private final Pose targetPose = new Pose(60.055, 85.424, Math.toRadians(-43.052)); // example target
 
     @Override
     public void runOpMode() {
@@ -99,9 +99,6 @@ public class RedTeleOp extends LinearOpMode {
                 double distToTarget = Math.hypot(dx, dy);
 
                 telemetry.addData("Distance to target", distToTarget);
-                telemetry.addData("Current X", currentPose.getX());
-                telemetry.addData("Current Y", currentPose.getY());
-                telemetry.addData("Current Heading", PoseStorage.currentPose.getHeading());
 
                 // Stop when Pedro says path is done OR we're close enough
                 if (!follower.isBusy() || distToTarget < 2.0) { // 2 units tolerance
@@ -191,7 +188,7 @@ public class RedTeleOp extends LinearOpMode {
 
         // PRIORITY: outtake (lt) > intake in (rt) > intake out (rb)
         if (lb) {
-            outtakeWheelPower = 0.8;  // set wheel speed
+            outtakeWheelPower = 1;  // set wheel speed
             leftWheel.setPower(outtakeWheelPower);
             rightWheel.setPower(outtakeWheelPower);
 
@@ -275,7 +272,7 @@ public class RedTeleOp extends LinearOpMode {
 
     // Start the path when B is first pressed
     public void checkStartPathWithB() {
-        boolean justPressedB = gamepad1.b && !lastB;
+        boolean justPressedB = gamepad2.b && !lastB;
         if (justPressedB && !movingToTarget) {
             //removed && !lastB
             Pose currentPose = follower.getPose();
@@ -293,6 +290,6 @@ public class RedTeleOp extends LinearOpMode {
             telemetry.addData("Started moving to target", targetPose);
         }
 
-        lastB = gamepad1.b;
+        lastB = gamepad2.b;
     }
 }
