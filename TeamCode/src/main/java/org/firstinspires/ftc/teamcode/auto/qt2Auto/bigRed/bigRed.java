@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pedroPathing;
+package org.firstinspires.ftc.teamcode.auto.qt2Auto.bigRed;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous (name = "bigRed", group = "Autonomous")
+@Autonomous (name = "bigRed")
 @Configurable
 public class bigRed extends OpMode {
 
@@ -355,7 +355,7 @@ public class bigRed extends OpMode {
             case 13:
                 if(!follower.isBusy()) {
                 follower.followPath(paths.Path14);
-                setPathState(14);
+                setPathState(-1);
                 telemetry.addLine("Path 14 Completed");
                 telemetry.update();
                 break;
