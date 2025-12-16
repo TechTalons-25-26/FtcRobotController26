@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto;
+package org.firstinspires.ftc.teamcode.pedroPathing;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -12,7 +12,6 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.auto.qt2Auto.smallBlue.smallBlue;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous (name = "bigRed", group = "Autonomous")
@@ -22,7 +21,7 @@ public class bigRed extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pedro Pathing follower instance
     private int pathState; // Current autonomous path state (state machine)
-    private smallBlue.Paths paths; // Paths defined in the Paths class
+    private Paths paths; // Paths defined in the Paths class
     private Timer pathTimer, actionTimer, opmodeTimer;
 
     @Override
@@ -33,7 +32,7 @@ public class bigRed extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(56, 136, Math.toRadians(90)));
 
-        paths = new smallBlue.Paths(follower); // Build paths
+        paths = new Paths(follower); // Build paths
 
         panelsTelemetry.debug("Status", "Initialized");
         panelsTelemetry.update(telemetry);
@@ -78,10 +77,10 @@ public class bigRed extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(88.000, 136.000),
-                                    new Pose(88.000, 115.800),
-                                    new Pose(87.500, 85.600),
-                                    new Pose(96.000, 96.000)
+                                    new Pose(123.200, 123.100),
+                                    new Pose(104.400, 109.300),
+                                    new Pose(100.000, 103.200),
+                                    new Pose(84.000, 84.000)
                             )
                     )
                     .setTangentHeadingInterpolation()
@@ -92,9 +91,9 @@ public class bigRed extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(96.000, 96.000),
-                                    new Pose(90.800, 89.800),
-                                    new Pose(95.800, 84.100),
+                                    new Pose(84.000, 84.000),
+                                    new Pose(91.700, 93.200),
+                                    new Pose(92.500, 84.100),
                                     new Pose(102.000, 84.000)
                             )
                     )
@@ -123,9 +122,9 @@ public class bigRed extends OpMode {
                     .addPath(
                             new BezierCurve(
                                     new Pose(102.000, 84.000),
-                                    new Pose(95.800, 84.100),
-                                    new Pose(90.800, 89.800),
-                                    new Pose(96.000, 96.000)
+                                    new Pose(92.500, 84.100),
+                                    new Pose(91.700, 93.200),
+                                    new Pose(84.000, 84.000)
                             )
                     )
                     .setTangentHeadingInterpolation()
@@ -136,9 +135,9 @@ public class bigRed extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(96.000, 96.000),
-                                    new Pose(88.400, 87.200),
-                                    new Pose(85.500, 60.400),
+                                    new Pose(84.000, 84.000),
+                                    new Pose(91.700, 93.200),
+                                    new Pose(91.000, 60.400),
                                     new Pose(102.000, 60.000)
                             )
                     )
@@ -167,9 +166,9 @@ public class bigRed extends OpMode {
                     .addPath(
                             new BezierCurve(
                                     new Pose(102.000, 60.000),
-                                    new Pose(85.500, 60.400),
-                                    new Pose(88.400, 87.200),
-                                    new Pose(96.000, 96.000)
+                                    new Pose(91.000, 60.400),
+                                    new Pose(91.700, 93.200),
+                                    new Pose(84.000, 84.000)
                             )
                     )
                     .setTangentHeadingInterpolation()
@@ -180,9 +179,9 @@ public class bigRed extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(96.000, 96.000),
-                                    new Pose(82.100, 79.800),
-                                    new Pose(76.700, 36.300),
+                                    new Pose(84.000, 84.000),
+                                    new Pose(94.000, 96.200),
+                                    new Pose(89.700, 35.600),
                                     new Pose(102.000, 36.000)
                             )
                     )
@@ -211,9 +210,9 @@ public class bigRed extends OpMode {
                     .addPath(
                             new BezierCurve(
                                     new Pose(102.000, 36.000),
-                                    new Pose(76.700, 36.300),
-                                    new Pose(82.100, 79.800),
-                                    new Pose(96.000, 96.000)
+                                    new Pose(89.700, 35.600),
+                                    new Pose(94.000, 96.200),
+                                    new Pose(84.000, 84.000)
                             )
                     )
                     .setTangentHeadingInterpolation()
@@ -224,16 +223,17 @@ public class bigRed extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(96.000, 96.000),
-                                    new Pose(82.500, 80.300),
-                                    new Pose(90.300, 72.100),
-                                    new Pose(96.000, 72.000)
+                                    new Pose(84.000, 84.000),
+                                    new Pose(94.000, 96.200),
+                                    new Pose(98.000, 72.100),
+                                    new Pose(107.300, 71.900)
                             )
                     )
                     .setTangentHeadingInterpolation()
                     .build();
         }
     }
+
 
     public int autonomousPathUpdate() {
         switch (pathState) {
@@ -245,95 +245,121 @@ public class bigRed extends OpMode {
                 break;
 
             case 1:
-                follower.followPath(paths.Path2);
-                setPathState(2);
-                telemetry.addLine("Path 2 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path2);
+                    setPathState(2);
+                    telemetry.addLine("Path 2 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 2:
-                follower.followPath(paths.Path3);
-                setPathState(3);
-                telemetry.addLine("Path 3 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path3);
+                    setPathState(3);
+                    telemetry.addLine("Path 3 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 3:
-                follower.followPath(paths.Path4);
-                setPathState(4);
-                telemetry.addLine("Path 4 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path4);
+                    setPathState(4);
+                    telemetry.addLine("Path 4 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 4:
-                follower.followPath(paths.Path5);
-                setPathState(5);
-                telemetry.addLine("Path 5 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path5);
+                    setPathState(5);
+                    telemetry.addLine("Path 5 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 5:
-                follower.followPath(paths.Path6);
-                setPathState(6);
-                telemetry.addLine("Path 6 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path6);
+                    setPathState(6);
+                    telemetry.addLine("Path 6 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 6:
-                follower.followPath(paths.Path7);
-                setPathState(7);
-                telemetry.addLine("Path 7 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path7);
+                    setPathState(7);
+                    telemetry.addLine("Path 7 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 7:
-                follower.followPath(paths.Path8);
-                setPathState(8);
-                telemetry.addLine("Path 8 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path8);
+                    setPathState(8);
+                    telemetry.addLine("Path 8 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 8:
-                follower.followPath(paths.Path9);
-                setPathState(9);
-                telemetry.addLine("Path 9 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path9);
+                    setPathState(9);
+                    telemetry.addLine("Path 9 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 9:
-                follower.followPath(paths.Path10);
-                setPathState(10);
-                telemetry.addLine("Path 10 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path10);
+                    setPathState(10);
+                    telemetry.addLine("Path 10 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 10:
-                follower.followPath(paths.Path11);
-                setPathState(11);
-                telemetry.addLine("Path 11 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path11);
+                    setPathState(11);
+                    telemetry.addLine("Path 11 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 11:
-                follower.followPath(paths.Path12);
-                setPathState(12);
-                telemetry.addLine("Path 12 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path12);
+                    setPathState(12);
+                    telemetry.addLine("Path 12 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 12:
-                follower.followPath(paths.Path13);
-                setPathState(13);
-                telemetry.addLine("Path 13 Completed");
-                telemetry.update();
-                break;
+                if(!follower.isBusy()) {
+                    follower.followPath(paths.Path13);
+                    setPathState(13);
+                    telemetry.addLine("Path 13 Completed");
+                    telemetry.update();
+                    break;
+                }
 
             case 13:
+                if(!follower.isBusy()) {
                 follower.followPath(paths.Path14);
                 setPathState(14);
                 telemetry.addLine("Path 14 Completed");
                 telemetry.update();
                 break;
+                }
         }
         return pathState;
     }
