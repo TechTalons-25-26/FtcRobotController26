@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto.bigRed;
+package org.firstinspires.ftc.teamcode.auto.qt2Auto;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -370,4 +370,3 @@ public class bigRed extends OpMode {
     }
 }
 
- 

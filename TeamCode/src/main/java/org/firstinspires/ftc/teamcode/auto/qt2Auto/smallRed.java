@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto.smallRed;
+package org.firstinspires.ftc.teamcode.auto.qt2Auto;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
