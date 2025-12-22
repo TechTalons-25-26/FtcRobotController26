@@ -36,6 +36,7 @@ public class LimelightTest extends OpMode {
 
     @Override
     public void start() {
+        limelight.setPollRateHz(100);
         limelight.start();
     }
 
