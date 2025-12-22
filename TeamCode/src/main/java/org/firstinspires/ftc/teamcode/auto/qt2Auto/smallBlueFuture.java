@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "bigBlueCurrent", group = "Autonomous")
+@Autonomous(name = "smallBlueFuture", group = "Autonomous")
 @Configurable // Panels
 public class smallBlueFuture extends OpMode {
 
