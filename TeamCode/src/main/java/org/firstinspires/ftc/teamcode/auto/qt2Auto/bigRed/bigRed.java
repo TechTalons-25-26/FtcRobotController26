@@ -369,5 +369,3 @@ public class bigRed extends OpMode {
         pathTimer.resetTimer();
     }
 }
-
- 
