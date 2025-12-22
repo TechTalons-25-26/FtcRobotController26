@@ -21,7 +21,7 @@ public class bigBlue extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     public Follower follower; // Pedro Pathing follower instance
     private int pathState; // Current autonomous path state (state machine)
-    private smallBlue.Paths paths; // Paths defined in the Paths class
+    private Paths paths; // Paths defined in the Paths class
     private Timer pathTimer, actionTimer, opmodeTimer;
 
     @Override
@@ -32,7 +32,7 @@ public class bigBlue extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(56, 136, Math.toRadians(90)));
 
-        paths = new smallBlue.Paths(follower); // Build paths
+        paths = new Paths(follower); // Build paths
 
         panelsTelemetry.debug("Status", "Initialized");
         panelsTelemetry.update(telemetry);
