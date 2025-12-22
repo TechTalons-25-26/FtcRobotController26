@@ -20,7 +20,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
 //import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "smallBlueV8 4", group = "Autonomous")
 @Configurable // Panels
 public class smallBlueV82 extends OpMode {
     // ----- Drive Motors -----

@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
 
 
-@Autonomous(name = "smallBlueV6", group = "Autonomous")
 @Configurable // Panels
 public class smallBlueV7_2 extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance

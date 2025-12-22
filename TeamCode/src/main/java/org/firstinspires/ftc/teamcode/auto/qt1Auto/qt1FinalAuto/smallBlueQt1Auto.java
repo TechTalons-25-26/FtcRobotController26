@@ -19,7 +19,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
-@Autonomous(name = "A--> FINAL Blue Small Triangle 6767", group = "Autonomous")
 @Configurable // Panels
 public class smallBlueQt1Auto extends OpMode {
     // ----- Drive Motors -----

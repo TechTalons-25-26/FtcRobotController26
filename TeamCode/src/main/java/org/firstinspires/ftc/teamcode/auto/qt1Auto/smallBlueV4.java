@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "smallBlueV4", group = "Autonomous")
 @Configurable // Panels
 public class smallBlueV4 extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance

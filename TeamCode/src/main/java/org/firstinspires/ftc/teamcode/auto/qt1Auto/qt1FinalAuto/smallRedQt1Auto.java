@@ -19,7 +19,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 //import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "FINAL AUTO - Red Small Triangle 4", group = "Autonomous")
 @Configurable // Panels
 public class smallRedQt1Auto extends OpMode {
     // ----- Drive Motors -----

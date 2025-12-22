@@ -11,7 +11,6 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "Example Auto", group = "Examples")
 public abstract class ExampleAuto_2 extends OpMode {
 
     private Follower follower;
