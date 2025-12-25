@@ -11,69 +11,52 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous (name = "bigRed")
+@Autonomous(name = "bigRed")
 @Configurable
 public class bigRed extends OpMode {
-
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
-    public Follower follower; // Pedro Pathing follower instance
-    private int pathState; // Current autonomous path state (state machine)
-    private Paths paths; // Paths defined in the Paths class
-    private Timer pathTimer, actionTimer, opmodeTimer;
+    private Follower follower;
+    private Timer pathTimer, opModeTimer;
 
-    @Override
-    public void init() {
-
-        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(56, 136, Math.toRadians(90)));
-
-        paths = new Paths(follower); // Build paths
-
-        panelsTelemetry.debug("Status", "Initialized");
-        panelsTelemetry.update(telemetry);
-
-        pathTimer = new Timer();
-        opmodeTimer = new Timer();
-        opmodeTimer.resetTimer();
+    PathState pathState;
+    public enum PathState {
+        BIGREDSTART_REDSHOOT,
+        REDSHOOT_REDTOPSTART,
+        REDTOPSTART_REDTOPEND,
+        REDTOPEND_REDTOPSTART,
+        REDTOPSTART_REDSHOOT,
+        REDSHOOT_REDMIDDLESTART,
+        REDMIDDLESTART_REDMIDDLEEND,
+        REDMIDDLEEND_REDMIDDLESTART,
+        REDMIDDLESTART_REDSHOOT,
+        REDSHOOT_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDBOTTOMEND,
+        REDBOTTOMEND_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDSHOOT,
+        REDSHOOT_REDEND
     }
 
-    @Override
-    public void loop() {
-        follower.update(); // Update Pedro Pathing
-        pathState = autonomousPathUpdate(); // Update autonomous state machine
+    private PathChain bigRedStart_redShoot;
+    private PathChain redShoot_redTopStart;
+    private PathChain redTopStart_redTopEnd;
+    private PathChain redTopEnd_redTopStart;
+    private PathChain redTopStart_redShoot;
+    private PathChain redShoot_redMiddleStart;
+    private PathChain redMiddleStart_redMiddleEnd;
+    private PathChain redMiddleEnd_redMiddleStart;
+    private PathChain redMiddleStart_redShoot;
+    private PathChain redShoot_redBottomStart;
+    private PathChain redBottomStart_redBottomEnd;
+    private PathChain redBottomEnd_redBottomStart;
+    private PathChain redBottomStart_redShoot;
+    private PathChain redShoot_redEnd;
 
-        // Log values to Panels and Driver Station
-        panelsTelemetry.debug("Path State", pathState);
-        panelsTelemetry.debug("X", follower.getPose().getX());
-        panelsTelemetry.debug("Y", follower.getPose().getY());
-        panelsTelemetry.debug("Heading", follower.getPose().getHeading());
-        panelsTelemetry.update(telemetry);
-    }
 
-    public static class Paths {
 
-        public PathChain Path1;
-        public PathChain Path2;
-        public PathChain Path3;
-        public PathChain Path4;
-        public PathChain Path5;
-        public PathChain Path6;
-        public PathChain Path7;
-        public PathChain Path8;
-        public PathChain Path9;
-        public PathChain Path10;
-        public PathChain Path11;
-        public PathChain Path12;
-        public PathChain Path13;
-        public PathChain Path14;
-
-        public Paths(Follower follower) {
-            Path1 = follower
+    public void buildPaths() {
+            bigRedStart_redShoot = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -87,7 +70,7 @@ public class bigRed extends OpMode {
                     .setReversed()
                     .build();
 
-            Path2 = follower
+            redShoot_redTopStart = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -100,7 +83,7 @@ public class bigRed extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
 
-            Path3 = follower
+            redTopStart_redTopEnd = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(102.000, 84.000), new Pose(130.000, 84.000))
@@ -108,7 +91,7 @@ public class bigRed extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
 
-            Path4 = follower
+            redTopEnd_redTopStart = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(130.000, 84.000), new Pose(102.000, 84.000))
@@ -117,7 +100,7 @@ public class bigRed extends OpMode {
                     .setReversed()
                     .build();
 
-            Path5 = follower
+            redTopStart_redShoot = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -131,7 +114,7 @@ public class bigRed extends OpMode {
                     .setReversed()
                     .build();
 
-            Path6 = follower
+            redShoot_redMiddleStart = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -144,7 +127,7 @@ public class bigRed extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
 
-            Path7 = follower
+            redMiddleStart_redMiddleEnd = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(102.000, 60.000), new Pose(136.000, 60.000))
@@ -152,7 +135,7 @@ public class bigRed extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
 
-            Path8 = follower
+            redMiddleEnd_redMiddleStart = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(136.000, 60.000), new Pose(102.000, 60.000))
@@ -161,7 +144,7 @@ public class bigRed extends OpMode {
                     .setReversed()
                     .build();
 
-            Path9 = follower
+            redMiddleStart_redShoot = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -175,7 +158,7 @@ public class bigRed extends OpMode {
                     .setReversed()
                     .build();
 
-            Path10 = follower
+            redShoot_redBottomStart = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -188,7 +171,7 @@ public class bigRed extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
 
-            Path11 = follower
+            redBottomStart_redBottomEnd = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(102.000, 36.000), new Pose(136.000, 36.000))
@@ -196,7 +179,7 @@ public class bigRed extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
 
-            Path12 = follower
+            redBottomEnd_redBottomStart = follower
                     .pathBuilder()
                     .addPath(
                             new BezierLine(new Pose(136.000, 36.000), new Pose(102.000, 36.000))
@@ -205,7 +188,7 @@ public class bigRed extends OpMode {
                     .setReversed()
                     .build();
 
-            Path13 = follower
+            redBottomStart_redShoot = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -219,7 +202,7 @@ public class bigRed extends OpMode {
                     .setReversed()
                     .build();
 
-            Path14 = follower
+            redShoot_redEnd = follower
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
@@ -232,139 +215,139 @@ public class bigRed extends OpMode {
                     .setTangentHeadingInterpolation()
                     .build();
         }
-    }
-
-
-    public int autonomousPathUpdate() {
+        public void statePathUpdate() {
         switch (pathState) {
-            case 0:
-                follower.followPath(paths.Path1);
-                setPathState(1);
-                telemetry.addLine("Path 1 Completed");
-                telemetry.update();
-                break;
 
-            case 1:
+            case BIGREDSTART_REDSHOOT:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path2);
-                    setPathState(2);
-                    telemetry.addLine("Path 2 Completed");
-                    telemetry.update();
+                    follower.followPath(bigRedStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDTOPSTART);
                     break;
                 }
 
-            case 2:
+            case REDSHOOT_REDTOPSTART:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path3);
-                    setPathState(3);
-                    telemetry.addLine("Path 3 Completed");
-                    telemetry.update();
+                    follower.followPath(redShoot_redTopStart, true);
+                    setPathState(PathState.REDTOPSTART_REDTOPEND);
                     break;
                 }
 
-            case 3:
+            case REDTOPSTART_REDTOPEND:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path4);
-                    setPathState(4);
-                    telemetry.addLine("Path 4 Completed");
-                    telemetry.update();
+                    follower.followPath(redTopStart_redTopEnd, true);
+                    setPathState(PathState.REDTOPEND_REDTOPSTART);
                     break;
                 }
 
-            case 4:
+            case REDTOPEND_REDTOPSTART:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path5);
-                    setPathState(5);
-                    telemetry.addLine("Path 5 Completed");
-                    telemetry.update();
+                    follower.followPath(redTopEnd_redTopStart, true);
+                    setPathState(PathState.REDTOPSTART_REDSHOOT);
                     break;
                 }
 
-            case 5:
+            case REDTOPSTART_REDSHOOT:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path6);
-                    setPathState(6);
-                    telemetry.addLine("Path 6 Completed");
-                    telemetry.update();
+                    follower.followPath(redTopStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDMIDDLESTART);
                     break;
                 }
 
-            case 6:
+            case REDSHOOT_REDMIDDLESTART:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path7);
-                    setPathState(7);
-                    telemetry.addLine("Path 7 Completed");
-                    telemetry.update();
+                    follower.followPath(redShoot_redMiddleStart, true);
+                    setPathState(PathState.REDMIDDLESTART_REDMIDDLEEND);
                     break;
                 }
 
-            case 7:
+            case REDMIDDLESTART_REDMIDDLEEND:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path8);
-                    setPathState(8);
-                    telemetry.addLine("Path 8 Completed");
-                    telemetry.update();
+                    follower.followPath(redMiddleStart_redMiddleEnd, true);
+                    setPathState(PathState.REDMIDDLEEND_REDMIDDLESTART);
                     break;
                 }
 
-            case 8:
+            case REDMIDDLEEND_REDMIDDLESTART:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path9);
-                    setPathState(9);
-                    telemetry.addLine("Path 9 Completed");
-                    telemetry.update();
+                    follower.followPath(redMiddleEnd_redMiddleStart, true);
+                    setPathState(PathState.REDMIDDLESTART_REDSHOOT);
                     break;
                 }
 
-            case 9:
+            case REDMIDDLESTART_REDSHOOT:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path10);
-                    setPathState(10);
-                    telemetry.addLine("Path 10 Completed");
-                    telemetry.update();
+                    follower.followPath(redMiddleStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDBOTTOMSTART);
                     break;
                 }
 
-            case 10:
+            case REDSHOOT_REDBOTTOMSTART:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path11);
-                    setPathState(11);
-                    telemetry.addLine("Path 11 Completed");
-                    telemetry.update();
+                    follower.followPath(redShoot_redBottomStart, true);
+                    setPathState(PathState.REDBOTTOMSTART_REDBOTTOMEND);
                     break;
                 }
 
-            case 11:
+            case REDBOTTOMSTART_REDBOTTOMEND:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path12);
-                    setPathState(12);
-                    telemetry.addLine("Path 12 Completed");
-                    telemetry.update();
+                    follower.followPath(redBottomStart_redBottomEnd, true);
+                    setPathState(PathState.REDBOTTOMEND_REDBOTTOMSTART);
                     break;
                 }
 
-            case 12:
+            case REDBOTTOMEND_REDBOTTOMSTART:
                 if(!follower.isBusy()) {
-                    follower.followPath(paths.Path13);
-                    setPathState(13);
-                    telemetry.addLine("Path 13 Completed");
-                    telemetry.update();
+                    follower.followPath(redBottomEnd_redBottomStart, true);
+                    setPathState(PathState.REDBOTTOMSTART_REDSHOOT);
                     break;
                 }
 
-            case 13:
+            case REDBOTTOMSTART_REDSHOOT:
                 if(!follower.isBusy()) {
-                follower.followPath(paths.Path14);
-                setPathState(-1);
-                telemetry.addLine("Path 14 Completed");
-                telemetry.update();
-                break;
+                    follower.followPath(redBottomStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDEND);
+                    break;
+                }
+
+            case REDSHOOT_REDEND:
+                if(!follower.isBusy()) {
+                    follower.followPath(redShoot_redEnd, true);
+                    break;
                 }
         }
-        return pathState;
     }
 
-    public void setPathState(int pState) {
-        pathState = pState;
+    public void setPathState(PathState newState) {
+        pathState = newState;
         pathTimer.resetTimer();
-    }}
+    }
+
+    @Override
+    public void init() {
+        pathState = PathState.BIGREDSTART_REDSHOOT;
+        pathTimer = new Timer();
+        opModeTimer = new Timer();
+        follower = Constants.createFollower(hardwareMap);
+        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+        //Add any other init mechanisms
+        buildPaths();
+        follower.setStartingPose(new Pose(20.800, 123.100,Math.toRadians(144)));
+    }
+
+    public void start() {
+        opModeTimer.resetTimer();
+        setPathState(pathState);
+    }
+
+    @Override
+    public void loop() {
+        follower.update();
+        statePathUpdate();
+        panelsTelemetry.debug("Path State", pathState);
+        panelsTelemetry.debug("X", follower.getPose().getX());
+        panelsTelemetry.debug("Y", follower.getPose().getY());
+        panelsTelemetry.debug("Heading", follower.getPose().getHeading());
+        panelsTelemetry.update(telemetry);
+
+    }
+}
