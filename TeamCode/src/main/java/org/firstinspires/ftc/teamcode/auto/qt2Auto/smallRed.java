@@ -11,417 +11,340 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
-@Autonomous(name = "smallRedOldV1", group = "Autonomous")
-@Configurable // Panels
+@Autonomous(name = "smallRede")
+@Configurable
 public class smallRed extends OpMode {
-    // ----- Drive Motors -----
-    private DcMotor frontLeft, frontRight, backLeft, backRight;
-    private DcMotor leftWheel, rightWheel;
-    // ----- Mechanisms -----
-    private DcMotor intakeMotor;
-    private CRServo conveyor;
-    private Servo outtakeAngle;
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
-    public Follower follower; // Pedro Pathing follower instance
-    private int pathState; // Current autonomous path state (state machine)
-    private PathsR paths; // Paths defined in the Paths class
-    private Timer pathTimer, actionTimer, opmodeTimer;
-    // ----- Timed Mechanisms -----
-    private long intakeEndTime = 0;
-    private long conveyorEndTime = 0;
-    private long outtakeEndTime = 0;
+    private Follower follower;
+    private Timer pathTimer, opModeTimer;
+
+    PathState pathState;
+    public enum PathState {
+        SMALLREDSTART_SMALLREDPRELOAD,
+        SMALLREDPRELOAD_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDBOTTOMEND,
+        REDBOTTOMEND_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDSHOOT,
+        REDSHOOT_REDMIDDLESTART,
+        REDMIDDLESTART_REDMIDDLEEND,
+        REDMIDDLEEND_REDMIDDLESTART,
+        REDMIDDLESTART_REDSHOOT,
+        REDSHOOT_REDTOPSTART,
+        REDTOPSTART_REDTOPEND,
+        REDTOPEND_REDTOPSTART,
+        REDTOPSTART_REDSHOOT,
+        REDSHOOT_REDEND
+    }
+
+
+    private PathChain smallRedStart_smallRedPreload;
+    private PathChain smallRedPreload_redBottomStart;
+    private PathChain redBottomStart_redBottomEnd;
+    private PathChain redBottomEnd_redBottomStart;
+    private PathChain redBottomStart_redShoot;
+    private PathChain redShoot_redMiddleStart;
+    private PathChain redMiddleStart_redMiddleEnd;
+    private PathChain redMiddleEnd_redMiddleStart;
+    private PathChain redMiddleStart_redShoot;
+    private PathChain redShoot_redTopStart;
+    private PathChain redTopStart_redTopEnd;
+    private PathChain redTopEnd_redTopStart;
+    private PathChain redTopStart_redShoot;
+    private PathChain redShoot_redEnd;
+
+
+
+    public void buildPaths() {
+        smallRedStart_smallRedPreload = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(88.000, 8.000), new Pose(88.000, 16.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(70))
+                .build();
+
+        smallRedPreload_redBottomStart = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(88.000, 16.000),
+                                new Pose(96.000, 38.000),
+                                new Pose(94.900, 36.000),
+                                new Pose(102.000, 36.000)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redBottomStart_redBottomEnd = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(102.000, 36.000), new Pose(136.000, 36.000))
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redBottomEnd_redBottomStart = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(136.000, 36.000), new Pose(102.000, 36.000))
+                )
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redBottomStart_redShoot = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(102.000, 36.000),
+                                new Pose(89.700, 36.550),
+                                new Pose(94.000, 96.200),
+                                new Pose(84.000, 84.000)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redShoot_redMiddleStart = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(84.000, 84.000),
+                                new Pose(92.200, 93.100),
+                                new Pose(88.500, 60.400),
+                                new Pose(102.000, 60.000)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redMiddleStart_redMiddleEnd = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(102.000, 60.000), new Pose(136.000, 60.000))
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redMiddleEnd_redMiddleStart = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(136.000, 60.000), new Pose(102.000, 60.000))
+                )
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redMiddleStart_redShoot = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(102.000, 60.000),
+                                new Pose(88.500, 60.400),
+                                new Pose(92.200, 93.100),
+                                new Pose(84.000, 84.000)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redShoot_redTopStart = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(84.000, 84.000),
+                                new Pose(91.700, 93.200),
+                                new Pose(92.500, 84.000),
+                                new Pose(102.000, 84.000)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redTopStart_redTopEnd = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(102.000, 84.000), new Pose(130.000, 84.000))
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redTopEnd_redTopStart = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(130.000, 84.000), new Pose(102.000, 84.000))
+                )
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redTopStart_redShoot = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(102.000, 84.000),
+                                new Pose(92.500, 84.000),
+                                new Pose(91.700, 93.300),
+                                new Pose(84.000, 84.000)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redShoot_redEnd = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(84.000, 84.000),
+                                new Pose(94.000, 96.200),
+                                new Pose(98.000, 72.100),
+                                new Pose(107.300, 71.900)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+    }
+
+    public void statePathUpdate() {
+        switch (pathState) {
+
+            case SMALLREDSTART_SMALLREDPRELOAD:
+                if(!follower.isBusy()) {
+                    follower.followPath(smallRedStart_smallRedPreload, true);
+                    setPathState(PathState.SMALLREDPRELOAD_REDBOTTOMSTART);
+                    break;
+                }
+
+            case SMALLREDPRELOAD_REDBOTTOMSTART:
+                if(!follower.isBusy()) {
+                    follower.followPath(smallRedPreload_redBottomStart, true);
+                    setPathState(PathState.REDBOTTOMSTART_REDBOTTOMEND);
+                    break;
+                }
+
+            case REDBOTTOMSTART_REDBOTTOMEND:
+                if(!follower.isBusy()) {
+                    follower.followPath(redBottomStart_redBottomEnd, true);
+                    setPathState(PathState.REDBOTTOMEND_REDBOTTOMSTART);
+                    break;
+                }
+
+            case REDBOTTOMEND_REDBOTTOMSTART:
+                if(!follower.isBusy()) {
+                    follower.followPath(redBottomEnd_redBottomStart, true);
+                    setPathState(PathState.REDBOTTOMSTART_REDSHOOT);
+                    break;
+                }
+
+            case REDBOTTOMSTART_REDSHOOT:
+                if(!follower.isBusy()) {
+                    follower.followPath(redBottomStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDMIDDLESTART);
+                    break;
+                }
+
+            case REDSHOOT_REDMIDDLESTART:
+                if(!follower.isBusy()) {
+                    follower.followPath(redShoot_redMiddleStart, true);
+                    setPathState(PathState.REDMIDDLESTART_REDMIDDLEEND);
+                    break;
+                }
+
+            case REDMIDDLESTART_REDMIDDLEEND:
+                if(!follower.isBusy()) {
+                    follower.followPath(redMiddleStart_redMiddleEnd, true);
+                    setPathState(PathState.REDMIDDLEEND_REDMIDDLESTART);
+                    break;
+                }
+
+            case REDMIDDLEEND_REDMIDDLESTART:
+                if(!follower.isBusy()) {
+                    follower.followPath(redMiddleEnd_redMiddleStart, true);
+                    setPathState(PathState.REDMIDDLESTART_REDSHOOT);
+                    break;
+                }
+
+            case REDMIDDLESTART_REDSHOOT:
+                if(!follower.isBusy()) {
+                    follower.followPath(redMiddleStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDTOPSTART);
+                    break;
+                }
+
+            case REDSHOOT_REDTOPSTART:
+                if(!follower.isBusy()) {
+                    follower.followPath(redShoot_redTopStart, true);
+                    setPathState(PathState.REDTOPSTART_REDTOPEND);
+                    break;
+                }
+
+            case REDTOPSTART_REDTOPEND:
+                if(!follower.isBusy()) {
+                    follower.followPath(redTopStart_redTopEnd, true);
+                    setPathState(PathState.REDTOPEND_REDTOPSTART);
+                    break;
+                }
+
+            case REDTOPEND_REDTOPSTART:
+                if(!follower.isBusy()) {
+                    follower.followPath(redTopEnd_redTopStart, true);
+                    setPathState(PathState.REDTOPSTART_REDSHOOT);
+                    break;
+                }
+
+            case REDTOPSTART_REDSHOOT:
+                if(!follower.isBusy()) {
+                    follower.followPath(redTopStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDEND);
+                    break;
+                }
+
+            case REDSHOOT_REDEND:
+                if(!follower.isBusy()) {
+                    follower.followPath(redShoot_redEnd, true);
+                    break;
+                }
+        }
+
+    }
+
+    public void setPathState(PathState newState) {
+        pathState = newState;
+        pathTimer.resetTimer();
+    }
+
     @Override
     public void init() {
-        robotSetup();
-        //updateMechanisms();
-
-        outtakeAngle.setPosition(0.14);
-
-        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(88, 8, Math.toRadians(270)));
-
-        paths = new PathsR(follower); // Build paths
-
-        panelsTelemetry.debug("Status", "Initialized");
-        panelsTelemetry.update(telemetry);
-
+        pathState = PathState.SMALLREDSTART_SMALLREDPRELOAD;
         pathTimer = new Timer();
-        opmodeTimer = new Timer();
-        opmodeTimer.resetTimer();
+        opModeTimer = new Timer();
+        follower = Constants.createFollower(hardwareMap);
+        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+        //Add any other init mechanisms
+        buildPaths();
+        follower.setStartingPose(new Pose(20.800, 123.100,Math.toRadians(144)));
+    }
 
+    public void start() {
+        opModeTimer.resetTimer();
+        setPathState(pathState);
     }
 
     @Override
     public void loop() {
-        follower.update(); // Update Pedro Pathing
-        pathState = autonomousPathUpdate(); // Update autonomous state machine
-        updateMechanisms();
-
-        // Log values to Panels and Driver Station
+        follower.update();
+        statePathUpdate();
         panelsTelemetry.debug("Path State", pathState);
         panelsTelemetry.debug("X", follower.getPose().getX());
         panelsTelemetry.debug("Y", follower.getPose().getY());
         panelsTelemetry.debug("Heading", follower.getPose().getHeading());
         panelsTelemetry.update(telemetry);
-        telemetry.addData("outtake Angle:", outtakeAngle);
-        telemetry.update();
-    }
 
-    public static class PathsR {
-
-        public PathChain Path1;
-        public PathChain Path2;
-        public PathChain Path3;
-        public PathChain Path4;
-        public PathChain Path5;
-        public PathChain Path6;
-        public PathChain Path7;
-        public PathChain Path8;
-        public PathChain Path9;
-        public PathChain Path10;
-        public PathChain Path11;
-        public PathChain Path12;
-        public PathChain Path13;
-
-        public PathsR(Follower follower) {
-            Path1 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(88.000, 8.000), new Pose(88.000, 12.000))
-                    )
-                    .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(288))
-                    .build();
-
-            Path2 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierCurve(
-                                    new Pose(88.000, 12.000),
-                                    new Pose(93.600, 29.200),
-                                    new Pose(85.200, 36.120),
-                                    new Pose(72.000, 36.000)
-                            )
-                    )
-                    .setTangentHeadingInterpolation()
-                    .setReversed()
-                    .build();
-
-            Path3 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(72.000, 36.000), new Pose(96.000, 36.000))
-                    )
-                    .setTangentHeadingInterpolation()
-                    .build();
-
-            Path4 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(96.000, 36.000), new Pose(136.400, 36.000))
-                    )
-                    .setTangentHeadingInterpolation()
-                    .build();
-
-            Path5 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierCurve(
-                                    new Pose(136.400, 36.000),
-                                    new Pose(91.400, 36.460),
-                                    new Pose(77.000, 76.100),
-                                    new Pose(84.000, 84.000)
-                            )
-                    )
-                    .setTangentHeadingInterpolation()
-                    .setReversed()
-                    .build();
-
-            Path6 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierCurve(
-                                    new Pose(84.000, 84.000),
-                                    new Pose(74.270, 72.590),
-                                    new Pose(79.480, 60.150),
-                                    new Pose(96.000, 60.000)
-                            )
-                    )
-                    .setTangentHeadingInterpolation()
-                    .build();
-
-            Path7 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(96.000, 60.000), new Pose(136.400, 60.000))
-                    )
-                    .setTangentHeadingInterpolation()
-                    .build();
-
-            Path8 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(136.400, 60.000), new Pose(96.000, 60.000))
-                    )
-                    .setTangentHeadingInterpolation()
-                    .setReversed()
-                    .build();
-
-            Path9 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierCurve(
-                                    new Pose(96.000, 60.000),
-                                    new Pose(79.480, 60.150),
-                                    new Pose(74.270, 72.590),
-                                    new Pose(84.000, 84.000)
-                            )
-                    )
-                    .setTangentHeadingInterpolation()
-                    .setReversed()
-                    .build();
-            /*
-            Path10 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(84.000, 84.000), new Pose(84.000, 84.000))
-                    )
-                    .setLinearHeadingInterpolation(Math.toRadians(230), Math.toRadians(180))
-                    .build();
-
-            Path11 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(84.000, 84.000), new Pose(120.000, 84.000))
-                    )
-                    .setTangentHeadingInterpolation()
-                    .build();
-
-            Path12 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(120.000, 84.000), new Pose(84.000, 84.000))
-                    )
-                    .setTangentHeadingInterpolation()
-                    .setReversed()
-                    .build();
-
-
-
-            Path13 = follower
-                    .pathBuilder()
-                    .addPath(
-                            new BezierLine(new Pose(84.000, 84.000), new Pose(84.000, 84.000))
-                    )
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(230))
-                    .build();
-
-             */
-        }
-    }
-
-    public int autonomousPathUpdate() {
-        switch (pathState) {
-            case 0:
-                follower.followPath(paths.Path1);
-                setPathState(1);
-                break;
-            case 1:
-
-            /* You could check for
-            - Follower State: "if(!follower.isBusy()) {}"
-            - Time: "if(pathTimer.getElapsedTimeSeconds() > 1) {}"
-            - Robot Position: "if(follower.getPose().getX() > 36) {}"
-            */
-
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy()) {
-                    /* Score Preload */
-
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(paths.Path2);
-                    setPathState(2);
-                }
-                break;
-            case 2:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if(!follower.isBusy()) {
-                    /* Grab Sample */
-
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(paths.Path3);
-                    setPathState(3);
-                }
-                break;
-            case 3:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy()) {
-                    /* Score Sample */
-                    rollIntake(0.9,5000);
-                    rollConveyor(1,5000);
-
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(paths.Path4);
-                    setPathState(4);
-                }
-                break;
-            case 4:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup2Pose's position */
-                if(!follower.isBusy()) {
-                    /* Grab Sample */
-
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(paths.Path5);
-                    setPathState(5);
-                }
-                break;
-            case 5:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if (!follower.isBusy()) {
-                    pathTimer.resetTimer();  // start pause timer
-                    setPathState(50);        // go to pause
-                    //rollOuttake(0.38, 50);
-                }
-                break;
-            case 50:
-                rollIntake(-0.5, 50);
-                rollConveyor(-1, 50);
-                rollOuttake(0.38, 4999);
-                rollConveyor(-1, 4999);
-                if (pathTimer.getElapsedTimeSeconds() > 5) {
-
-                    follower.followPath(paths.Path6);
-                    setPathState(6);   // go to the normal next state
-                }
-                break;
-            case 6:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
-                    /* Grab Sample */
-                    rollIntake(0.9,5000);
-                    rollConveyor(1,5000);
-
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(paths.Path7);
-                    setPathState(7);
-                }
-                break;
-            case 7:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
-                    /* Grab Sample */
-                    rollConveyor(1,500);
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(paths.Path8);
-                    setPathState(8);
-                }
-                break;
-            case 8:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
-                    /* Grab Sample */
-                    rollOuttake(0.38, 4999);
-                    rollConveyor(-1, 4999);
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(paths.Path9);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup3Pose's position */
-                if(!follower.isBusy()) {
-                    Pose finalPose = follower.getPose();
-
-                    PoseStorage.currentPose = finalPose;
-                    panelsTelemetry.debug("Final X", finalPose.getX());
-                    panelsTelemetry.debug("Final Y", finalPose.getY());
-                    panelsTelemetry.debug("Final Heading", finalPose.getHeading());
-                    panelsTelemetry.update(telemetry);
-                    setPathState(-1);
-                }
-                break;
-        }
-        return pathState;
-    }
-    public void setPathState(int pState) {
-        pathState = pState;
-        pathTimer.resetTimer();
-    }
-
-    private void robotSetup() {
-        leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
-        rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
-        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        conveyor = hardwareMap.get(CRServo.class, "conveyor");
-        outtakeAngle = hardwareMap.get(Servo.class, "outtakeAngle");
-
-        rightWheel.setDirection(DcMotor.Direction.REVERSE);
-
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
-
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
-
-        stopWheelMotors();
-
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    }
-    private void stopWheelMotors() {
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
-    }
-    // ----- Timed Mechanism Methods -----
-    public void rollIntake(double speed, long durationMS) {
-        intakeMotor.setPower(speed);
-        intakeEndTime = System.currentTimeMillis() + durationMS;
-    }
-
-    public void rollConveyor(double speed, long durationMS) {
-        conveyor.setPower(-speed);
-        conveyorEndTime = System.currentTimeMillis() + durationMS;
-    }
-
-    public void rollOuttake(double speed, long durationMS) {
-        leftWheel.setPower(speed);
-        rightWheel.setPower(speed);
-        outtakeEndTime = System.currentTimeMillis() + durationMS;
-    }
-
-    private void updateMechanisms() {
-        if (System.currentTimeMillis() > intakeEndTime) {
-            intakeMotor.setPower(0);
-            intakeEndTime = 0;
-        }
-
-        if (System.currentTimeMillis() > conveyorEndTime) {
-            conveyor.setPower(0);
-            conveyorEndTime = 0;
-        }
-
-        if (System.currentTimeMillis() > outtakeEndTime) {
-            leftWheel.setPower(0);
-            rightWheel.setPower(0);
-            outtakeEndTime = 0;
-        }
     }
 }
