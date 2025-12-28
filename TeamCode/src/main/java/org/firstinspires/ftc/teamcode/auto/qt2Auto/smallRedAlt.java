@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "smallBlue with bigTri preload")
+@Autonomous(name = "smallBlueAlt")
 @Configurable
 public class smallRedAlt extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
