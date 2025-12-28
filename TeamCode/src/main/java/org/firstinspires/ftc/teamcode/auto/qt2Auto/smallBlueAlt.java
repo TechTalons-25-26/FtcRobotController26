@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "smallBlue with bigTri preload")
 @Configurable
-public class smallBlue2 extends OpMode {
+public class smallBlueAlt extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     private Follower follower;
     private Timer pathTimer, opModeTimer;
