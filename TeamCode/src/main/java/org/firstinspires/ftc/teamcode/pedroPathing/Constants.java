@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.pedropathing.control.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(7.3)
@@ -20,10 +21,8 @@ public class Constants {
             .lateralZeroPowerAcceleration(-54.876)
             .translationalPIDFCoefficients(new PIDFCoefficients(0.075, 0, 0, 0))
             .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0.02, 0.01))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.025,0.0,0.002,0.6,0.01))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.025, 0.0, 0.002, 0.6, 0.01))
             .centripetalScaling(0.00042);
-
-
 
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 5);
@@ -35,7 +34,9 @@ public class Constants {
                 .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
                 .build();
-    }    public static MecanumConstants driveConstants = new MecanumConstants()
+    }
+
+    public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
             .rightFrontMotorName("frontRight")
             .rightRearMotorName("backRight")

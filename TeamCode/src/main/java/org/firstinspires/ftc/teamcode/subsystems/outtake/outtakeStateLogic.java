@@ -5,18 +5,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class outtakeLogic {
+public class outtakeStateLogic {
     private DcMotor outtakeMotor;
     private Servo gateServo;
     private ElapsedTime stateTimer = new ElapsedTime();
     OuttakeState outtakeState;
+
     public enum OuttakeState {
         IDLE,
         SPIN_UP,
         LAUNCH,
         RESET_GATE
     }
-    
+
     //TODO: TUNE ALL OF THESE
     //----------- Gate Constants ----------
     private double gateCloseAngle = 0;
@@ -44,7 +45,7 @@ public class outtakeLogic {
     }
 
     public void update() {
-        switch (outtakeState){
+        switch (outtakeState) {
             case IDLE:
                 if (shotsRemaining > 0) {
                     gateServo.setPosition(gateCloseAngle);
@@ -103,7 +104,6 @@ public class outtakeLogic {
     public void setOuttakeState(OuttakeState newState) {
         outtakeState = newState;
     }
-
 
 
 }
