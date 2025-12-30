@@ -12,6 +12,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
 
 @Autonomous(name = "bigBlue")
 @Configurable
@@ -19,6 +20,10 @@ public class bigBlue extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     private Follower follower;
     private Timer pathTimer, opModeTimer;
+
+    // ----------- OUTTAKE LOGIC ----------
+    private outtakeLogic outtake = new outtakeLogic();
+    private boolean shotsTriggered = false;
 
     PathState pathState;
     public enum PathState {
@@ -52,8 +57,6 @@ public class bigBlue extends OpMode {
     private PathChain blueBottomEnd_blueBottomStart;
     private PathChain blueBottomStart_blueShoot;
     private PathChain blueShoot_blueEnd;
-
-
 
     public void buildPaths() {
         bigBlueStart_blueShoot = follower
@@ -216,7 +219,7 @@ public class bigBlue extends OpMode {
                 .build();
     }
 
-    public void statePathUpdate() {
+    public void pathStateUpdate() {
         switch (pathState) {
 
             case BIGBLUESTART_BLUESHOOT:
@@ -322,6 +325,8 @@ public class bigBlue extends OpMode {
     public void setPathState(PathState newState) {
         pathState = newState;
         pathTimer.resetTimer();
+
+        shotsTriggered = false;
     }
 
     @Override
@@ -331,7 +336,9 @@ public class bigBlue extends OpMode {
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        //Add any other init mechanisms
+
+        outtake.init(hardwareMap);
+
         buildPaths();
         follower.setStartingPose(new Pose(20.800, 123.100,Math.toRadians(144)));
     }
@@ -344,7 +351,9 @@ public class bigBlue extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        statePathUpdate();
+        pathStateUpdate();
+        outtake.update();
+
         panelsTelemetry.debug("Path State", pathState);
         panelsTelemetry.debug("X", follower.getPose().getX());
         panelsTelemetry.debug("Y", follower.getPose().getY());
