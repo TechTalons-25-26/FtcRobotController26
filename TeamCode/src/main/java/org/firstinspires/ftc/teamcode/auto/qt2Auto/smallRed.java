@@ -187,6 +187,17 @@ public class smallRed extends baseAuto {
                 }
                 break;
 
+            case SHOOT_PRELOAD:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.SMALLREDPRELOAD_REDBOTTOMSTART);
+                    }
+                }
+                break;
+
             case SMALLREDPRELOAD_REDBOTTOMSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(smallRedPreload_redBottomStart, true);
@@ -212,6 +223,17 @@ public class smallRed extends baseAuto {
                 if (!follower.isBusy()) {
                     follower.followPath(redBottomStart_redShoot, true);
                     setPathState(PathState.REDSHOOT_REDMIDDLESTART);
+                }
+                break;
+
+            case SHOOT_BOTTOM:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.REDSHOOT_REDMIDDLESTART);
+                    }
                 }
                 break;
 
@@ -243,6 +265,17 @@ public class smallRed extends baseAuto {
                 }
                 break;
 
+            case SHOOT_MIDDLE:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.REDSHOOT_REDTOPSTART);
+                    }
+                }
+                break;
+
             case REDSHOOT_REDTOPSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(redShoot_redTopStart, true);
@@ -271,6 +304,17 @@ public class smallRed extends baseAuto {
                 }
                 break;
 
+            case SHOOT_TOP:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.REDSHOOT_REDEND);
+                    }
+                }
+                break;
+
             case REDSHOOT_REDEND:
                 if (!follower.isBusy()) {
                     follower.followPath(redShoot_redEnd, true);
@@ -286,14 +330,17 @@ public class smallRed extends baseAuto {
         REDBOTTOMSTART_REDBOTTOMEND,
         REDBOTTOMEND_REDBOTTOMSTART,
         REDBOTTOMSTART_REDSHOOT,
+        SHOOT_BOTTOM,
         REDSHOOT_REDMIDDLESTART,
         REDMIDDLESTART_REDMIDDLEEND,
         REDMIDDLEEND_REDMIDDLESTART,
         REDMIDDLESTART_REDSHOOT,
+        SHOOT_MIDDLE,
         REDSHOOT_REDTOPSTART,
         REDTOPSTART_REDTOPEND,
         REDTOPEND_REDTOPSTART,
         REDTOPSTART_REDSHOOT,
+        SHOOT_TOP,
         REDSHOOT_REDEND
     }
 }

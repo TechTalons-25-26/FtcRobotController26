@@ -229,6 +229,17 @@ public class smallBlueAlt extends baseAuto {
                 }
                 break;
 
+            case SHOOT_TOP:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.BLUESHOOT_BLUEMIDDLESTART);
+                    }
+                }
+                break;
+
             case BLUESHOOT_BLUEMIDDLESTART:
                 if (!follower.isBusy()) {
                     follower.followPath(blueShoot_blueMiddleStart, true);
@@ -254,6 +265,17 @@ public class smallBlueAlt extends baseAuto {
                 if (!follower.isBusy()) {
                     follower.followPath(blueMiddleStart_blueShoot, true);
                     setPathState(PathState.BLUESHOOT_BLUEBOTTOMSTART);
+                }
+                break;
+
+            case SHOOT_MIDDLE:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.BLUESHOOT_BLUEBOTTOMSTART);
+                    }
                 }
                 break;
 
@@ -285,6 +307,17 @@ public class smallBlueAlt extends baseAuto {
                 }
                 break;
 
+            case SHOOT_BOTTOM:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.BLUESHOOT_BLUEEND);
+                    }
+                }
+                break;
+
             case BLUESHOOT_BLUEEND:
                 if (!follower.isBusy()) {
                     follower.followPath(blueShoot_blueEnd, true);
@@ -300,14 +333,17 @@ public class smallBlueAlt extends baseAuto {
         BLUETOPSTART_BLUETOPEND,
         BLUETOPEND_BLUETOPSTART,
         BLUETOPSTART_BLUESHOOT,
+        SHOOT_TOP,
         BLUESHOOT_BLUEMIDDLESTART,
         BLUEMIDDLESTART_BLUEMIDDLEEND,
         BLUEMIDDLEEND_BLUEMIDDLESTART,
         BLUEMIDDLESTART_BLUESHOOT,
+        SHOOT_MIDDLE,
         BLUESHOOT_BLUEBOTTOMSTART,
         BLUEBOTTOM_BLUEBOTTOMEND,
         BLUEBOTTOMEND_BLUEBOTTOMSTART,
         BLUEBOTTOMSTART_BLUESHOOT,
+        SHOOT_BOTTOM,
         BLUESHOOT_BLUEEND
     }
 }

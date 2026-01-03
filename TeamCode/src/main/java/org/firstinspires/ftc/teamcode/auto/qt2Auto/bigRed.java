@@ -37,7 +37,8 @@ public class bigRed extends baseAuto {
 
     @Override
     protected Pose getStartingPose() {
-        return new Pose(20.800, 123.100, Math.toRadians(144));
+        // TODO: MAKE THIS RIGHT
+        return new Pose(123.200, 123.100, Math.toRadians(144));
     }
 
     @Override
@@ -227,6 +228,17 @@ public class bigRed extends baseAuto {
                 }
                 break;
 
+            case SHOOT_TOP:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.REDSHOOT_REDMIDDLESTART);
+                    }
+                }
+                break;
+
             case REDSHOOT_REDMIDDLESTART:
                 if (!follower.isBusy()) {
                     follower.followPath(redShoot_redMiddleStart, true);
@@ -252,6 +264,17 @@ public class bigRed extends baseAuto {
                 if (!follower.isBusy()) {
                     follower.followPath(redMiddleStart_redShoot, true);
                     setPathState(PathState.REDSHOOT_REDBOTTOMSTART);
+                }
+                break;
+
+            case SHOOT_MIDDLE:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.REDSHOOT_REDBOTTOMSTART);
+                    }
                 }
                 break;
 
@@ -283,6 +306,17 @@ public class bigRed extends baseAuto {
                 }
                 break;
 
+            case SHOOT_BOTTOM:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.REDSHOOT_REDEND);
+                    }
+                }
+                break;
+
             case REDSHOOT_REDEND:
                 if (!follower.isBusy()) {
                     follower.followPath(redShoot_redEnd, true);
@@ -298,14 +332,17 @@ public class bigRed extends baseAuto {
         REDTOPSTART_REDTOPEND,
         REDTOPEND_REDTOPSTART,
         REDTOPSTART_REDSHOOT,
+        SHOOT_TOP,
         REDSHOOT_REDMIDDLESTART,
         REDMIDDLESTART_REDMIDDLEEND,
         REDMIDDLEEND_REDMIDDLESTART,
         REDMIDDLESTART_REDSHOOT,
+        SHOOT_MIDDLE,
         REDSHOOT_REDBOTTOMSTART,
         REDBOTTOMSTART_REDBOTTOMEND,
         REDBOTTOMEND_REDBOTTOMSTART,
         REDBOTTOMSTART_REDSHOOT,
+        SHOOT_BOTTOM,
         REDSHOOT_REDEND
     }
 }
