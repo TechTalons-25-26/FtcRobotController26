@@ -8,7 +8,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeStateLogic;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
 
 public abstract class baseAuto extends OpMode {
 
@@ -16,7 +16,7 @@ public abstract class baseAuto extends OpMode {
     protected Follower follower;
     protected Timer pathTimer, opModeTimer;
 
-    protected outtakeStateLogic outtake = new outtakeStateLogic();
+    protected outtakeLogic outtake = new outtakeLogic();
     protected boolean shotsTriggered = false;
 
     // Each auto will define its own PathState enum

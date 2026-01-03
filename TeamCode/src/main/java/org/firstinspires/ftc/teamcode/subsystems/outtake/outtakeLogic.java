@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class outtakeStateLogic {
+public class outtakeLogic {
     private DcMotor outtakeMotor;
     private Servo gateServo;
-    private ElapsedTime stateTimer = new ElapsedTime();
+    private ElapsedTime outtakeTimer = new ElapsedTime();
     OuttakeState outtakeState;
 
     public enum OuttakeState {
@@ -18,14 +18,14 @@ public class outtakeStateLogic {
         RESET_GATE
     }
 
-    //TODO: TUNE ALL OF THESE
+    //TODO: TUNE THESE
     //----------- Gate Constants ----------
     private double gateCloseAngle = 0;
     private double gateOpenAngle = 90;
     private double gateOpenTime = 0.5;
     private double gateCloseTime = 0.5;
 
-    //TODO: TUNE ALL OF THESE
+    //TODO: TUNE THESE
     //----------- Outtake Constants--------
     private int shotsRemaining = 0;
     private double outtakeVelocity = 0;
@@ -49,8 +49,7 @@ public class outtakeStateLogic {
             case IDLE:
                 if (shotsRemaining > 0) {
                     gateServo.setPosition(gateCloseAngle);
-                    stateTimer.reset();
-
+                    outtakeTimer.reset();
                     //set velocity
                     outtakeMotor.setPower(targetOuttakeRPM);
                     setOuttakeState(OuttakeState.SPIN_UP);
@@ -59,28 +58,29 @@ public class outtakeStateLogic {
 
             case SPIN_UP:
                 //set velocity
-                if (outtakeVelocity > minOuttakeRPM || stateTimer.seconds() > maxOuttakeSpinupTime) {
+                outtakeTimer.reset();
+                if (outtakeVelocity > minOuttakeRPM || outtakeTimer.seconds() > maxOuttakeSpinupTime) {
                     gateServo.setPosition(gateOpenAngle);
-                    stateTimer.reset();
+                    outtakeTimer.reset();
 
                     setOuttakeState(OuttakeState.LAUNCH);
                 }
                 break;
 
             case LAUNCH:
-                if (stateTimer.seconds() > gateOpenTime) {
+                if (outtakeTimer.seconds() > gateOpenTime) {
                     shotsRemaining--; //increment by 1
                     gateServo.setPosition(gateCloseAngle);
-                    stateTimer.reset();
+                    outtakeTimer.reset();
 
                     setOuttakeState(OuttakeState.RESET_GATE);
                 }
                 break;
 
             case RESET_GATE:
-                if (stateTimer.seconds() > gateCloseTime) {
+                if (outtakeTimer.seconds() > gateCloseTime) {
                     if (shotsRemaining > 0) {
-                        stateTimer.reset();
+                        outtakeTimer.reset();
                         setOuttakeState(OuttakeState.SPIN_UP);
                     } else {
                         outtakeMotor.setPower(0);
@@ -107,4 +107,3 @@ public class outtakeStateLogic {
 
 
 }
-
