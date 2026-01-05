@@ -1,0 +1,29 @@
+package org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums;
+
+import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+@Configurable
+public class bigBlueEnum {
+    public enum PathState {
+        INTAKE_START,
+        BIGBLUESTART_BLUESHOOT,
+        SHOOT_PRELOAD,
+        BLUESHOOT_BLUETOPSTART,
+        BLUETOPSTART_BLUETOPEND,
+        BLUETOPEND_BLUETOPSTART,
+        BLUETOPSTART_BLUESHOOT,
+        SHOOT_TOP,
+        BLUESHOOT_BLUEMIDDLESTART,
+        BLUEMIDDLESTART_BLUEMIDDLEEND,
+        BLUEMIDDLEEND_BLUEMIDDLESTART,
+        BLUEMIDDLESTART_BLUESHOOT,
+        SHOOT_MIDDLE,
+        BLUESHOOT_BLUEBOTTOMSTART,
+        BLUEBOTTOM_BLUEBOTTOMEND,
+        BLUEBOTTOMEND_BLUEBOTTOMSTART,
+        BLUEBOTTOMSTART_BLUESHOOT,
+        SHOOT_BOTTOM,
+        BLUESHOOT_BLUEEND
+    }
+}

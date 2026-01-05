@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto;
+package org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
@@ -6,26 +6,25 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallBlueAltEnum.PathState;
+
 import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
 
-@Autonomous(name = "smallBlueAlt")
 @Configurable
-public class smallBlueAlt extends baseAuto {
+public class smallBlueEnum extends baseAuto {
 
-    private PathChain smallBlueStart_blueShoot;
-    private PathChain blueShoot_blueTopStart;
-    private PathChain blueTopStart_blueTopEnd;
-    private PathChain blueTopEnd_blueTopStart;
-    private PathChain blueTopStart_blueShoot;
+    private PathChain smallBlueStart_smallBluePreload;
+    private PathChain smallBluePreload_blueBottomStart;
+    private PathChain blueBottomStart_blueBottomEnd;
+    private PathChain blueBottomEnd_blueBottomStart;
+    private PathChain blueBottomStart_blueShoot;
     private PathChain blueShoot_blueMiddleStart;
     private PathChain blueMiddleStart_blueMiddleEnd;
     private PathChain blueMiddleEnd_blueMiddleStart;
     private PathChain blueMiddleStart_blueShoot;
-    private PathChain blueShoot_blueBottomStart;
-    private PathChain blueBottom_blueBottomEnd;
-    private PathChain blueBottomEnd_blueBottomStart;
-    private PathChain blueBottomStart_blueShoot;
+    private PathChain blueShoot_blueTopStart;
+    private PathChain blueTopStart_blueTopEnd;
+    private PathChain blueTopEnd_blueTopStart;
+    private PathChain blueTopStart_blueShoot;
     private PathChain blueShoot_blueEnd;
 
     @Override
@@ -43,11 +42,84 @@ public class smallBlueAlt extends baseAuto {
     @Override
     protected void buildPaths() {
 
-        smallBlueStart_blueShoot = follower.pathBuilder()
-                .addPath(new BezierCurve(
+        smallBlueStart_smallBluePreload = follower.pathBuilder()
+                .addPath(new BezierLine(
                         new Pose(56.000, 8.000),
-                        new Pose(55.800, 44.500),
-                        new Pose(81.800, 58.000),
+                        new Pose(56.000, 16.000)
+                ))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(110))
+                .build();
+
+        smallBluePreload_blueBottomStart = follower.pathBuilder()
+                .addPath(new BezierCurve(
+                        new Pose(56.000, 16.000),
+                        new Pose(48.000, 38.000),
+                        new Pose(49.100, 36.000),
+                        new Pose(42.000, 36.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        blueBottomStart_blueBottomEnd = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        new Pose(42.000, 36.000),
+                        new Pose(8.000, 36.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        blueBottomEnd_blueBottomStart = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        new Pose(8.000, 36.000),
+                        new Pose(42.000, 36.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        blueBottomStart_blueShoot = follower.pathBuilder()
+                .addPath(new BezierCurve(
+                        new Pose(42.000, 36.000),
+                        new Pose(54.300, 36.550),
+                        new Pose(50.000, 96.200),
+                        new Pose(60.000, 84.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        blueShoot_blueMiddleStart = follower.pathBuilder()
+                .addPath(new BezierCurve(
+                        new Pose(60.000, 84.000),
+                        new Pose(51.800, 93.100),
+                        new Pose(55.500, 60.400),
+                        new Pose(42.000, 60.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        blueMiddleStart_blueMiddleEnd = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        new Pose(42.000, 60.000),
+                        new Pose(8.000, 60.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        blueMiddleEnd_blueMiddleStart = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        new Pose(8.000, 60.000),
+                        new Pose(42.000, 60.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        blueMiddleStart_blueShoot = follower.pathBuilder()
+                .addPath(new BezierCurve(
+                        new Pose(42.000, 60.000),
+                        new Pose(55.500, 60.400),
+                        new Pose(51.800, 93.100),
                         new Pose(60.000, 84.000)
                 ))
                 .setTangentHeadingInterpolation()
@@ -84,84 +156,8 @@ public class smallBlueAlt extends baseAuto {
         blueTopStart_blueShoot = follower.pathBuilder()
                 .addPath(new BezierCurve(
                         new Pose(42.000, 84.000),
-                        new Pose(51.500, 84.100),
-                        new Pose(52.300, 93.200),
-                        new Pose(60.000, 84.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .setReversed()
-                .build();
-
-        blueShoot_blueMiddleStart = follower.pathBuilder()
-                .addPath(new BezierCurve(
-                        new Pose(60.000, 84.000),
-                        new Pose(52.300, 93.200),
-                        new Pose(53.000, 60.400),
-                        new Pose(42.000, 60.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        blueMiddleStart_blueMiddleEnd = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        new Pose(42.000, 60.000),
-                        new Pose(8.000, 60.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        blueMiddleEnd_blueMiddleStart = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        new Pose(8.000, 60.000),
-                        new Pose(42.000, 60.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .setReversed()
-                .build();
-
-        blueMiddleStart_blueShoot = follower.pathBuilder()
-                .addPath(new BezierCurve(
-                        new Pose(42.000, 60.000),
-                        new Pose(53.000, 60.400),
-                        new Pose(52.300, 93.200),
-                        new Pose(60.000, 84.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .setReversed()
-                .build();
-
-        blueShoot_blueBottomStart = follower.pathBuilder()
-                .addPath(new BezierCurve(
-                        new Pose(60.000, 84.000),
-                        new Pose(50.000, 96.200),
-                        new Pose(54.300, 35.600),
-                        new Pose(42.000, 36.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        blueBottom_blueBottomEnd = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        new Pose(42.000, 36.000),
-                        new Pose(8.000, 36.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        blueBottomEnd_blueBottomStart = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        new Pose(8.000, 36.000),
-                        new Pose(42.000, 36.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .setReversed()
-                .build();
-
-        blueBottomStart_blueShoot = follower.pathBuilder()
-                .addPath(new BezierCurve(
-                        new Pose(42.000, 36.000),
-                        new Pose(54.300, 35.600),
-                        new Pose(50.000, 96.200),
+                        new Pose(51.600, 84.000),
+                        new Pose(52.400, 93.300),
                         new Pose(60.000, 84.000)
                 ))
                 .setTangentHeadingInterpolation()
@@ -185,11 +181,11 @@ public class smallBlueAlt extends baseAuto {
             case INTAKE_START:
                 if (!follower.isBusy()) {
                     intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
-                    setPathState(PathState.SMALLBLUESTART_BLUESHOOT);
+                    setPathState(PathState.SMALLBLUESTART_SMALLBLUEPRELOAD);
                 }
-            case SMALLBLUESTART_BLUESHOOT:
+            case SMALLBLUESTART_SMALLBLUEPRELOAD:
                 if (!follower.isBusy()) {
-                    follower.followPath(smallBlueStart_blueShoot, true);
+                    follower.followPath(smallBlueStart_smallBluePreload, true);
                     setPathState(PathState.SHOOT_PRELOAD);
                 }
                 break;
@@ -200,40 +196,40 @@ public class smallBlueAlt extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.BLUESHOOT_BLUETOPSTART);
+                        setPathState(PathState.SMALLBLUEPRELOAD_BLUEBOTTOMSTART);
                     }
                 }
                 break;
 
-            case BLUESHOOT_BLUETOPSTART:
+            case SMALLBLUEPRELOAD_BLUEBOTTOMSTART:
                 if (!follower.isBusy()) {
-                    follower.followPath(blueShoot_blueTopStart, true);
-                    setPathState(PathState.BLUETOPSTART_BLUETOPEND);
+                    follower.followPath(smallBluePreload_blueBottomStart, true);
+                    setPathState(PathState.BLUEBOTTOMSTART_BLUEBOTTOMEND);
                 }
                 break;
 
-            case BLUETOPSTART_BLUETOPEND:
+            case BLUEBOTTOMSTART_BLUEBOTTOMEND:
                 if (!follower.isBusy()) {
-                    follower.followPath(blueTopStart_blueTopEnd, true);
-                    setPathState(PathState.BLUETOPEND_BLUETOPSTART);
+                    follower.followPath(blueBottomStart_blueBottomEnd, true);
+                    setPathState(PathState.BLUEBOTTOMEND_BLUEBOTTOMSTART);
                 }
                 break;
 
-            case BLUETOPEND_BLUETOPSTART:
+            case BLUEBOTTOMEND_BLUEBOTTOMSTART:
                 if (!follower.isBusy()) {
-                    follower.followPath(blueTopEnd_blueTopStart, true);
-                    setPathState(PathState.BLUETOPSTART_BLUESHOOT);
+                    follower.followPath(blueBottomEnd_blueBottomStart, true);
+                    setPathState(PathState.BLUEBOTTOMSTART_BLUESHOOT);
                 }
                 break;
 
-            case BLUETOPSTART_BLUESHOOT:
+            case BLUEBOTTOMSTART_BLUESHOOT:
                 if (!follower.isBusy()) {
-                    follower.followPath(blueTopStart_blueShoot, true);
+                    follower.followPath(blueBottomStart_blueShoot, true);
                     setPathState(PathState.BLUESHOOT_BLUEMIDDLESTART);
                 }
                 break;
 
-            case SHOOT_TOP:
+            case SHOOT_BOTTOM:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
@@ -268,7 +264,7 @@ public class smallBlueAlt extends baseAuto {
             case BLUEMIDDLESTART_BLUESHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(blueMiddleStart_blueShoot, true);
-                    setPathState(PathState.BLUESHOOT_BLUEBOTTOMSTART);
+                    setPathState(PathState.BLUESHOOT_BLUETOPSTART);
                 }
                 break;
 
@@ -278,40 +274,40 @@ public class smallBlueAlt extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.BLUESHOOT_BLUEBOTTOMSTART);
+                        setPathState(PathState.BLUESHOOT_BLUETOPSTART);
                     }
                 }
                 break;
 
-            case BLUESHOOT_BLUEBOTTOMSTART:
+            case BLUESHOOT_BLUETOPSTART:
                 if (!follower.isBusy()) {
-                    follower.followPath(blueShoot_blueBottomStart, true);
-                    setPathState(PathState.BLUEBOTTOM_BLUEBOTTOMEND);
+                    follower.followPath(blueShoot_blueTopStart, true);
+                    setPathState(PathState.BLUETOPSTART_BLUETOPEND);
                 }
                 break;
 
-            case BLUEBOTTOM_BLUEBOTTOMEND:
+            case BLUETOPSTART_BLUETOPEND:
                 if (!follower.isBusy()) {
-                    follower.followPath(blueBottom_blueBottomEnd, true);
-                    setPathState(PathState.BLUEBOTTOMEND_BLUEBOTTOMSTART);
+                    follower.followPath(blueTopStart_blueTopEnd, true);
+                    setPathState(PathState.BLUETOPEND_BLUETOPSTART);
                 }
                 break;
 
-            case BLUEBOTTOMEND_BLUEBOTTOMSTART:
+            case BLUETOPEND_BLUETOPSTART:
                 if (!follower.isBusy()) {
-                    follower.followPath(blueBottomEnd_blueBottomStart, true);
-                    setPathState(PathState.BLUEBOTTOMSTART_BLUESHOOT);
+                    follower.followPath(blueTopEnd_blueTopStart, true);
+                    setPathState(PathState.BLUETOPSTART_BLUESHOOT);
                 }
                 break;
 
-            case BLUEBOTTOMSTART_BLUESHOOT:
+            case BLUETOPSTART_BLUESHOOT:
                 if (!follower.isBusy()) {
-                    follower.followPath(blueBottomStart_blueShoot, true);
+                    follower.followPath(blueTopStart_blueShoot, true);
                     setPathState(PathState.BLUESHOOT_BLUEEND);
                 }
                 break;
 
-            case SHOOT_BOTTOM:
+            case SHOOT_TOP:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
@@ -328,5 +324,27 @@ public class smallBlueAlt extends baseAuto {
                 }
                 break;
         }
+    }
+
+    public enum PathState {
+        INTAKE_START,
+        SMALLBLUESTART_SMALLBLUEPRELOAD,
+        SHOOT_PRELOAD,
+        SMALLBLUEPRELOAD_BLUEBOTTOMSTART,
+        BLUEBOTTOMSTART_BLUEBOTTOMEND,
+        BLUEBOTTOMEND_BLUEBOTTOMSTART,
+        BLUEBOTTOMSTART_BLUESHOOT,
+        SHOOT_BOTTOM,
+        BLUESHOOT_BLUEMIDDLESTART,
+        BLUEMIDDLESTART_BLUEMIDDLEEND,
+        BLUEMIDDLEEND_BLUEMIDDLESTART,
+        BLUEMIDDLESTART_BLUESHOOT,
+        SHOOT_MIDDLE,
+        BLUESHOOT_BLUETOPSTART,
+        BLUETOPSTART_BLUETOPEND,
+        BLUETOPEND_BLUETOPSTART,
+        BLUETOPSTART_BLUESHOOT,
+        SHOOT_TOP,
+        BLUESHOOT_BLUEEND
     }
 }

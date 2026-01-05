@@ -6,7 +6,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
+import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallRedAltEnum.PathState;
 import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
 
 @Autonomous(name = "smallRedAlt")
@@ -30,7 +30,7 @@ public class smallRedAlt extends baseAuto {
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.SMALLREDSTART_REDSHOOT;
+        return PathState.INTAKE_START;
     }
 
     // ---------------- REQUIRED OVERRIDES ----------------
@@ -182,7 +182,11 @@ public class smallRedAlt extends baseAuto {
     @Override
     protected void pathStateUpdate() {
         switch ((PathState) pathState) {
-
+            case INTAKE_START:
+                if (!follower.isBusy()) {
+                    intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
+                    setPathState(PathState.SMALLREDSTART_REDSHOOT);
+                }
             case SMALLREDSTART_REDSHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(smallRedStart_redShoot, true);
@@ -324,26 +328,5 @@ public class smallRedAlt extends baseAuto {
                 }
                 break;
         }
-    }
-
-    public enum PathState {
-        SMALLREDSTART_REDSHOOT,
-        SHOOT_PRELOAD,
-        REDSHOOT_REDTOPSTART,
-        REDTOPSTART_REDTOPEND,
-        REDTOPEND_REDTOPSTART,
-        REDTOPSTART_REDSHOOT,
-        SHOOT_TOP,
-        REDSHOOT_REDMIDDLESTART,
-        REDMIDDLESTART_REDMIDDLEEND,
-        REDMIDDLEEND_REDMIDDLESTART,
-        REDMIDDLESTART_REDSHOOT,
-        SHOOT_MIDDLE,
-        REDSHOOT_REDBOTTOMSTART,
-        REDBOTTOMSTART_REDBOTTOMEND,
-        REDBOTTOMEND_REDBOTTOMSTART,
-        REDBOTTOMSTART_REDSHOOT,
-        SHOOT_BOTTOM,
-        REDSHOOT_REDEND
     }
 }

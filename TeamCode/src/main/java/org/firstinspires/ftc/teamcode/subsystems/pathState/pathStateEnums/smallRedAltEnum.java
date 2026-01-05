@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto;
+package org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
@@ -6,26 +6,25 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallRedEnum.PathState;
+
 import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
 
-@Autonomous(name = "smallRed")
 @Configurable
-public class smallRed extends baseAuto {
+public class smallRedAltEnum extends baseAuto {
 
-    private PathChain smallRedStart_smallRedPreload;
-    private PathChain smallRedPreload_redBottomStart;
-    private PathChain redBottomStart_redBottomEnd;
-    private PathChain redBottomEnd_redBottomStart;
-    private PathChain redBottomStart_redShoot;
-    private PathChain redShoot_redMiddleStart;
-    private PathChain redMiddleStart_redMiddleEnd;
-    private PathChain redMiddleEnd_redMiddleStart;
-    private PathChain redMiddleStart_redShoot;
+    private PathChain smallRedStart_redShoot;
     private PathChain redShoot_redTopStart;
     private PathChain redTopStart_redTopEnd;
     private PathChain redTopEnd_redTopStart;
     private PathChain redTopStart_redShoot;
+    private PathChain redShoot_redMiddleStart;
+    private PathChain redMiddleStart_redMiddleEnd;
+    private PathChain redMiddleEnd_redMiddleStart;
+    private PathChain redMiddleStart_redShoot;
+    private PathChain redShoot_redBottomStart;
+    private PathChain redBottomStart_redBottomEnd;
+    private PathChain redBottomEnd_redBottomStart;
+    private PathChain redBottomStart_redShoot;
     private PathChain redShoot_redEnd;
 
     @Override
@@ -43,84 +42,11 @@ public class smallRed extends baseAuto {
     @Override
     protected void buildPaths() {
 
-        smallRedStart_smallRedPreload = follower.pathBuilder()
-                .addPath(new BezierLine(
+        smallRedStart_redShoot = follower.pathBuilder()
+                .addPath(new BezierCurve(
                         new Pose(88.000, 8.000),
-                        new Pose(88.000, 16.000)
-                ))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(70))
-                .build();
-
-        smallRedPreload_redBottomStart = follower.pathBuilder()
-                .addPath(new BezierCurve(
-                        new Pose(88.000, 16.000),
-                        new Pose(96.000, 38.000),
-                        new Pose(94.900, 36.000),
-                        new Pose(102.000, 36.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        redBottomStart_redBottomEnd = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        new Pose(102.000, 36.000),
-                        new Pose(136.000, 36.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        redBottomEnd_redBottomStart = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        new Pose(136.000, 36.000),
-                        new Pose(102.000, 36.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .setReversed()
-                .build();
-
-        redBottomStart_redShoot = follower.pathBuilder()
-                .addPath(new BezierCurve(
-                        new Pose(102.000, 36.000),
-                        new Pose(89.700, 36.550),
-                        new Pose(94.000, 96.200),
-                        new Pose(84.000, 84.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .setReversed()
-                .build();
-
-        redShoot_redMiddleStart = follower.pathBuilder()
-                .addPath(new BezierCurve(
-                        new Pose(84.000, 84.000),
-                        new Pose(92.200, 93.100),
-                        new Pose(88.500, 60.400),
-                        new Pose(102.000, 60.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        redMiddleStart_redMiddleEnd = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        new Pose(102.000, 60.000),
-                        new Pose(136.000, 60.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .build();
-
-        redMiddleEnd_redMiddleStart = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        new Pose(136.000, 60.000),
-                        new Pose(102.000, 60.000)
-                ))
-                .setTangentHeadingInterpolation()
-                .setReversed()
-                .build();
-
-        redMiddleStart_redShoot = follower.pathBuilder()
-                .addPath(new BezierCurve(
-                        new Pose(102.000, 60.000),
-                        new Pose(88.500, 60.400),
-                        new Pose(92.200, 93.100),
+                        new Pose(88.200, 44.500),
+                        new Pose(62.200, 58.000),
                         new Pose(84.000, 84.000)
                 ))
                 .setTangentHeadingInterpolation()
@@ -131,7 +57,7 @@ public class smallRed extends baseAuto {
                 .addPath(new BezierCurve(
                         new Pose(84.000, 84.000),
                         new Pose(91.700, 93.200),
-                        new Pose(92.500, 84.000),
+                        new Pose(92.500, 84.100),
                         new Pose(102.000, 84.000)
                 ))
                 .setTangentHeadingInterpolation()
@@ -157,8 +83,84 @@ public class smallRed extends baseAuto {
         redTopStart_redShoot = follower.pathBuilder()
                 .addPath(new BezierCurve(
                         new Pose(102.000, 84.000),
-                        new Pose(92.500, 84.000),
-                        new Pose(91.700, 93.300),
+                        new Pose(92.500, 84.100),
+                        new Pose(91.700, 93.200),
+                        new Pose(84.000, 84.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redShoot_redMiddleStart = follower.pathBuilder()
+                .addPath(new BezierCurve(
+                        new Pose(84.000, 84.000),
+                        new Pose(91.700, 93.200),
+                        new Pose(91.000, 60.400),
+                        new Pose(102.000, 60.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redMiddleStart_redMiddleEnd = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        new Pose(102.000, 60.000),
+                        new Pose(136.000, 60.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redMiddleEnd_redMiddleStart = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        new Pose(136.000, 60.000),
+                        new Pose(102.000, 60.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redMiddleStart_redShoot = follower.pathBuilder()
+                .addPath(new BezierCurve(
+                        new Pose(102.000, 60.000),
+                        new Pose(91.000, 60.400),
+                        new Pose(91.700, 93.200),
+                        new Pose(84.000, 84.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redShoot_redBottomStart = follower.pathBuilder()
+                .addPath(new BezierCurve(
+                        new Pose(84.000, 84.000),
+                        new Pose(94.000, 96.200),
+                        new Pose(89.700, 35.600),
+                        new Pose(102.000, 36.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redBottomStart_redBottomEnd = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        new Pose(102.000, 36.000),
+                        new Pose(136.000, 36.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        redBottomEnd_redBottomStart = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        new Pose(136.000, 36.000),
+                        new Pose(102.000, 36.000)
+                ))
+                .setTangentHeadingInterpolation()
+                .setReversed()
+                .build();
+
+        redBottomStart_redShoot = follower.pathBuilder()
+                .addPath(new BezierCurve(
+                        new Pose(102.000, 36.000),
+                        new Pose(89.700, 35.600),
+                        new Pose(94.000, 96.200),
                         new Pose(84.000, 84.000)
                 ))
                 .setTangentHeadingInterpolation()
@@ -179,93 +181,19 @@ public class smallRed extends baseAuto {
     @Override
     protected void pathStateUpdate() {
         switch ((PathState) pathState) {
-
-            case SMALLREDSTART_SMALLREDPRELOAD:
+            case INTAKE_START:
                 if (!follower.isBusy()) {
-                    follower.followPath(smallRedStart_smallRedPreload, true);
-                    setPathState(PathState.SMALLREDPRELOAD_REDBOTTOMSTART);
+                    intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
+                    setPathState(PathState.SMALLREDSTART_REDSHOOT);
                 }
-                break;
-
-            case SHOOT_PRELOAD:
+            case SMALLREDSTART_REDSHOOT:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(3);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.SMALLREDPRELOAD_REDBOTTOMSTART);
-                    }
-                }
-                break;
-
-            case SMALLREDPRELOAD_REDBOTTOMSTART:
-                if (!follower.isBusy()) {
-                    follower.followPath(smallRedPreload_redBottomStart, true);
-                    setPathState(PathState.REDBOTTOMSTART_REDBOTTOMEND);
-                }
-                break;
-
-            case REDBOTTOMSTART_REDBOTTOMEND:
-                if (!follower.isBusy()) {
-                    follower.followPath(redBottomStart_redBottomEnd, true);
-                    setPathState(PathState.REDBOTTOMEND_REDBOTTOMSTART);
-                }
-                break;
-
-            case REDBOTTOMEND_REDBOTTOMSTART:
-                if (!follower.isBusy()) {
-                    follower.followPath(redBottomEnd_redBottomStart, true);
-                    setPathState(PathState.REDBOTTOMSTART_REDSHOOT);
-                }
-                break;
-
-            case REDBOTTOMSTART_REDSHOOT:
-                if (!follower.isBusy()) {
-                    follower.followPath(redBottomStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDMIDDLESTART);
-                }
-                break;
-
-            case SHOOT_BOTTOM:
-                if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(3);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDSHOOT_REDMIDDLESTART);
-                    }
-                }
-                break;
-
-            case REDSHOOT_REDMIDDLESTART:
-                if (!follower.isBusy()) {
-                    follower.followPath(redShoot_redMiddleStart, true);
-                    setPathState(PathState.REDMIDDLESTART_REDMIDDLEEND);
-                }
-                break;
-
-            case REDMIDDLESTART_REDMIDDLEEND:
-                if (!follower.isBusy()) {
-                    follower.followPath(redMiddleStart_redMiddleEnd, true);
-                    setPathState(PathState.REDMIDDLEEND_REDMIDDLESTART);
-                }
-                break;
-
-            case REDMIDDLEEND_REDMIDDLESTART:
-                if (!follower.isBusy()) {
-                    follower.followPath(redMiddleEnd_redMiddleStart, true);
-                    setPathState(PathState.REDMIDDLESTART_REDSHOOT);
-                }
-                break;
-
-            case REDMIDDLESTART_REDSHOOT:
-                if (!follower.isBusy()) {
-                    follower.followPath(redMiddleStart_redShoot, true);
+                    follower.followPath(smallRedStart_redShoot, true);
                     setPathState(PathState.REDSHOOT_REDTOPSTART);
                 }
                 break;
 
-            case SHOOT_MIDDLE:
+            case SHOOT_PRELOAD:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
@@ -300,11 +228,89 @@ public class smallRed extends baseAuto {
             case REDTOPSTART_REDSHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(redTopStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDEND);
+                    setPathState(PathState.REDSHOOT_REDMIDDLESTART);
                 }
                 break;
 
             case SHOOT_TOP:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.REDSHOOT_REDMIDDLESTART);
+                    }
+                }
+                break;
+
+            case REDSHOOT_REDMIDDLESTART:
+                if (!follower.isBusy()) {
+                    follower.followPath(redShoot_redMiddleStart, true);
+                    setPathState(PathState.REDMIDDLESTART_REDMIDDLEEND);
+                }
+                break;
+
+            case REDMIDDLESTART_REDMIDDLEEND:
+                if (!follower.isBusy()) {
+                    follower.followPath(redMiddleStart_redMiddleEnd, true);
+                    setPathState(PathState.REDMIDDLEEND_REDMIDDLESTART);
+                }
+                break;
+
+            case REDMIDDLEEND_REDMIDDLESTART:
+                if (!follower.isBusy()) {
+                    follower.followPath(redMiddleEnd_redMiddleStart, true);
+                    setPathState(PathState.REDMIDDLESTART_REDSHOOT);
+                }
+                break;
+
+            case REDMIDDLESTART_REDSHOOT:
+                if (!follower.isBusy()) {
+                    follower.followPath(redMiddleStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDBOTTOMSTART);
+                }
+                break;
+
+            case SHOOT_MIDDLE:
+                if (!follower.isBusy()) {
+                    if (!shotsTriggered) {
+                        outtake.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (shotsTriggered && !outtake.isBusy()) {
+                        setPathState(PathState.REDSHOOT_REDBOTTOMSTART);
+                    }
+                }
+                break;
+
+            case REDSHOOT_REDBOTTOMSTART:
+                if (!follower.isBusy()) {
+                    follower.followPath(redShoot_redBottomStart, true);
+                    setPathState(PathState.REDBOTTOMSTART_REDBOTTOMEND);
+                }
+                break;
+
+            case REDBOTTOMSTART_REDBOTTOMEND:
+                if (!follower.isBusy()) {
+                    follower.followPath(redBottomStart_redBottomEnd, true);
+                    setPathState(PathState.REDBOTTOMEND_REDBOTTOMSTART);
+                }
+                break;
+
+            case REDBOTTOMEND_REDBOTTOMSTART:
+                if (!follower.isBusy()) {
+                    follower.followPath(redBottomEnd_redBottomStart, true);
+                    setPathState(PathState.REDBOTTOMSTART_REDSHOOT);
+                }
+                break;
+
+            case REDBOTTOMSTART_REDSHOOT:
+                if (!follower.isBusy()) {
+                    follower.followPath(redBottomStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDEND);
+                }
+                break;
+
+            case SHOOT_BOTTOM:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
@@ -321,5 +327,27 @@ public class smallRed extends baseAuto {
                 }
                 break;
         }
+    }
+
+    public enum PathState {
+        INTAKE_START,
+        SMALLREDSTART_REDSHOOT,
+        SHOOT_PRELOAD,
+        REDSHOOT_REDTOPSTART,
+        REDTOPSTART_REDTOPEND,
+        REDTOPEND_REDTOPSTART,
+        REDTOPSTART_REDSHOOT,
+        SHOOT_TOP,
+        REDSHOOT_REDMIDDLESTART,
+        REDMIDDLESTART_REDMIDDLEEND,
+        REDMIDDLEEND_REDMIDDLESTART,
+        REDMIDDLESTART_REDSHOOT,
+        SHOOT_MIDDLE,
+        REDSHOOT_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDBOTTOMEND,
+        REDBOTTOMEND_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDSHOOT,
+        SHOOT_BOTTOM,
+        REDSHOOT_REDEND
     }
 }

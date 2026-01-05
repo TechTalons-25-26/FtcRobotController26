@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class intakeLogic {
     IntakeState intakeState;
-    private DcMotor intakeMotor;
+    public DcMotor intakeMotor;
     private ElapsedTime intakeTimer = new ElapsedTime();
     //TODO: TUNE THESE
-    private double intakePower = 0;
-    private boolean intakeIsRunning = false;
-    private double intakeRunTime = 0;
-    private boolean intakeIsReversed;
+    public double intakePower = 0;
+    public boolean intakeIsRunning = false;
+    public double intakeRunTime = 0;
+    public boolean intakeIsReversed;
 
     public void init(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intake");

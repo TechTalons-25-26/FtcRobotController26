@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto;
+package org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
@@ -6,12 +6,11 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallRedEnum.PathState;
+
 import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
 
-@Autonomous(name = "smallRed")
 @Configurable
-public class smallRed extends baseAuto {
+public class smallRedEnum extends baseAuto {
 
     private PathChain smallRedStart_smallRedPreload;
     private PathChain smallRedPreload_redBottomStart;
@@ -321,5 +320,27 @@ public class smallRed extends baseAuto {
                 }
                 break;
         }
+    }
+
+    public enum PathState {
+        INTAKE_START,
+        SMALLREDSTART_SMALLREDPRELOAD,
+        SHOOT_PRELOAD,
+        SMALLREDPRELOAD_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDBOTTOMEND,
+        REDBOTTOMEND_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDSHOOT,
+        SHOOT_BOTTOM,
+        REDSHOOT_REDMIDDLESTART,
+        REDMIDDLESTART_REDMIDDLEEND,
+        REDMIDDLEEND_REDMIDDLESTART,
+        REDMIDDLESTART_REDSHOOT,
+        SHOOT_MIDDLE,
+        REDSHOOT_REDTOPSTART,
+        REDTOPSTART_REDTOPEND,
+        REDTOPEND_REDTOPSTART,
+        REDTOPSTART_REDSHOOT,
+        SHOOT_TOP,
+        REDSHOOT_REDEND
     }
 }

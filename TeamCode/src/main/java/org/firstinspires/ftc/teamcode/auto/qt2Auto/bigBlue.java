@@ -6,7 +6,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
+import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.bigBlueEnum.PathState;
 import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
 
 @Autonomous(name = "bigBlue")
@@ -182,6 +182,11 @@ public class bigBlue extends baseAuto {
     protected void pathStateUpdate() {
         switch ((PathState) pathState) {
 
+            case INTAKE_START:
+                if (!follower.isBusy()) {
+                    intake.runIntake(false, 1,Double.POSITIVE_INFINITY);
+                    setPathState(PathState.BIGBLUESTART_BLUESHOOT);
+                }
             case BIGBLUESTART_BLUESHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(bigBlueStart_blueShoot, true);
@@ -323,26 +328,5 @@ public class bigBlue extends baseAuto {
                 }
                 break;
         }
-    }
-
-    public enum PathState {
-        BIGBLUESTART_BLUESHOOT,
-        SHOOT_PRELOAD,
-        BLUESHOOT_BLUETOPSTART,
-        BLUETOPSTART_BLUETOPEND,
-        BLUETOPEND_BLUETOPSTART,
-        BLUETOPSTART_BLUESHOOT,
-        SHOOT_TOP,
-        BLUESHOOT_BLUEMIDDLESTART,
-        BLUEMIDDLESTART_BLUEMIDDLEEND,
-        BLUEMIDDLEEND_BLUEMIDDLESTART,
-        BLUEMIDDLESTART_BLUESHOOT,
-        SHOOT_MIDDLE,
-        BLUESHOOT_BLUEBOTTOMSTART,
-        BLUEBOTTOM_BLUEBOTTOMEND,
-        BLUEBOTTOMEND_BLUEBOTTOMSTART,
-        BLUEBOTTOMSTART_BLUESHOOT,
-        SHOOT_BOTTOM,
-        BLUESHOOT_BLUEEND
     }
 }

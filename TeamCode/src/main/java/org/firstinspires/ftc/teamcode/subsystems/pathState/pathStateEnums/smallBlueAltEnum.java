@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto;
+package org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
@@ -6,12 +6,11 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallBlueAltEnum.PathState;
+
 import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
 
-@Autonomous(name = "smallBlueAlt")
 @Configurable
-public class smallBlueAlt extends baseAuto {
+public class smallBlueAltEnum extends baseAuto {
 
     private PathChain smallBlueStart_blueShoot;
     private PathChain blueShoot_blueTopStart;
@@ -328,5 +327,27 @@ public class smallBlueAlt extends baseAuto {
                 }
                 break;
         }
+    }
+
+    public enum PathState {
+        INTAKE_START,
+        SMALLBLUESTART_BLUESHOOT,
+        SHOOT_PRELOAD,
+        BLUESHOOT_BLUETOPSTART,
+        BLUETOPSTART_BLUETOPEND,
+        BLUETOPEND_BLUETOPSTART,
+        BLUETOPSTART_BLUESHOOT,
+        SHOOT_TOP,
+        BLUESHOOT_BLUEMIDDLESTART,
+        BLUEMIDDLESTART_BLUEMIDDLEEND,
+        BLUEMIDDLEEND_BLUEMIDDLESTART,
+        BLUEMIDDLESTART_BLUESHOOT,
+        SHOOT_MIDDLE,
+        BLUESHOOT_BLUEBOTTOMSTART,
+        BLUEBOTTOM_BLUEBOTTOMEND,
+        BLUEBOTTOMEND_BLUEBOTTOMSTART,
+        BLUEBOTTOMSTART_BLUESHOOT,
+        SHOOT_BOTTOM,
+        BLUESHOOT_BLUEEND
     }
 }

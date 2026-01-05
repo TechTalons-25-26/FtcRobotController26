@@ -6,7 +6,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
+import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.bigRedEnum.PathState;
 import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
 
 @Autonomous(name = "bigRed")
@@ -30,7 +30,7 @@ public class bigRed extends baseAuto {
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.BIGREDSTART_REDSHOOT;
+        return PathState.INTAKE_START;
     }
 
     // ---------------- REQUIRED OVERRIDES ----------------
@@ -182,6 +182,11 @@ public class bigRed extends baseAuto {
     @Override
     protected void pathStateUpdate() {
         switch ((PathState) pathState) {
+            case INTAKE_START:
+                if (!follower.isBusy()) {
+                    intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
+                    setPathState(PathState.BIGREDSTART_REDSHOOT);
+                }
             case BIGREDSTART_REDSHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(bigRedStart_redShoot, true);
@@ -323,26 +328,5 @@ public class bigRed extends baseAuto {
                 }
                 break;
         }
-    }
-
-    public enum PathState {
-        BIGREDSTART_REDSHOOT,
-        SHOOT_PRELOAD,
-        REDSHOOT_REDTOPSTART,
-        REDTOPSTART_REDTOPEND,
-        REDTOPEND_REDTOPSTART,
-        REDTOPSTART_REDSHOOT,
-        SHOOT_TOP,
-        REDSHOOT_REDMIDDLESTART,
-        REDMIDDLESTART_REDMIDDLEEND,
-        REDMIDDLEEND_REDMIDDLESTART,
-        REDMIDDLESTART_REDSHOOT,
-        SHOOT_MIDDLE,
-        REDSHOOT_REDBOTTOMSTART,
-        REDBOTTOMSTART_REDBOTTOMEND,
-        REDBOTTOMEND_REDBOTTOMSTART,
-        REDBOTTOMSTART_REDSHOOT,
-        SHOOT_BOTTOM,
-        REDSHOOT_REDEND
     }
 }

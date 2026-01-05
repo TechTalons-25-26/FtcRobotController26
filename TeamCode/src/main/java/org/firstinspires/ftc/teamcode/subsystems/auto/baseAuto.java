@@ -57,7 +57,6 @@ public abstract class baseAuto extends OpMode {
     public void start() {
         opModeTimer.resetTimer();
         setPathState(pathState);
-        intake.runIntake(false,0.5, Double.POSITIVE_INFINITY);
     }
 
     @Override

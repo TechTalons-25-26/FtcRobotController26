@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.visualizerPaths;
+package org.firstinspires.ftc.teamcode.subsystems.visualizerPaths;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;

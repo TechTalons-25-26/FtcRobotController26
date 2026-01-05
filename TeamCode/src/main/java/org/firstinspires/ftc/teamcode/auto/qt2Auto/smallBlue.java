@@ -6,7 +6,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
+import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallBlueEnum.PathState;
 import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
 
 @Autonomous(name = "smallBlue")
@@ -30,7 +30,7 @@ public class smallBlue extends baseAuto {
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.SMALLBLUESTART_SMALLBLUEPRELOAD;
+        return PathState.INTAKE_START;
     }
 
     // ---------------- REQUIRED OVERRIDES ----------------
@@ -179,7 +179,11 @@ public class smallBlue extends baseAuto {
     @Override
     protected void pathStateUpdate() {
         switch ((PathState) pathState) {
-
+            case INTAKE_START:
+                if (!follower.isBusy()) {
+                    intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
+                    setPathState(PathState.SMALLBLUESTART_SMALLBLUEPRELOAD);
+                }
             case SMALLBLUESTART_SMALLBLUEPRELOAD:
                 if (!follower.isBusy()) {
                     follower.followPath(smallBlueStart_smallBluePreload, true);
@@ -321,26 +325,5 @@ public class smallBlue extends baseAuto {
                 }
                 break;
         }
-    }
-
-    public enum PathState {
-        SMALLBLUESTART_SMALLBLUEPRELOAD,
-        SHOOT_PRELOAD,
-        SMALLBLUEPRELOAD_BLUEBOTTOMSTART,
-        BLUEBOTTOMSTART_BLUEBOTTOMEND,
-        BLUEBOTTOMEND_BLUEBOTTOMSTART,
-        BLUEBOTTOMSTART_BLUESHOOT,
-        SHOOT_BOTTOM,
-        BLUESHOOT_BLUEMIDDLESTART,
-        BLUEMIDDLESTART_BLUEMIDDLEEND,
-        BLUEMIDDLEEND_BLUEMIDDLESTART,
-        BLUEMIDDLESTART_BLUESHOOT,
-        SHOOT_MIDDLE,
-        BLUESHOOT_BLUETOPSTART,
-        BLUETOPSTART_BLUETOPEND,
-        BLUETOPEND_BLUETOPSTART,
-        BLUETOPSTART_BLUESHOOT,
-        SHOOT_TOP,
-        BLUESHOOT_BLUEEND
     }
 }
