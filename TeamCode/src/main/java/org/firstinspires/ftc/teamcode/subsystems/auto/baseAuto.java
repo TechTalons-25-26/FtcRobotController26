@@ -8,6 +8,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.intake.intakeLogic;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
 
 public abstract class baseAuto extends OpMode {
@@ -17,6 +18,7 @@ public abstract class baseAuto extends OpMode {
     protected Timer pathTimer, opModeTimer;
 
     protected outtakeLogic outtake = new outtakeLogic();
+    protected intakeLogic intake = new intakeLogic();
     protected boolean shotsTriggered = false;
 
     // Each auto will define its own PathState enum
@@ -45,6 +47,7 @@ public abstract class baseAuto extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         outtake.init(hardwareMap);
+        intake.init(hardwareMap);
 
         buildPaths();
         follower.setStartingPose(getStartingPose());
@@ -54,6 +57,7 @@ public abstract class baseAuto extends OpMode {
     public void start() {
         opModeTimer.resetTimer();
         setPathState(pathState);
+        intake.runIntake(false,0.5, Double.POSITIVE_INFINITY);
     }
 
     @Override
@@ -61,6 +65,7 @@ public abstract class baseAuto extends OpMode {
         follower.update();
         pathStateUpdate();
         outtake.update();
+        intake.update();
 
         panelsTelemetry.debug("Path State", pathState);
         panelsTelemetry.debug("X", follower.getPose().getX());

@@ -5,18 +5,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class intakeLogic {
+    IntakeState intakeState;
     private DcMotor intakeMotor;
     private ElapsedTime intakeTimer = new ElapsedTime();
-    IntakeState intakeState;
-    public enum IntakeState {
-        IDLE,
-        RUN
-    }
-
     //TODO: TUNE THESE
-    private double intakePower = 0; // could be velocity idk
+    private double intakePower = 0;
     private boolean intakeIsRunning = false;
     private double intakeRunTime = 0;
+    private boolean intakeIsReversed;
 
     public void init(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intake");
@@ -32,25 +28,46 @@ public class intakeLogic {
             case IDLE:
                 if (intakeIsRunning) {
                     intakeTimer.reset();
-                    setIntakeState(IntakeState.RUN);
+                    if (!intakeIsReversed) {
+                        setIntakeState(IntakeState.FORWARD);
+                    } else if (intakeIsReversed) {
+                        setIntakeState(IntakeState.REVERSE);
+                    }
                 }
                 break;
 
-            case RUN:
-                intakeMotor.setPower(intakePower);
-                if (intakeTimer.seconds() > intakeRunTime) {
-                    intakeMotor.setPower(0);
-                    intakeTimer.reset();
-                    intakeIsRunning = false;
-                    setIntakeState(IntakeState.IDLE);
+            case FORWARD:
+                if (intakeIsRunning) {
+                    intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+                    intakeMotor.setPower(intakePower);
+                    if (intakeTimer.seconds() > intakeRunTime) {
+                        intakeMotor.setPower(0);
+                        intakeTimer.reset();
+                        intakeIsRunning = false;
+                        setIntakeState(IntakeState.IDLE);
+                    }
                 }
                 break;
+
+            case REVERSE:
+                if (intakeIsRunning) {
+                    intakeMotor.setDirection(DcMotor.Direction.REVERSE);
+                    intakeMotor.setPower(intakePower);
+                    if (intakeTimer.seconds() > intakeRunTime) {
+                        intakeMotor.setPower(0);
+                        intakeTimer.reset();
+                        intakeIsRunning = false;
+                        setIntakeState(IntakeState.IDLE);
+                    }
+                }
         }
     }
 
-    public void runIntake(double seconds) {
+    public void runIntake(boolean reversed, double power, double seconds) {
         intakeIsRunning = true;
+        intakeIsReversed = reversed;
         intakeRunTime = seconds;
+        intakePower = power;
     }
 
     public boolean isBusy() {
@@ -61,5 +78,9 @@ public class intakeLogic {
         intakeState = newState;
     }
 
-
+    public enum IntakeState {
+        IDLE,
+        FORWARD,
+        REVERSE
+    }
 }
