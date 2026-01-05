@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums;
 
-import com.bylazar.configurables.annotations.Configurable;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-@Configurable
 public class bigBlueEnum {
     public enum PathState {
         INTAKE_START,

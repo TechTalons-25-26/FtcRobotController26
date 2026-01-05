@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.qt2Auto;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.geometry.BezierCurve;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallRedAltEnum.PathState;

@@ -5,7 +5,6 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-
 public class bigRedPaths {
     public PathChain bigRedStart_redShoot;
     public PathChain redShoot_redTopStart;

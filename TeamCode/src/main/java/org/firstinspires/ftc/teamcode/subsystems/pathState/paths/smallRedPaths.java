@@ -5,7 +5,6 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-
 public class smallRedPaths {
     public PathChain smallRedStart_smallRedPreload;
     public PathChain smallRedPreload_redBottomStart;
@@ -23,7 +22,6 @@ public class smallRedPaths {
     public PathChain redShoot_redEnd;
 
     public void buildPaths(Follower follower) {
-
         smallRedStart_smallRedPreload = follower.pathBuilder()
                 .addPath(new BezierLine(
                         new Pose(88.000, 8.000),

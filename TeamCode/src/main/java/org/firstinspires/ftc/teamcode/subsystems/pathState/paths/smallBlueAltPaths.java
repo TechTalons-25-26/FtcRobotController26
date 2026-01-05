@@ -5,7 +5,6 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-
 public class smallBlueAltPaths {
     public PathChain smallBlueStart_blueShoot;
     public PathChain blueShoot_blueTopStart;
