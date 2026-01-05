@@ -1,1 +1,0 @@
-{"startPoint":{"x":64,"y":8,"heading":"linear","startDeg":90,"endDeg":180},"lines":[{"name":"Path 1","endPoint":{"x":64,"y":36,"heading":"tangential","startDeg":90,"endDeg":180},"controlPoints":[{"x":64,"y":19},{"x":68,"y":27}],"color":"#95597D"}],"shapes":[]}

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.auto;
+package org.firstinspires.ftc.teamcode.auto;
 
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;

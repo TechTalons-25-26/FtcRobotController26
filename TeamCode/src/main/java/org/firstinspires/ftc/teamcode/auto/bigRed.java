@@ -1,17 +1,16 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto;
+package org.firstinspires.ftc.teamcode.auto;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.bigRedEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.pathState.paths.bigRedPaths;
 
-import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallRedAltEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.paths.smallRedAltPaths;
-
-@Autonomous(name = "smallRedAlt")
+@Autonomous(name = "bigRed")
 @Configurable
-public class smallRedAlt extends baseAuto {
-    private smallRedAltPaths paths = new smallRedAltPaths();
+public class bigRed extends baseAuto {
+
+    public bigRedPaths paths = new bigRedPaths();
 
     @Override
     protected Enum<?> getInitialState() {
@@ -22,7 +21,8 @@ public class smallRedAlt extends baseAuto {
 
     @Override
     protected Pose getStartingPose() {
-        return new Pose(88.000, 8.000, Math.toRadians(90));
+        // TODO: MAKE THIS RIGHT
+        return new Pose(123.200, 123.100, Math.toRadians(144));
     }
 
     @Override
@@ -36,12 +36,12 @@ public class smallRedAlt extends baseAuto {
             case INTAKE_START:
                 if (!follower.isBusy()) {
                     intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
-                    setPathState(PathState.SMALLREDSTART_REDSHOOT);
+                    setPathState(PathState.BIGREDSTART_REDSHOOT);
                 }
-            case SMALLREDSTART_REDSHOOT:
+            case BIGREDSTART_REDSHOOT:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.smallRedStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDTOPSTART);
+                    follower.followPath(paths.bigRedStart_redShoot, true);
+                    setPathState(PathState.SHOOT_PRELOAD);
                 }
                 break;
 

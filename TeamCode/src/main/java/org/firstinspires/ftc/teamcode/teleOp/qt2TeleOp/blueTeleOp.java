@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleOp.qt2TeleOp.blueTeleOp;
+package org.firstinspires.ftc.teamcode.teleOp.qt2TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
 @TeleOp(name = "blueTeleOp")
 public class blueTeleOp extends LinearOpMode {
-
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
     private DcMotor intakeMotor;

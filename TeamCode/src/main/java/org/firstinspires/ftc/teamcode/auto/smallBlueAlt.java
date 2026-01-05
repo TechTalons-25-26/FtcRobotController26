@@ -1,31 +1,26 @@
-package org.firstinspires.ftc.teamcode.auto.qt2Auto;
+package org.firstinspires.ftc.teamcode.auto;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.geometry.BezierCurve;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallBlueAltEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.pathState.paths.smallBlueAltPaths;
 
-import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.bigBlueEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.auto.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.paths.bigBluePaths;
-
-@Autonomous(name = "bigBlue")
+@Autonomous(name = "smallBlueAlt")
 @Configurable
-public class bigBlue extends baseAuto {
-    private bigBluePaths paths = new bigBluePaths();
+public class smallBlueAlt extends baseAuto {
+    private smallBlueAltPaths paths = new smallBlueAltPaths();
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.BIGBLUESTART_BLUESHOOT;
+        return PathState.INTAKE_START;
     }
 
     // ---------------- REQUIRED OVERRIDES ----------------
 
     @Override
     protected Pose getStartingPose() {
-        return new Pose(20.800, 123.100, Math.toRadians(144));
+        return new Pose(56.000, 8.000, Math.toRadians(90));
     }
 
     @Override
@@ -36,15 +31,14 @@ public class bigBlue extends baseAuto {
     @Override
     protected void pathStateUpdate() {
         switch ((PathState) pathState) {
-
             case INTAKE_START:
                 if (!follower.isBusy()) {
                     intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
-                    setPathState(PathState.BIGBLUESTART_BLUESHOOT);
+                    setPathState(PathState.SMALLBLUESTART_BLUESHOOT);
                 }
-            case BIGBLUESTART_BLUESHOOT:
+            case SMALLBLUESTART_BLUESHOOT:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.bigBlueStart_blueShoot, true);
+                    follower.followPath(paths.smallBlueStart_blueShoot, true);
                     setPathState(PathState.SHOOT_PRELOAD);
                 }
                 break;
