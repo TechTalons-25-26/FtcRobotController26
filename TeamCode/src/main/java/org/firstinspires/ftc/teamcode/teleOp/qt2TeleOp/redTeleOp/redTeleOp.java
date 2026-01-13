@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.teleOp.qt2TeleOp.redTeleOp;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
@@ -12,6 +16,9 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
@@ -37,6 +44,12 @@ public class redTeleOp extends LinearOpMode {
 
     // target pose for pressing B (make sure units match your field config)
     private final Pose targetPose = new Pose(83.959, 86.004, Math.toRadians(-2.226)); // example target
+    private static final double SHOOTING_HEADING_RAD = Math.toRadians(-32.0); // example
+
+
+    private Limelight3A limelight;
+    private IMU imu;
+    private double distance;
 
     @Override
     public void runOpMode() {
@@ -78,9 +91,26 @@ public class redTeleOp extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+
+        // ⚠ Choose ONE pipeline (last call wins)
+        limelight.pipelineSwitch(5);
+
+        imu = hardwareMap.get(IMU.class, "imu");
+
+        RevHubOrientationOnRobot revHubOrientationOnRobot =
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
+                        RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                );
+
+        imu.initialize(new IMU.Parameters(revHubOrientationOnRobot));
+
         waitForStart();
 
         while (opModeIsActive()) {
+
+            limelight.start();
 
             // ALWAYS keep follower/localizer updated
             //follower.update();
@@ -123,7 +153,7 @@ public class redTeleOp extends LinearOpMode {
                 mecanumWheels();
             }
             */
-            if(!movingToTarget) {
+            if (!movingToTarget) {
                 mecanumWheels();
             }
 
@@ -131,6 +161,29 @@ public class redTeleOp extends LinearOpMode {
             handleIntakeAndOuttake();
             outtakeAngleControl();
             checkStartPathWithB();
+
+            telemetry.update();
+
+            YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+            limelight.updateRobotOrientation(orientation.getYaw(AngleUnit.RADIANS));
+
+            LLResult llResult = limelight.getLatestResult();
+
+            if (llResult != null && llResult.isValid()) {
+                Pose3D botPose = llResult.getBotpose();
+                telemetry.addData("Calculated Distance", distance);
+                telemetry.addData("Target X", llResult.getTx());
+                telemetry.addData("Target Y", llResult.getTy());
+                telemetry.addData("Target Area", llResult.getTa());
+            /*
+            telemetry.addData("X", botPose.getPosition().x);
+            telemetry.addData("Y", botPose.getPosition().y);
+            */
+                telemetry.addData("Bot Pose", botPose.toString());
+                telemetry.addData("Heading", botPose.getOrientation().getYaw());
+            } else {
+                telemetry.addLine("No valid Limelight data");
+            }
 
             telemetry.update();
         }
@@ -276,21 +329,38 @@ public class redTeleOp extends LinearOpMode {
     // Start the path when B is first pressed
     public void checkStartPathWithB() {
         boolean justPressedB = gamepad1.b && !lastB;
+
         if (justPressedB && !movingToTarget) {
-            //removed && !lastB
+
+            // Current robot pose from Pedro
             Pose currentPose = follower.getPose();
 
-            // Build a path from current pose to target
-            BezierLine curve = new BezierLine(currentPose, targetPose);
+            // Build a NEW target pose with FIXED shooting heading
+            Pose correctedTargetPose = new Pose(
+                    targetPose.getX(),
+                    targetPose.getY(),
+                    SHOOTING_HEADING_RAD
+            );
+
+            // Build path
+            BezierLine curve = new BezierLine(currentPose, correctedTargetPose);
             Path movePath = new Path(curve);
-            movePath.setLinearHeadingInterpolation(currentPose.getHeading(), targetPose.getHeading());
+
+            // Force heading interpolation to the shooting heading
+            movePath.setLinearHeadingInterpolation(
+                    currentPose.getHeading(),
+                    SHOOTING_HEADING_RAD
+            );
 
             follower.followPath(movePath);
 
             outtakeAngle.setPosition(0.14);
             movingToTarget = true;
 
-            telemetry.addData("Started moving to target", targetPose);
+            telemetry.addData("Started moving to target X", correctedTargetPose.getX());
+            telemetry.addData("Started moving to target Y", correctedTargetPose.getY());
+            telemetry.addData("Target shooting heading (deg)",
+                    Math.toDegrees(SHOOTING_HEADING_RAD));
         }
 
         lastB = gamepad1.b;
