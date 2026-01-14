@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallBlueEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.paths.smallBluePaths;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallBlueEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallBluePaths;
 
 @Autonomous(name = "smallBlue")
 @Configurable

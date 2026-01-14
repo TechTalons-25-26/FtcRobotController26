@@ -4,8 +4,8 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.smallRedAltEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.paths.smallRedAltPaths;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallRedAltEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallRedAltPaths;
 
 @Autonomous(name = "smallRedAlt")
 @Configurable

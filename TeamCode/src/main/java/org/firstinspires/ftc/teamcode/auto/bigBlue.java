@@ -4,8 +4,8 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.subsystems.pathState.pathStateEnums.bigBlueEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.pathState.paths.bigBluePaths;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigBlueEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.bigBluePaths;
 
 @Autonomous(name = "bigBlue")
 @Configurable

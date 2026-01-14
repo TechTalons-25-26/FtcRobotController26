@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.subsystems.pathState.paths;
+package org.firstinspires.ftc.teamcode.subsystems.path.state.paths;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-public class bigRedPaths {
-    public PathChain bigRedStart_redShoot;
+public class smallRedAltPaths {
+    public PathChain smallRedStart_redShoot;
     public PathChain redShoot_redTopStart;
     public PathChain redTopStart_redTopEnd;
     public PathChain redTopEnd_redTopStart;
@@ -22,11 +22,11 @@ public class bigRedPaths {
     public PathChain redShoot_redEnd;
 
     public void buildPaths(Follower follower) {
-        bigRedStart_redShoot = follower.pathBuilder()
+        smallRedStart_redShoot = follower.pathBuilder()
                 .addPath(new BezierCurve(
-                        new Pose(123.200, 123.100),
-                        new Pose(104.400, 109.300),
-                        new Pose(100.000, 103.200),
+                        new Pose(88.000, 8.000),
+                        new Pose(88.200, 44.500),
+                        new Pose(62.200, 58.000),
                         new Pose(84.000, 84.000)
                 ))
                 .setTangentHeadingInterpolation()

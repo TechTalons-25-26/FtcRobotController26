@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
 @TeleOp(name = "redTeleOp")
 public class redTeleOp extends LinearOpMode {
-
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private DcMotor leftWheel, rightWheel;
     private DcMotor intakeMotor;
