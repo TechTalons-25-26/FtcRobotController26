@@ -18,7 +18,7 @@ public class blueTeleOp extends OpMode {
 
         // BLUE TELEOP TARGET POSE
         robot.path.setTargetPose(
-                new Pose(83.959, 86.004, Math.toRadians(-2.226))
+                new Pose(60, 84, Math.toRadians(130))
         );
 
         telemetry.addData("Status", "Initialized");
@@ -43,13 +43,17 @@ public class blueTeleOp extends OpMode {
             robot.drive.stop();
         }
 
+        double intakeForwardPower = gamepad2.right_trigger;
+        double intakeReversePower = gamepad2.left_trigger;
+
         // Intake buttons
-        if (gamepad2.x) robot.intake.runIntake(false, 1.0, 1.0);
-        if (gamepad2.b) robot.intake.runIntake(true, 1.0, 0.5);
+        if (intakeForwardPower > 0.05 && !(intakeReversePower > 0.05)) robot.intake.runIntake(false, intakeForwardPower, 0.01);
+        if (intakeReversePower > 0.05 && !(intakeForwardPower > 0.05)) robot.intake.runIntake(true, intakeReversePower, 0.01);
 
         // Outtake buttons
-        if (gamepad2.y) robot.outtake.fireShots(1);
-        if (gamepad2.a) robot.outtake.fireShots(3);
+        if (gamepad2.x) robot.outtake.fireShots(1);
+        if (gamepad2.a) robot.outtake.fireShots(2);
+        if (gamepad2.b) robot.outtake.fireShots(3);
 
         telemetry.update();
     }
