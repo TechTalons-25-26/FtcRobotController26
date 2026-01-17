@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems.path.state.enums;
 
-public class smallBlueAltEnum {
+public class bigBlueAltEnum {
     public enum PathState {
-        SMALLBLUESTART_SMALLBLUEPRELOAD,
+        BIGBLUESTART_BLUESHOOT,
         SHOOT_PRELOAD,
-        SMALLBLUEPRELOAD_SMALLBLUEALTEND
+        BLUESHOOT_BLUEEND
     }
 }
