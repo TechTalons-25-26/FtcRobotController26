@@ -1,0 +1,25 @@
+package org.firstinspires.ftc.teamcode.subsystems.path.state.enums;
+
+public class smallRed2Enum {
+    public enum PathState {
+        INTAKE_START,
+        SMALLREDSTART_REDSHOOT,
+        SHOOT_PRELOAD,
+        REDSHOOT_REDTOPSTART,
+        REDTOPSTART_REDTOPEND,
+        REDTOPEND_REDTOPSTART,
+        REDTOPSTART_REDSHOOT,
+        SHOOT_TOP,
+        REDSHOOT_REDMIDDLESTART,
+        REDMIDDLESTART_REDMIDDLEEND,
+        REDMIDDLEEND_REDMIDDLESTART,
+        REDMIDDLESTART_REDSHOOT,
+        SHOOT_MIDDLE,
+        REDSHOOT_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDBOTTOMEND,
+        REDBOTTOMEND_REDBOTTOMSTART,
+        REDBOTTOMSTART_REDSHOOT,
+        SHOOT_BOTTOM,
+        REDSHOOT_REDEND
+    }
+}

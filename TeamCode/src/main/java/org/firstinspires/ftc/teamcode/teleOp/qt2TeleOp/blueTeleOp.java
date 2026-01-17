@@ -30,7 +30,7 @@ public class blueTeleOp extends OpMode {
         robot.update();
 
         // Start path on B
-        robot.path.handleStartPath(gamepad1.b);
+        robot.path.handleStartPath(gamepad1.bWasPressed());
 
         // Drive only when not pathing
         if (!robot.path.isBusy()) {
@@ -51,9 +51,9 @@ public class blueTeleOp extends OpMode {
         if (intakeReversePower > 0.05 && !(intakeForwardPower > 0.05)) robot.intake.runIntake(true, intakeReversePower, 0.01);
 
         // Outtake buttons
-        if (gamepad2.x) robot.outtake.fireShots(1);
-        if (gamepad2.a) robot.outtake.fireShots(2);
-        if (gamepad2.b) robot.outtake.fireShots(3);
+        if (gamepad2.xWasPressed()) robot.outtake.fireShots(1);
+        if (gamepad2.aWasPressed()) robot.outtake.fireShots(2);
+        if (gamepad2.bWasPressed()) robot.outtake.fireShots(3);
 
         telemetry.update();
     }

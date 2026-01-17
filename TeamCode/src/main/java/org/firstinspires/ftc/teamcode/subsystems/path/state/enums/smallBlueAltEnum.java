@@ -1,24 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems.path.state.enums;
+
 public class smallBlueAltEnum {
     public enum PathState {
-        INTAKE_START,
-        SMALLBLUESTART_BLUESHOOT,
+        SMALLBLUESTART_SMALLBLUEPRELOAD,
         SHOOT_PRELOAD,
-        BLUESHOOT_BLUETOPSTART,
-        BLUETOPSTART_BLUETOPEND,
-        BLUETOPEND_BLUETOPSTART,
-        BLUETOPSTART_BLUESHOOT,
-        SHOOT_TOP,
-        BLUESHOOT_BLUEMIDDLESTART,
-        BLUEMIDDLESTART_BLUEMIDDLEEND,
-        BLUEMIDDLEEND_BLUEMIDDLESTART,
-        BLUEMIDDLESTART_BLUESHOOT,
-        SHOOT_MIDDLE,
-        BLUESHOOT_BLUEBOTTOMSTART,
-        BLUEBOTTOM_BLUEBOTTOMEND,
-        BLUEBOTTOMEND_BLUEBOTTOMSTART,
-        BLUEBOTTOMSTART_BLUESHOOT,
-        SHOOT_BOTTOM,
-        BLUESHOOT_BLUEEND
+        SMALLBLUEPRELOAD_SMALLBLUEALTEND
     }
 }
+
+/*
+* smallBlueStart_smallBluePreload
+* smallBluePreload_smallBlueAltEnd
+* */
