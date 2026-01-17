@@ -1,17 +1,19 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.auto.red;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallRed2Enum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallRed2Paths;
+import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallRedEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallRedPaths;
 
-@Autonomous(name = "smallRed2")
+@Autonomous(name = "smallRed")
 @Configurable
-public class smallRed2 extends baseAuto {
-    private smallRed2Paths paths = new smallRed2Paths();
+public class smallRed extends baseAuto {
 
+    private smallRedPaths paths = new smallRedPaths();
+    
     @Override
     protected Enum<?> getInitialState() {
         return PathState.INTAKE_START;
@@ -32,15 +34,11 @@ public class smallRed2 extends baseAuto {
     @Override
     protected void pathStateUpdate() {
         switch ((PathState) pathState) {
-            case INTAKE_START:
+
+            case SMALLREDSTART_SMALLREDPRELOAD:
                 if (!follower.isBusy()) {
-                    intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
-                    setPathState(PathState.SMALLREDSTART_REDSHOOT);
-                }
-            case SMALLREDSTART_REDSHOOT:
-                if (!follower.isBusy()) {
-                    follower.followPath(paths.smallRedStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDTOPSTART);
+                    follower.followPath(paths.smallRedStart_smallRedPreload, true);
+                    setPathState(PathState.SMALLREDPRELOAD_REDBOTTOMSTART);
                 }
                 break;
 
@@ -50,40 +48,40 @@ public class smallRed2 extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDSHOOT_REDTOPSTART);
+                        setPathState(PathState.SMALLREDPRELOAD_REDBOTTOMSTART);
                     }
                 }
                 break;
 
-            case REDSHOOT_REDTOPSTART:
+            case SMALLREDPRELOAD_REDBOTTOMSTART:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.redShoot_redTopStart, true);
-                    setPathState(PathState.REDTOPSTART_REDTOPEND);
+                    follower.followPath(paths.smallRedPreload_redBottomStart, true);
+                    setPathState(PathState.REDBOTTOMSTART_REDBOTTOMEND);
                 }
                 break;
 
-            case REDTOPSTART_REDTOPEND:
+            case REDBOTTOMSTART_REDBOTTOMEND:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.redTopStart_redTopEnd, true);
-                    setPathState(PathState.REDTOPEND_REDTOPSTART);
+                    follower.followPath(paths.redBottomStart_redBottomEnd, true);
+                    setPathState(PathState.REDBOTTOMEND_REDBOTTOMSTART);
                 }
                 break;
 
-            case REDTOPEND_REDTOPSTART:
+            case REDBOTTOMEND_REDBOTTOMSTART:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.redTopEnd_redTopStart, true);
-                    setPathState(PathState.REDTOPSTART_REDSHOOT);
+                    follower.followPath(paths.redBottomEnd_redBottomStart, true);
+                    setPathState(PathState.REDBOTTOMSTART_REDSHOOT);
                 }
                 break;
 
-            case REDTOPSTART_REDSHOOT:
+            case REDBOTTOMSTART_REDSHOOT:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.redTopStart_redShoot, true);
+                    follower.followPath(paths.redBottomStart_redShoot, true);
                     setPathState(PathState.REDSHOOT_REDMIDDLESTART);
                 }
                 break;
 
-            case SHOOT_TOP:
+            case SHOOT_BOTTOM:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
@@ -118,7 +116,7 @@ public class smallRed2 extends baseAuto {
             case REDMIDDLESTART_REDSHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redMiddleStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDBOTTOMSTART);
+                    setPathState(PathState.REDSHOOT_REDTOPSTART);
                 }
                 break;
 
@@ -128,40 +126,40 @@ public class smallRed2 extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDSHOOT_REDBOTTOMSTART);
+                        setPathState(PathState.REDSHOOT_REDTOPSTART);
                     }
                 }
                 break;
 
-            case REDSHOOT_REDBOTTOMSTART:
+            case REDSHOOT_REDTOPSTART:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.redShoot_redBottomStart, true);
-                    setPathState(PathState.REDBOTTOMSTART_REDBOTTOMEND);
+                    follower.followPath(paths.redShoot_redTopStart, true);
+                    setPathState(PathState.REDTOPSTART_REDTOPEND);
                 }
                 break;
 
-            case REDBOTTOMSTART_REDBOTTOMEND:
+            case REDTOPSTART_REDTOPEND:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.redBottomStart_redBottomEnd, true);
-                    setPathState(PathState.REDBOTTOMEND_REDBOTTOMSTART);
+                    follower.followPath(paths.redTopStart_redTopEnd, true);
+                    setPathState(PathState.REDTOPEND_REDTOPSTART);
                 }
                 break;
 
-            case REDBOTTOMEND_REDBOTTOMSTART:
+            case REDTOPEND_REDTOPSTART:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.redBottomEnd_redBottomStart, true);
-                    setPathState(PathState.REDBOTTOMSTART_REDSHOOT);
+                    follower.followPath(paths.redTopEnd_redTopStart, true);
+                    setPathState(PathState.REDTOPSTART_REDSHOOT);
                 }
                 break;
 
-            case REDBOTTOMSTART_REDSHOOT:
+            case REDTOPSTART_REDSHOOT:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.redBottomStart_redShoot, true);
+                    follower.followPath(paths.redTopStart_redShoot, true);
                     setPathState(PathState.REDSHOOT_REDEND);
                 }
                 break;
 
-            case SHOOT_BOTTOM:
+            case SHOOT_TOP:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);

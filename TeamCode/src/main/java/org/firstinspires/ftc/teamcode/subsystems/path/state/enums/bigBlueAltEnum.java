@@ -4,6 +4,6 @@ public class bigBlueAltEnum {
     public enum PathState {
         BIGBLUESTART_BLUESHOOT,
         SHOOT_PRELOAD,
-        BLUESHOOT_BLUEEND
+        BLUESHOOT_BLUEALTEND
     }
 }

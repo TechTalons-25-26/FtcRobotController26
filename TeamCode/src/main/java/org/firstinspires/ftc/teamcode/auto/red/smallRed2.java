@@ -1,16 +1,17 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.auto.red;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigRedEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.bigRedPaths;
 
-@Autonomous(name = "bigRed")
+import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallRed2Enum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallRed2Paths;
+
+@Autonomous(name = "smallRed2")
 @Configurable
-public class bigRed extends baseAuto {
-
-    public bigRedPaths paths = new bigRedPaths();
+public class smallRed2 extends baseAuto {
+    private smallRed2Paths paths = new smallRed2Paths();
 
     @Override
     protected Enum<?> getInitialState() {
@@ -21,8 +22,7 @@ public class bigRed extends baseAuto {
 
     @Override
     protected Pose getStartingPose() {
-        // TODO: MAKE THIS RIGHT
-        return new Pose(123.200, 123.100, Math.toRadians(144));
+        return new Pose(88.000, 8.000, Math.toRadians(90));
     }
 
     @Override
@@ -36,12 +36,12 @@ public class bigRed extends baseAuto {
             case INTAKE_START:
                 if (!follower.isBusy()) {
                     intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
-                    setPathState(PathState.BIGREDSTART_REDSHOOT);
+                    setPathState(PathState.SMALLREDSTART_REDSHOOT);
                 }
-            case BIGREDSTART_REDSHOOT:
+            case SMALLREDSTART_REDSHOOT:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.bigRedStart_redShoot, true);
-                    setPathState(PathState.SHOOT_PRELOAD);
+                    follower.followPath(paths.smallRedStart_redShoot, true);
+                    setPathState(PathState.REDSHOOT_REDTOPSTART);
                 }
                 break;
 

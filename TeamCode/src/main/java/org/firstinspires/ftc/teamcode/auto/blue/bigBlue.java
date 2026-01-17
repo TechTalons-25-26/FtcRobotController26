@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.auto.blue;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigBlueEnum.PathState;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.bigBluePaths;
 

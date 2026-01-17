@@ -1,8 +1,10 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.auto.red;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigRedAltEnum.PathState;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.bigRedAltPaths;
 
@@ -44,14 +46,14 @@ public class bigRedAlt extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDSHOOT_REDEND);
+                        setPathState(PathState.REDSHOOT_REDALTEND);
                     }
                 }
                 break;
 
-            case REDSHOOT_REDEND:
+            case REDSHOOT_REDALTEND:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.redShoot_redEnd, true);
+                    follower.followPath(paths.redShoot_redAltEnd, true);
                 }
                 break;
         }

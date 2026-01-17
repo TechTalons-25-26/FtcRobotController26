@@ -1,19 +1,21 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.auto.red;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallBlueAltEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallBlueAltPaths;
 
-@Autonomous(name = "smallBlueAlt")
+import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallRedAltEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallRedAltPaths;
+
+@Autonomous(name = "smallRedAlt")
 @Configurable
-public class smallBlueAlt extends baseAuto {
-    private smallBlueAltPaths paths = new smallBlueAltPaths();
+public class smallRedAlt extends baseAuto {
+    private smallRedAltPaths paths = new smallRedAltPaths();
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.SMALLBLUESTART_SMALLBLUEPRELOAD;
+        return PathState.SMALLREDSTART_SMALLREDPRELOAD;
     }
 
     // ---------------- REQUIRED OVERRIDES ----------------
@@ -31,9 +33,9 @@ public class smallBlueAlt extends baseAuto {
     @Override
     protected void pathStateUpdate() {
         switch ((PathState) pathState) {
-            case SMALLBLUESTART_SMALLBLUEPRELOAD:
+            case SMALLREDSTART_SMALLREDPRELOAD:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.smallBlueStart_smallBluePreload, true);
+                    follower.followPath(paths.smallRedStart_smallRedPreload, true);
                     setPathState(PathState.SHOOT_PRELOAD);
                 }
                 break;
@@ -44,14 +46,14 @@ public class smallBlueAlt extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.SMALLBLUEPRELOAD_SMALLBLUEALTEND);
+                        setPathState(PathState.SMALLREDPRELOAD_SMALLREDALTEND);
                     }
                 }
                 break;
 
-            case SMALLBLUEPRELOAD_SMALLBLUEALTEND:
+            case SMALLREDPRELOAD_SMALLREDALTEND:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.smallBluePreload_smallBlueAltEnd, true);
+                    follower.followPath(paths.smallRedPreload_smallRedAltEnd, true);
                 }
                 break;
         }

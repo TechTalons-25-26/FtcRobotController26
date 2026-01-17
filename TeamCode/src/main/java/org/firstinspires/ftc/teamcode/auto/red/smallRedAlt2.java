@@ -1,26 +1,28 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.auto.red;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigBlueAltEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.bigBlueAltPaths;
 
-@Autonomous(name = "bigBlueAlt")
+import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallRedAlt2Enum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallRedAlt2Paths;
+
+@Autonomous(name = "smallRedAlt2")
 @Configurable
-public class bigBlueAlt extends baseAuto {
-    private bigBlueAltPaths paths = new bigBlueAltPaths();
+public class smallRedAlt2 extends baseAuto {
+    private smallRedAlt2Paths paths = new smallRedAlt2Paths();
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.BIGBLUESTART_BLUESHOOT;
+        return PathState.SMALLREDSTART_REDPRELOAD;
     }
 
     // ---------------- REQUIRED OVERRIDES ----------------
 
     @Override
     protected Pose getStartingPose() {
-        return new Pose(20.800, 123.100, Math.toRadians(144));
+        return new Pose(88.000, 8.000, Math.toRadians(90));
     }
 
     @Override
@@ -31,9 +33,9 @@ public class bigBlueAlt extends baseAuto {
     @Override
     protected void pathStateUpdate() {
         switch ((PathState) pathState) {
-            case BIGBLUESTART_BLUESHOOT:
+            case SMALLREDSTART_REDPRELOAD:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.bigBlueStart_blueShoot, true);
+                    follower.followPath(paths.smallRedStart_redPreload, true);
                     setPathState(PathState.SHOOT_PRELOAD);
                 }
                 break;
@@ -44,14 +46,14 @@ public class bigBlueAlt extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.BLUESHOOT_BLUEEND);
+                        setPathState(PathState.REDPRELOAD_REDALTEND);
                     }
                 }
                 break;
 
-            case BLUESHOOT_BLUEEND:
+            case REDPRELOAD_REDALTEND:
                 if (!follower.isBusy()) {
-                    follower.followPath(paths.blueShoot_blueEnd, true);
+                    follower.followPath(paths.redPreload_redAltEnd, true);
                 }
                 break;
         }
