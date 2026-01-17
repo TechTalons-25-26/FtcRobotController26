@@ -16,7 +16,7 @@ public class blueTeleOp extends OpMode {
         robot = new robot(hardwareMap);
         robot.init();
 
-        // BLUE TELEOP TARGET POSE
+        // BLUE TELEOP TARGET POSE - change to accurate position after tuning
         robot.path.setTargetPose(
                 new Pose(83.959, 86.004, Math.toRadians(-2.226))
         );
