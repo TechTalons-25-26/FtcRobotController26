@@ -5,8 +5,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallBlueEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallBluePaths;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.blue.smallBlueEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.blue.smallBluePaths;
 
 @Autonomous(name = "smallBlue")
 @Configurable
@@ -36,7 +36,7 @@ private smallBluePaths paths = new smallBluePaths();
         switch ((PathState) pathState) {
             case INTAKE_START:
                 if (!follower.isBusy()) {
-                    intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
+                    intake.setIntake(false, 1, Double.POSITIVE_INFINITY);
                     setPathState(PathState.SMALLBLUESTART_SMALLBLUEPRELOAD);
                 }
             case SMALLBLUESTART_SMALLBLUEPRELOAD:

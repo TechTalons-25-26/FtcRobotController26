@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.path.state.enums;
+package org.firstinspires.ftc.teamcode.subsystems.path.state.enums.blue;
 
 public class smallBlueAltEnum {
     public enum PathState {

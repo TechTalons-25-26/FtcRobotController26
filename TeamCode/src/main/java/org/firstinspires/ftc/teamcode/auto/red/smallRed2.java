@@ -5,8 +5,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallRed2Enum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallRed2Paths;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.red.smallRed2Enum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.red.smallRed2Paths;
 
 @Autonomous(name = "smallRed2")
 @Configurable
@@ -35,7 +35,7 @@ public class smallRed2 extends baseAuto {
         switch ((PathState) pathState) {
             case INTAKE_START:
                 if (!follower.isBusy()) {
-                    intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
+                    intake.setIntake(false, 1, Double.POSITIVE_INFINITY);
                     setPathState(PathState.SMALLREDSTART_REDSHOOT);
                 }
             case SMALLREDSTART_REDSHOOT:

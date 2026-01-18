@@ -5,8 +5,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigRedEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.bigRedPaths;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.red.bigRedEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.red.bigRedPaths;
 
 @Autonomous(name = "bigRed")
 @Configurable
@@ -23,8 +23,7 @@ public class bigRed extends baseAuto {
 
     @Override
     protected Pose getStartingPose() {
-        // TODO: MAKE THIS RIGHT
-        return new Pose(123.200, 123.100, Math.toRadians(144));
+        return new Pose(123.200, 123.100, Math.toRadians(36));
     }
 
     @Override
@@ -37,9 +36,11 @@ public class bigRed extends baseAuto {
         switch ((PathState) pathState) {
             case INTAKE_START:
                 if (!follower.isBusy()) {
-                    intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
+                    intake.runIntake(false, 1);
                     setPathState(PathState.BIGREDSTART_REDSHOOT);
                 }
+                break;
+
             case BIGREDSTART_REDSHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.bigRedStart_redShoot, true);
@@ -82,7 +83,7 @@ public class bigRed extends baseAuto {
             case REDTOPSTART_REDSHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redTopStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDMIDDLESTART);
+                    setPathState(PathState.SHOOT_TOP);
                 }
                 break;
 

@@ -5,8 +5,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigBlueEnum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.bigBluePaths;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.blue.bigBlueEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.blue.bigBluePaths;
 
 @Autonomous(name = "bigBlue")
 @Configurable
@@ -36,7 +36,7 @@ public class bigBlue extends baseAuto {
 
             case INTAKE_START:
                 if (!follower.isBusy()) {
-                    intake.runIntake(false, 1, Double.POSITIVE_INFINITY);
+                    intake.setIntake(false, 1, Double.POSITIVE_INFINITY);
                     setPathState(PathState.BIGBLUESTART_BLUESHOOT);
                 }
             case BIGBLUESTART_BLUESHOOT:

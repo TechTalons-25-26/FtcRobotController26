@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.path.state.enums;
+package org.firstinspires.ftc.teamcode.subsystems.path.state.enums.red;
 public class bigRedEnum {
     public enum PathState {
         INTAKE_START,

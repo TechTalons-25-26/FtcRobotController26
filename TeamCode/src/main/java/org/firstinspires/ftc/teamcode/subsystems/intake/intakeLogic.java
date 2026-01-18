@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.intake;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -63,11 +64,21 @@ public class intakeLogic {
         }
     }
 
-    public void runIntake(boolean reversed, double power, double seconds) {
+    public void setIntake(boolean reversed, double power, double seconds) {
         intakeIsRunning = true;
         intakeIsReversed = reversed;
         intakeRunTime = seconds;
         intakePower = power;
+    }
+
+    public void runIntake(boolean reversed, double power) {
+        if (reversed) {
+            intakeMotor.setDirection(DcMotor.Direction.REVERSE);
+            intakeMotor.setPower(power);
+        } else {
+            intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+            intakeMotor.setPower(power);
+        }
     }
 
     public boolean isBusy() {

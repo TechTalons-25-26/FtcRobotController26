@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.path.state.paths;
+package org.firstinspires.ftc.teamcode.subsystems.path.state.paths.red;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;

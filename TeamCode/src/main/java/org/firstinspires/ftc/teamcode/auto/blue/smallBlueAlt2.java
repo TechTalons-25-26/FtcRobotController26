@@ -5,8 +5,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallBlueAlt2Enum.PathState;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.smallBlueAlt2Paths;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.blue.smallBlueAlt2Enum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.blue.smallBlueAlt2Paths;
 
 @Autonomous(name = "smallBlueAlt2")
 @Configurable

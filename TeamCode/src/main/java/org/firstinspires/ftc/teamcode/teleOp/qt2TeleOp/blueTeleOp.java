@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot;
+
 import com.pedropathing.geometry.Pose;
 
 @TeleOp(name = "blueTeleOp")
@@ -47,8 +48,12 @@ public class blueTeleOp extends OpMode {
         double intakeReversePower = gamepad2.left_trigger;
 
         // Intake buttons
-        if (intakeForwardPower > 0.05 && !(intakeReversePower > 0.05)) robot.intake.runIntake(false, intakeForwardPower, 0.01);
-        if (intakeReversePower > 0.05 && !(intakeForwardPower > 0.05)) robot.intake.runIntake(true, intakeReversePower, 0.01);
+        if (intakeForwardPower > 0.05 && (intakeForwardPower > intakeReversePower)) {
+            robot.intake.runIntake(false, intakeForwardPower);
+        }
+        if (intakeReversePower > 0.05 && !(intakeForwardPower >= intakeReversePower)) {
+            robot.intake.runIntake(true, intakeReversePower);
+        }
 
         // Outtake buttons
         if (gamepad2.xWasPressed()) robot.outtake.fireShots(1);

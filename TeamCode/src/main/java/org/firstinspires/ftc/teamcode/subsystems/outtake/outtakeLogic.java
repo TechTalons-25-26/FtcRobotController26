@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class outtakeLogic {
-    private DcMotor outtakeMotor;
+    private DcMotorEx outtakeMotor;
     private Servo gateServo;
     private ElapsedTime outtakeTimer = new ElapsedTime();
     OuttakeState outtakeState;
@@ -34,7 +34,7 @@ public class outtakeLogic {
     private double maxOuttakeSpinupTime = 2;
 
     public void init(HardwareMap hardwareMap) {
-        outtakeMotor = hardwareMap.get(DcMotor.class, "outtake");
+        outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtake");
         gateServo = hardwareMap.get(Servo.class, "gate");
 
         setOuttakeState(OuttakeState.IDLE);
