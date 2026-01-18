@@ -7,19 +7,19 @@ import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
 public class pathFollower {
 
     private final Follower follower;
     private boolean movingToTarget = false;
     private boolean lastB = false;
+    public static Pose currentPose = new Pose(0, 0, 0);
 
     private Pose targetPose = null; // TeleOp will set this
 
     public pathFollower(HardwareMap hardwareMap) {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(PoseStorage.currentPose);
+        follower.setStartingPose(currentPose);
     }
 
     public void update() {
