@@ -9,7 +9,6 @@ public class intakeLogic {
     IntakeState intakeState;
     public DcMotor intakeMotor;
     private ElapsedTime intakeTimer = new ElapsedTime();
-    //TODO: TUNE THESE
     public double intakePower = 0;
     public boolean intakeIsRunning = false;
     public double intakeRunTime = 0;
