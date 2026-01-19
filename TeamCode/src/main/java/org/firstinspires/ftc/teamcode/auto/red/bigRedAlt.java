@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.red.bigRedAltEnum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.altEnum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.red.bigRedAltPaths;
 
 @Autonomous(name = "bigRedAlt")
@@ -15,10 +15,10 @@ public class bigRedAlt extends baseAuto {
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.BIGREDSTART_REDSHOOT;
+        return altEnum.START_SHOOT;
     }
 
-    // ---------------- REQUIRED OVERRIDES ----------------
+    // ---------------- REQUI OVERRIDES ----------------
 
     @Override
     protected Pose getStartingPose() {
@@ -32,26 +32,26 @@ public class bigRedAlt extends baseAuto {
 
     @Override
     protected void pathStateUpdate() {
-        switch ((PathState) pathState) {
-            case BIGREDSTART_REDSHOOT:
+        switch ((altEnum) pathState) {
+            case START_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.bigRedStart_redShoot, true);
-                    setPathState(PathState.SHOOT_PRELOAD);
+                    setPathState(altEnum.OUTTAKE_PRELOAD);
                 }
                 break;
 
-            case SHOOT_PRELOAD:
+            case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDSHOOT_REDALTEND);
+                        setPathState(altEnum.SHOOT_END);
                     }
                 }
                 break;
 
-            case REDSHOOT_REDALTEND:
+            case SHOOT_END:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redShoot_redAltEnd, true);
                 }

@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.red.smallRed2Enum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigAndSmall2Enum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.red.smallRed2Paths;
 
 @Autonomous(name = "smallRed2")
@@ -15,10 +15,10 @@ public class smallRed2 extends baseAuto {
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.INTAKE_START;
+        return bigAndSmall2Enum.INTAKE_START;
     }
 
-    // ---------------- REQUIRED OVERRIDES ----------------
+    // ---------------- REQUI OVERRIDES ----------------
 
     @Override
     protected Pose getStartingPose() {
@@ -32,148 +32,148 @@ public class smallRed2 extends baseAuto {
 
     @Override
     protected void pathStateUpdate() {
-        switch ((PathState) pathState) {
+        switch ((bigAndSmall2Enum) pathState) {
             case INTAKE_START:
                 if (!follower.isBusy()) {
                     intake.setIntake(false, 1, Double.POSITIVE_INFINITY);
-                    setPathState(PathState.SMALLREDSTART_REDSHOOT);
+                    setPathState(bigAndSmall2Enum.START_SHOOT);
                 }
-            case SMALLREDSTART_REDSHOOT:
+            case START_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.smallRedStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDTOPSTART);
+                    setPathState(bigAndSmall2Enum.SHOOT_TOPSTART);
                 }
                 break;
 
-            case SHOOT_PRELOAD:
+            case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDSHOOT_REDTOPSTART);
+                        setPathState(bigAndSmall2Enum.SHOOT_TOPSTART);
                     }
                 }
                 break;
 
-            case REDSHOOT_REDTOPSTART:
+            case SHOOT_TOPSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redShoot_redTopStart, true);
-                    setPathState(PathState.REDTOPSTART_REDTOPEND);
+                    setPathState(bigAndSmall2Enum.TOPSTART_TOPEND);
                 }
                 break;
 
-            case REDTOPSTART_REDTOPEND:
+            case TOPSTART_TOPEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redTopStart_redTopEnd, true);
-                    setPathState(PathState.REDTOPEND_REDTOPSTART);
+                    setPathState(bigAndSmall2Enum.TOPEND_TOPSTART);
                 }
                 break;
 
-            case REDTOPEND_REDTOPSTART:
+            case TOPEND_TOPSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redTopEnd_redTopStart, true);
-                    setPathState(PathState.REDTOPSTART_REDSHOOT);
+                    setPathState(bigAndSmall2Enum.TOPSTART_SHOOT);
                 }
                 break;
 
-            case REDTOPSTART_REDSHOOT:
+            case TOPSTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redTopStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDMIDDLESTART);
+                    setPathState(bigAndSmall2Enum.SHOOT_MIDDLESTART);
                 }
                 break;
 
-            case SHOOT_TOP:
+            case OUTTAKE_TOP:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDSHOOT_REDMIDDLESTART);
+                        setPathState(bigAndSmall2Enum.SHOOT_MIDDLESTART);
                     }
                 }
                 break;
 
-            case REDSHOOT_REDMIDDLESTART:
+            case SHOOT_MIDDLESTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redShoot_redMiddleStart, true);
-                    setPathState(PathState.REDMIDDLESTART_REDMIDDLEEND);
+                    setPathState(bigAndSmall2Enum.MIDDLESTART_MIDDLEEND);
                 }
                 break;
 
-            case REDMIDDLESTART_REDMIDDLEEND:
+            case MIDDLESTART_MIDDLEEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redMiddleStart_redMiddleEnd, true);
-                    setPathState(PathState.REDMIDDLEEND_REDMIDDLESTART);
+                    setPathState(bigAndSmall2Enum.MIDDLEEND_MIDDLESTART);
                 }
                 break;
 
-            case REDMIDDLEEND_REDMIDDLESTART:
+            case MIDDLEEND_MIDDLESTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redMiddleEnd_redMiddleStart, true);
-                    setPathState(PathState.REDMIDDLESTART_REDSHOOT);
+                    setPathState(bigAndSmall2Enum.MIDDLESTART_SHOOT);
                 }
                 break;
 
-            case REDMIDDLESTART_REDSHOOT:
+            case MIDDLESTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redMiddleStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDBOTTOMSTART);
+                    setPathState(bigAndSmall2Enum.SHOOT_BOTTOMSTART);
                 }
                 break;
 
-            case SHOOT_MIDDLE:
+            case OUTTAKE_MIDDLE:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDSHOOT_REDBOTTOMSTART);
+                        setPathState(bigAndSmall2Enum.SHOOT_BOTTOMSTART);
                     }
                 }
                 break;
 
-            case REDSHOOT_REDBOTTOMSTART:
+            case SHOOT_BOTTOMSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redShoot_redBottomStart, true);
-                    setPathState(PathState.REDBOTTOMSTART_REDBOTTOMEND);
+                    setPathState(bigAndSmall2Enum.BOTTOMSTART_BOTTOMEND);
                 }
                 break;
 
-            case REDBOTTOMSTART_REDBOTTOMEND:
+            case BOTTOMSTART_BOTTOMEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redBottomStart_redBottomEnd, true);
-                    setPathState(PathState.REDBOTTOMEND_REDBOTTOMSTART);
+                    setPathState(bigAndSmall2Enum.BOTTOMEND_BOTTOMSTART);
                 }
                 break;
 
-            case REDBOTTOMEND_REDBOTTOMSTART:
+            case BOTTOMEND_BOTTOMSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redBottomEnd_redBottomStart, true);
-                    setPathState(PathState.REDBOTTOMSTART_REDSHOOT);
+                    setPathState(bigAndSmall2Enum.BOTTOMSTART_SHOOT);
                 }
                 break;
 
-            case REDBOTTOMSTART_REDSHOOT:
+            case BOTTOMSTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redBottomStart_redShoot, true);
-                    setPathState(PathState.REDSHOOT_REDEND);
+                    setPathState(bigAndSmall2Enum.SHOOT_END);
                 }
                 break;
 
-            case SHOOT_BOTTOM:
+            case OUTTAKE_BOTTOM:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDSHOOT_REDEND);
+                        setPathState(bigAndSmall2Enum.SHOOT_END);
                     }
                 }
                 break;
 
-            case REDSHOOT_REDEND:
+            case SHOOT_END:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redShoot_redEnd, true);
                 }

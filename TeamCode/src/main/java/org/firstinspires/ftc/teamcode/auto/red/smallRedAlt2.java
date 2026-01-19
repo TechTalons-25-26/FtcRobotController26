@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.red.smallRedAlt2Enum.PathState;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.altEnum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.red.smallRedAlt2Paths;
 
 @Autonomous(name = "smallRedAlt2")
@@ -15,10 +15,10 @@ public class smallRedAlt2 extends baseAuto {
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.SMALLREDSTART_REDPRELOAD;
+        return altEnum.START_SHOOT;
     }
 
-    // ---------------- REQUIRED OVERRIDES ----------------
+    // ---------------- REQUI OVERRIDES ----------------
 
     @Override
     protected Pose getStartingPose() {
@@ -32,26 +32,26 @@ public class smallRedAlt2 extends baseAuto {
 
     @Override
     protected void pathStateUpdate() {
-        switch ((PathState) pathState) {
-            case SMALLREDSTART_REDPRELOAD:
+        switch ((altEnum) pathState) {
+            case START_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.smallRedStart_redPreload, true);
-                    setPathState(PathState.SHOOT_PRELOAD);
+                    setPathState(altEnum.OUTTAKE_PRELOAD);
                 }
                 break;
 
-            case SHOOT_PRELOAD:
+            case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.REDPRELOAD_REDALTEND);
+                        setPathState(altEnum.SHOOT_END);
                     }
                 }
                 break;
 
-            case REDPRELOAD_REDALTEND:
+            case SHOOT_END:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redPreload_redAltEnd, true);
                 }

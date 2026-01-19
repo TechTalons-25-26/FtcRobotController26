@@ -5,7 +5,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.blue.smallBlueAltEnum.PathState;
+
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.altEnum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.blue.smallBlueAltPaths;
 
 @Autonomous(name = "smallBlueAlt")
@@ -15,7 +16,7 @@ public class smallBlueAlt extends baseAuto {
 
     @Override
     protected Enum<?> getInitialState() {
-        return PathState.SMALLBLUESTART_SMALLBLUEPRELOAD;
+        return altEnum.START_SHOOT;
     }
 
     // ---------------- REQUIRED OVERRIDES ----------------
@@ -32,26 +33,26 @@ public class smallBlueAlt extends baseAuto {
 
     @Override
     protected void pathStateUpdate() {
-        switch ((PathState) pathState) {
-            case SMALLBLUESTART_SMALLBLUEPRELOAD:
+        switch ((altEnum) pathState) {
+            case START_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.smallBlueStart_smallBluePreload, true);
-                    setPathState(PathState.SHOOT_PRELOAD);
+                    setPathState(altEnum.OUTTAKE_PRELOAD);
                 }
                 break;
 
-            case SHOOT_PRELOAD:
+            case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(PathState.SMALLBLUEPRELOAD_SMALLBLUEALTEND);
+                        setPathState(altEnum.SHOOT_END);
                     }
                 }
                 break;
 
-            case SMALLBLUEPRELOAD_SMALLBLUEALTEND:
+            case SHOOT_END:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.smallBluePreload_smallBlueAltEnd, true);
                 }
