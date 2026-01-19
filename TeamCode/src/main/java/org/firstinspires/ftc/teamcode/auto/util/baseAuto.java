@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.intake.intakeLogic;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
+import org.firstinspires.ftc.teamcode.subsystems.path.poseStorage;
 
 public abstract class baseAuto extends OpMode {
 
@@ -71,5 +72,10 @@ public abstract class baseAuto extends OpMode {
         panelsTelemetry.debug("Y", follower.getPose().getY());
         panelsTelemetry.debug("Heading", follower.getPose().getHeading());
         panelsTelemetry.update(telemetry);
+    }
+
+    @Override
+    public void stop() {
+        poseStorage.currentPose = follower.getPose();
     }
 }
