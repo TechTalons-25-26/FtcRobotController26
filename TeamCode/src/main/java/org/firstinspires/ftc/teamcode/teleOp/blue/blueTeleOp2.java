@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleOp.blue;
+package org.firstinspires.ftc.teamcode.teleOp.qt2TeleOp;
 
 
 //import org.firstinspires.ftc.teamcode.pedroPathing;
@@ -8,8 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
-
+import com.qualcomm.robotcore.hardware.CRServo;
 // PedroPathing imports
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -17,396 +16,342 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
 
 
-//import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-//import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
 
 @TeleOp(name = "blueTeleOp2")
 public class blueTeleOp2 extends LinearOpMode {
 
 
-   private DcMotor frontLeft, frontRight, backLeft, backRight;
-   //private DcMotor leftWheel, rightWheel;
-   private DcMotor outtakeWheel;
-   private DcMotor intakeMotor;
+    private DcMotor frontLeft, frontRight, backLeft, backRight;
+    //private DcMotor leftWheel, rightWheel;
+    private DcMotor outtakeWheel;
+    //INTAKE MOTOR 1 IS FOR THE FIRST STAGE OKAY
+    private DcMotor intakeMotor1;
+    //INTAKE MOTOR 2 IS FOR THE FIRST STAGE OKAY
+    private DcMotor intakeMotor2;
 
 
-   //private CRServo conveyor;
-   //private Servo outtakeAngle;
+    //private Servo parkingPlate;
 
 
-   private Servo lid;
+    //private CRServo conveyor;
+    //private Servo outtakeAngle;
+
+
+    //private Servo lid;
+    private CRServo parkingPlate;
 
 
 
 
-   private Follower follower;
+    private Follower follower;
+
+    double outtakePower = 0.4;
+    double wheelSpeed = 0.4;
+    double axonPosition = 0.14; // start centered
+    double step = 0.01; // servo step
 
 
-   double wheelSpeed = 0.4;
-   double axonPosition = 0.14; // start centered
-   double step = 0.01; // servo step
+    private boolean movingToTarget = false;
+    boolean lastX = false;
+    boolean lastY = false;
+    boolean lastB = false; // track B button
 
 
-   private boolean movingToTarget = false;
-   boolean lastX = false;
-   boolean lastY = false;
-   boolean lastB = false; // track B button
+    // target pose for pressing B (make sure units match your field config)
+    private final Pose targetPose = new Pose(83.959, 86.004, Math.toRadians(-2.226)); // example target
 
 
-   // target pose for pressing B (make sure units match your field config)
-   private final Pose targetPose = new Pose(83.959, 86.004, Math.toRadians(-2.226)); // example target
+    @Override
+    public void runOpMode() {
 
 
-   @Override
-   public void runOpMode() {
+        // Hardware mapping
+        outtakeWheel = hardwareMap.get(DcMotor.class, "outtakeWheel");
+        //leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
+        //rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
+        intakeMotor1 = hardwareMap.get(DcMotor.class, "intakeMotor1");
+        intakeMotor2 = hardwareMap.get(DcMotor.class, "intakeMotor2");
+        //conveyor = hardwareMap.get(CRServo.class, "conveyor");
+        parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        backRight = hardwareMap.get(DcMotor.class, "backRight");
 
 
-       // Hardware mapping
-       outtakeWheel = hardwareMap.get(DcMotor.class, "outtakeWheel");
-       //leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
-       //rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
-       intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-       //conveyor = hardwareMap.get(CRServo.class, "conveyor");
-       lid = hardwareMap.get(Servo.class, "lid");
-       frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-       frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-       backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-       backRight = hardwareMap.get(DcMotor.class, "backRight");
+        // Motor directions
+        //rightWheel.setDirection(DcMotor.Direction.REVERSE);
+        outtakeWheel.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
 
 
-       // Motor directions
-       //rightWheel.setDirection(DcMotor.Direction.REVERSE);
-       outtakeWheel.setDirection(DcMotor.Direction.REVERSE);
-       frontLeft.setDirection(DcMotor.Direction.FORWARD);
-       frontRight.setDirection(DcMotor.Direction.REVERSE);
-       backLeft.setDirection(DcMotor.Direction.FORWARD);
-       backRight.setDirection(DcMotor.Direction.REVERSE);
+        // Zero power behavior
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-       // Zero power behavior
-       frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // Initialize PedroPathing follower
+
+        follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(PoseStorage.currentPose);
+        telemetry.addData("Starting X", PoseStorage.currentPose.getX());
+        telemetry.addData("Starting Y", PoseStorage.currentPose.getY());
+        telemetry.addData("Starting Heading", PoseStorage.currentPose.getHeading());
+        telemetry.update();// initial pose (only set ONCE)
 
 
-       // Initialize PedroPathing follower
-       /*
-       follower = Constants.createFollower(hardwareMap);
-       follower.setStartingPose(PoseStorage.currentPose);
-       telemetry.addData("Starting X", PoseStorage.currentPose.getX());
-       telemetry.addData("Starting Y", PoseStorage.currentPose.getY());
-       telemetry.addData("Starting Heading", PoseStorage.currentPose.getHeading());
-       telemetry.update();// initial pose (only set ONCE)
 
 
-        */
+
+        intakeMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //parkingPlate.setPosition(axonPosition);
 
 
-       intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-       lid.setPosition(axonPosition);
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
 
-       telemetry.addData("Status", "Initialized");
-       telemetry.update();
+        waitForStart();
 
 
-       waitForStart();
+        while (opModeIsActive()) {
+            //follower.update();
+            outtakeWheel.setPower(outtakePower);
 
 
-       while (opModeIsActive()) {
+            // ALWAYS keep follower/localizer updated
+            //follower.update();
 
 
-           // ALWAYS keep follower/localizer updated
-           //follower.update();
+            //Pose currentPose = follower.getPose();
+            //telemetry.addData("Current Pose", currentPose);
 
 
-           //Pose currentPose = follower.getPose();
-           //telemetry.addData("Current Pose", currentPose);
+            if (movingToTarget) {
+                // Pedro is driving – check if we arrived
+                follower.update();
+                Pose currentPose = follower.getPose();
+                telemetry.addData("Current Pose", currentPose);
 
 
-           if (movingToTarget) {
-               // Pedro is driving – check if we arrived
-               follower.update();
-               Pose currentPose = follower.getPose();
-               telemetry.addData("Current Pose", currentPose);
+                double dx = currentPose.getX() - targetPose.getX();
+                double dy = currentPose.getY() - targetPose.getY();
+                double distToTarget = Math.hypot(dx, dy);
 
 
-               double dx = currentPose.getX() - targetPose.getX();
-               double dy = currentPose.getY() - targetPose.getY();
-               double distToTarget = Math.hypot(dx, dy);
+                telemetry.addData("Distance to target", distToTarget);
+                telemetry.addData("Current X", currentPose.getX());
+                telemetry.addData("Current Y", currentPose.getY());
+                //telemetry.addData("Current Heading", PoseStorage.currentPose.getHeading());
 
 
-               telemetry.addData("Distance to target", distToTarget);
-               telemetry.addData("Current X", currentPose.getX());
-               telemetry.addData("Current Y", currentPose.getY());
-               //telemetry.addData("Current Heading", PoseStorage.currentPose.getHeading());
+                // Stop when Pedro says path is done OR we're close enough
+                if (!follower.isBusy() || distToTarget < 2.0) { // 2 units tolerance
+                    movingToTarget = false;
 
 
-               // Stop when Pedro says path is done OR we're close enough
-               if (!follower.isBusy() || distToTarget < 2.0) { // 2 units tolerance
-                   movingToTarget = false;
+                    // Make sure drive motors are stopped
+                    frontLeft.setPower(0);
+                    frontRight.setPower(0);
+                    backLeft.setPower(0);
+                    backRight.setPower(0);
 
 
-                   // Make sure drive motors are stopped
-                   frontLeft.setPower(0);
-                   frontRight.setPower(0);
-                   backLeft.setPower(0);
-                   backRight.setPower(0);
+                    telemetry.addData("Arrived at target", currentPose);
+                }
+                follower.update();
 
 
-                   telemetry.addData("Arrived at target", currentPose);
-               }
-               follower.update();
-
-
-           }
+            }
            /*else {
                // Normal driver control when not following a path
                mecanumWheels();
            }
            */
-           if(!movingToTarget) {
-               mecanumWheels();
-           }
+            if(!movingToTarget) {
+                mecanumWheels();
+            }
 
 
-           // Mechanisms can run in both modes
-           handleIntakeAndOuttake();
-           //outtakeAngleControl();
-           openCloseLid();
-           checkStartPathWithB();
+            // Mechanisms can run in both modes
+            handleIntakeAndOuttake();
+            //outtakeAngleControl();
+            //openCloseLid();
+            checkStartPathWithB();
 
 
-           telemetry.update();
-       }
-   }
+            telemetry.update();
+        }
+    }
 
 
-   // Mecanum drive
-   public void mecanumWheels() {
-       double y = -gamepad1.left_stick_y;
-       double x = gamepad1.left_stick_x * 1.1;
-       double rx = gamepad1.right_stick_x;
+    // Mecanum drive
+    public void mecanumWheels() {
+        double y = -gamepad1.left_stick_y;
+        double x = gamepad1.left_stick_x * 1.1;
+        double rx = gamepad1.right_stick_x;
 
 
-       double frontLeftPower = y + x + rx;
-       double frontRightPower = y - x - rx;
-       double backLeftPower = y - x + rx;
-       double backRightPower = y + x - rx;
+        double frontLeftPower = y + x + rx;
+        double frontRightPower = y - x - rx;
+        double backLeftPower = y - x + rx;
+        double backRightPower = y + x - rx;
 
 
-       double maxPower = Math.max(Math.abs(frontLeftPower),
-               Math.max(Math.abs(frontRightPower),
-                       Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
+        double maxPower = Math.max(Math.abs(frontLeftPower),
+                Math.max(Math.abs(frontRightPower),
+                        Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
 
 
-       if (maxPower > 1.0) {
-           frontLeftPower /= maxPower;
-           frontRightPower /= maxPower;
-           backLeftPower /= maxPower;
-           backRightPower /= maxPower;
-       }
+        if (maxPower > 1.0) {
+            frontLeftPower /= maxPower;
+            frontRightPower /= maxPower;
+            backLeftPower /= maxPower;
+            backRightPower /= maxPower;
+        }
 
 
-       // Clip to [-1, 1]
-       frontLeftPower = Math.max(-1, Math.min(1, frontLeftPower));
-       frontRightPower = Math.max(-1, Math.min(1, frontRightPower));
-       backLeftPower = Math.max(-1, Math.min(1, backLeftPower));
-       backRightPower = Math.max(-1, Math.min(1, backRightPower));
+        // Clip to [-1, 1]
+        frontLeftPower = Math.max(-1, Math.min(1, frontLeftPower));
+        frontRightPower = Math.max(-1, Math.min(1, frontRightPower));
+        backLeftPower = Math.max(-1, Math.min(1, backLeftPower));
+        backRightPower = Math.max(-1, Math.min(1, backRightPower));
 
 
-       frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-       frontLeft.setPower(frontLeftPower);
-       frontRight.setPower(frontRightPower);
-       backLeft.setPower(backLeftPower);
-       backRight.setPower(backRightPower);
-   }
+        frontLeft.setPower(frontLeftPower);
+        frontRight.setPower(frontRightPower);
+        backLeft.setPower(backLeftPower);
+        backRight.setPower(backRightPower);
+    }
 
 
 
 
-   // Intake / outtake
-   public void handleIntakeAndOuttake() {
-       double maxIntakePower = 0.7;
+    // Intake / outtake
+    public void handleIntakeAndOuttake() {
+        double maxIntakePower1 = 0.7;
+        double maxIntakePower2 = 0.5;
 
 
-       double rt = gamepad2.right_trigger;   // intake in
-       boolean rb = gamepad2.right_bumper;   // intake out
-       double lt = gamepad2.left_trigger;    // outtake
-       boolean lb = gamepad2.left_bumper;    // outtake
-       boolean lx = gamepad2.x;
+        double rt = gamepad2.right_trigger;   // intake in
+        boolean rb = gamepad2.right_bumper;   // intake out
+        double lt = gamepad2.left_trigger;    // outtake
+        //boolean lb = gamepad2.left_bumper;    // outtake
+        //double parking = gamepad1.right_trigger;
 
+        double intakePower = 0.0;
+        double parkingPlatePower = gamepad1.right_trigger;
+        double outtakeWheelPower = 0.0;
 
-       double intakePower = 0.0;
-       //double conveyorPower = 0.0;
-       //double outtakeWheelPower = 0.0;
+        if (rt > 0.05) {
+            // INTAKE IN: intake motor + conveyor reverse
+            maxIntakePower1 = rt * maxIntakePower1; // full speed from trigger
+            maxIntakePower2 = rt * -(maxIntakePower2);
+            //conveyorPower = -rt;
 
 
-       // PRIORITY: outtake (lt) > intake in (rt) > intake out (rb)
-       /*
-       if (lb) {
-           outtakeWheelPower = 0.8;  // set wheel speed
-           outtakeWheel.setPower(outtakeWheelPower);
-           //leftWheel.setPower(outtakeWheelPower);
-           //rightWheel.setPower(outtakeWheelPower);
+            //leftWheel.setPower(0);
+            //rightWheel.setPower(0);
+            //outtakeWheel.setPower(0);
 
 
-           intakeMotor.setPower(0);
-           //conveyor.setPower(0);
+            telemetry.addData("Mode", "INTAKE IN");
+            telemetry.addData("Intake trigger", rt);
 
 
-           telemetry.addData("Mode", "OUTTAKE WHEELS ONLY");
-       }
-       if (lt > 0.05) {
-           // OUTTAKE: use leftWheel/rightWheel + conveyor
-           outtakeWheelPower = lt * wheelSpeed;
-           outtakeWheel.setPower(outtakeWheelPower);
-           //leftWheel.setPower(outtakeWheelPower);
-           //rightWheel.setPower(outtakeWheelPower);
+        } else if (lt > 0.05) {
+            maxIntakePower1 = lt * maxIntakePower1;
 
+            maxIntakePower2 = lt * maxIntakePower2;
+        }else if (rb) {
+            // INTAKE OUT (reverse)
+            maxIntakePower1 = -maxIntakePower1; // constant speed out
+            //conveyorPower = 1.0;           // spit pieces out
+            maxIntakePower2 = -maxIntakePower2;
 
-           intakePower = 0.0;
-           conveyorPower = -lt;   // feed game pieces out
 
+            //leftWheel.setPower(0);
+            //rightWheel.setPower(0);
+            //outtakeWheel.setPower(0);
 
-           telemetry.addData("Mode", "OUTTAKE");
-           telemetry.addData("Outtake trigger", lt);
 
+            telemetry.addData("Mode", "INTAKE OUT (RB)");
+        } else {
+            // NOTHING PRESSED: stop everything
+            maxIntakePower1 = 0.0;
+            maxIntakePower2 = 0.0;
+            //conveyorPower = 0.0;
+            //leftWheel.setPower(0);
+            //rightWheel.setPower(0);
+            //outtakeWheel.setPower(0);
 
-       } */
-       if (rt > 0.05) {
-           // INTAKE IN: intake motor + conveyor reverse
-           intakePower = rt * maxIntakePower; // full speed from trigger
-           //conveyorPower = -rt;
 
+            telemetry.addData("Mode", "OFF");
+        }
 
-           //leftWheel.setPower(0);
-           //rightWheel.setPower(0);
-           //outtakeWheel.setPower(0);
 
+        // Actually apply powers
+        intakeMotor1.setPower(maxIntakePower1);
+        intakeMotor2.setPower(maxIntakePower2);
+        moveParkingPlate(parkingPlatePower);
+        //conveyorMove(conveyorPower);
 
-           telemetry.addData("Mode", "INTAKE IN");
-           telemetry.addData("Intake trigger", rt);
 
+        telemetry.addData("Intake power 1", maxIntakePower1);
+        telemetry.addData("Intake power 2", maxIntakePower2);
 
-       } else if (rb) {
-           // INTAKE OUT (reverse)
-           intakePower = -maxIntakePower; // constant speed out
-           //conveyorPower = 1.0;           // spit pieces out
+        //telemetry.addData("Conveyor power", conveyorPower);
+    }
 
 
-           //leftWheel.setPower(0);
-           //rightWheel.setPower(0);
-           //outtakeWheel.setPower(0);
+    public void moveParkingPlate(double power) {
+        double maxConveyorPower = 0.7;
+        parkingPlate.setPower(power * maxConveyorPower);
 
 
-           telemetry.addData("Mode", "INTAKE OUT (RB)");
-       } else {
-           // NOTHING PRESSED: stop everything
-           intakePower = 0.0;
-           //conveyorPower = 0.0;
-           //leftWheel.setPower(0);
-           //rightWheel.setPower(0);
-           //outtakeWheel.setPower(0);
+    }
 
+    // Start the path when B is first pressed
+    public void checkStartPathWithB() {
+        boolean justPressedB = gamepad1.b && !lastB;
+        if (justPressedB && !movingToTarget) {
+            //removed && !lastB
+            Pose currentPose = follower.getPose();
 
-           telemetry.addData("Mode", "OFF");
-       }
 
+            // Build a path from current pose to target
+            BezierLine curve = new BezierLine(currentPose, targetPose);
+            Path movePath = new Path(curve);
+            movePath.setLinearHeadingInterpolation(currentPose.getHeading(), targetPose.getHeading());
 
-       // Actually apply powers
-       intakeMotor.setPower(intakePower);
-       //conveyorMove(conveyorPower);
 
+            follower.followPath(movePath);
 
-       telemetry.addData("Intake power", intakePower);
-       //telemetry.addData("Conveyor power", conveyorPower);
-   }
 
+            //outtakeAngle.setPosition(0.14);
+            movingToTarget = true;
 
-   // Conveyor helper
-   public void conveyorMove(double power) {
-       //double maxConveyorPower = 0.7;
-       //conveyor.setPower(power * maxConveyorPower);
 
+            telemetry.addData("Started moving to target", targetPose);
+        }
 
 
-
-   }
-
-
-   // Servo control
-   /*
-   public void outtakeAngleControl() {
-       if (gamepad2.a && !lastA) {
-           axonPosition += step;
-       } else if (gamepad2.y && !lastY) {
-           axonPosition -= step;
-       }
-
-
-       axonPosition = Math.max(0, Math.min(1, axonPosition));
-       //outtakeAngle.setPosition(axonPosition);
-
-
-       lastA = gamepad2.a;
-       lastY = gamepad2.y;
-   }
-   */
-
-
-
-
-   public void openCloseLid() {
-       if (gamepad2.x && !lastX) {
-           axonPosition += step;
-       } else if (!gamepad2.x) {
-           axonPosition = 0.14;
-       }
-
-
-       axonPosition = Math.max(0, Math.min(1, axonPosition));
-       //outtakeAngle.setPosition(axonPosition);
-
-
-       lastX = gamepad2.x;
-       //lastY = gamepad2.y;
-   }
-
-
-   // Start the path when B is first pressed
-   public void checkStartPathWithB() {
-       boolean justPressedB = gamepad1.b && !lastB;
-       if (justPressedB && !movingToTarget) {
-           //removed && !lastB
-           Pose currentPose = follower.getPose();
-
-
-           // Build a path from current pose to target
-           BezierLine curve = new BezierLine(currentPose, targetPose);
-           Path movePath = new Path(curve);
-           movePath.setLinearHeadingInterpolation(currentPose.getHeading(), targetPose.getHeading());
-
-
-           follower.followPath(movePath);
-
-
-           //outtakeAngle.setPosition(0.14);
-           movingToTarget = true;
-
-
-           telemetry.addData("Started moving to target", targetPose);
-       }
-
-
-       lastB = gamepad1.b;
-   }
+        lastB = gamepad1.b;
+    }
 }
 
