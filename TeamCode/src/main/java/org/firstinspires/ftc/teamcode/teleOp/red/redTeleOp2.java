@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleOp.red;
+package org.firstinspires.ftc.teamcode.teleOp.qt2TeleOp;
 
 
 //import org.firstinspires.ftc.teamcode.pedroPathing;
@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 // PedroPathing imports
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -15,8 +16,8 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
 
 
-//import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-//import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
 
 
 @TeleOp(name = "redTeleOp2")
@@ -26,24 +27,28 @@ public class redTeleOp2 extends LinearOpMode {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     //private DcMotor leftWheel, rightWheel;
     private DcMotor outtakeWheel;
-    private DcMotor intakeMotor;
+    //INTAKE MOTOR 1 IS FOR THE FIRST STAGE OKAY
+    private DcMotor intakeMotor1;
+    //INTAKE MOTOR 2 IS FOR THE FIRST STAGE OKAY
+    private DcMotor intakeMotor2;
 
 
-    private Servo parkingPlate;
+    //private Servo parkingPlate;
 
 
     //private CRServo conveyor;
     //private Servo outtakeAngle;
 
 
-    private Servo lid;
+    //private Servo lid;
+    private CRServo parkingPlate;
 
 
 
 
     private Follower follower;
 
-
+    double outtakePower = 0.4;
     double wheelSpeed = 0.4;
     double axonPosition = 0.14; // start centered
     double step = 0.01; // servo step
@@ -67,9 +72,10 @@ public class redTeleOp2 extends LinearOpMode {
         outtakeWheel = hardwareMap.get(DcMotor.class, "outtakeWheel");
         //leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
         //rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
-        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
+        intakeMotor1 = hardwareMap.get(DcMotor.class, "intakeMotor1");
+        intakeMotor2 = hardwareMap.get(DcMotor.class, "intakeMotor2");
         //conveyor = hardwareMap.get(CRServo.class, "conveyor");
-        lid = hardwareMap.get(Servo.class, "lid");
+        parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -93,20 +99,21 @@ public class redTeleOp2 extends LinearOpMode {
 
 
         // Initialize PedroPathing follower
-       /*
+
        follower = Constants.createFollower(hardwareMap);
        follower.setStartingPose(PoseStorage.currentPose);
        telemetry.addData("Starting X", PoseStorage.currentPose.getX());
        telemetry.addData("Starting Y", PoseStorage.currentPose.getY());
        telemetry.addData("Starting Heading", PoseStorage.currentPose.getHeading());
        telemetry.update();// initial pose (only set ONCE)
-       */
 
 
 
 
-        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lid.setPosition(axonPosition);
+
+        intakeMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //parkingPlate.setPosition(axonPosition);
 
 
         telemetry.addData("Status", "Initialized");
@@ -117,6 +124,8 @@ public class redTeleOp2 extends LinearOpMode {
 
 
         while (opModeIsActive()) {
+            //follower.update();
+            outtakeWheel.setPower(outtakePower);
 
 
             // ALWAYS keep follower/localizer updated
@@ -176,7 +185,7 @@ public class redTeleOp2 extends LinearOpMode {
             // Mechanisms can run in both modes
             handleIntakeAndOuttake();
             //outtakeAngleControl();
-            openCloseLid();
+            //openCloseLid();
             checkStartPathWithB();
 
 
@@ -235,56 +244,24 @@ public class redTeleOp2 extends LinearOpMode {
 
     // Intake / outtake
     public void handleIntakeAndOuttake() {
-        double maxIntakePower = 0.7;
+        double maxIntakePower1 = 0.7;
+        double maxIntakePower2 = 0.5;
 
 
         double rt = gamepad2.right_trigger;   // intake in
         boolean rb = gamepad2.right_bumper;   // intake out
         double lt = gamepad2.left_trigger;    // outtake
-        boolean lb = gamepad2.left_bumper;    // outtake
-        boolean lx = gamepad2.x;
-
+        //boolean lb = gamepad2.left_bumper;    // outtake
+        //double parking = gamepad1.right_trigger;
 
         double intakePower = 0.0;
-        //double conveyorPower = 0.0;
-        //double outtakeWheelPower = 0.0;
+        double parkingPlatePower = gamepad1.right_trigger;
+        double outtakeWheelPower = 0.0;
 
-
-        // PRIORITY: outtake (lt) > intake in (rt) > intake out (rb)
-       /*
-       if (lb) {
-           outtakeWheelPower = 0.8;  // set wheel speed
-           outtakeWheel.setPower(outtakeWheelPower);
-           //leftWheel.setPower(outtakeWheelPower);
-           //rightWheel.setPower(outtakeWheelPower);
-
-
-           intakeMotor.setPower(0);
-           //conveyor.setPower(0);
-
-
-           telemetry.addData("Mode", "OUTTAKE WHEELS ONLY");
-       }
-       if (lt > 0.05) {
-           // OUTTAKE: use leftWheel/rightWheel + conveyor
-           outtakeWheelPower = lt * wheelSpeed;
-           outtakeWheel.setPower(outtakeWheelPower);
-           //leftWheel.setPower(outtakeWheelPower);
-           //rightWheel.setPower(outtakeWheelPower);
-
-
-           intakePower = 0.0;
-           conveyorPower = -lt;   // feed game pieces out
-
-
-           telemetry.addData("Mode", "OUTTAKE");
-           telemetry.addData("Outtake trigger", lt);
-
-
-       } */
         if (rt > 0.05) {
             // INTAKE IN: intake motor + conveyor reverse
-            intakePower = rt * maxIntakePower; // full speed from trigger
+            maxIntakePower1 = rt * maxIntakePower1; // full speed from trigger
+            maxIntakePower2 = rt * -(maxIntakePower2);
             //conveyorPower = -rt;
 
 
@@ -297,10 +274,15 @@ public class redTeleOp2 extends LinearOpMode {
             telemetry.addData("Intake trigger", rt);
 
 
-        } else if (rb) {
+        } else if (lt > 0.05) {
+            maxIntakePower1 = lt * maxIntakePower1;
+
+            maxIntakePower2 = lt * maxIntakePower2;
+        }else if (rb) {
             // INTAKE OUT (reverse)
-            intakePower = -maxIntakePower; // constant speed out
+            maxIntakePower1 = -maxIntakePower1; // constant speed out
             //conveyorPower = 1.0;           // spit pieces out
+            maxIntakePower2 = -maxIntakePower2;
 
 
             //leftWheel.setPower(0);
@@ -311,7 +293,8 @@ public class redTeleOp2 extends LinearOpMode {
             telemetry.addData("Mode", "INTAKE OUT (RB)");
         } else {
             // NOTHING PRESSED: stop everything
-            intakePower = 0.0;
+            maxIntakePower1 = 0.0;
+            maxIntakePower2 = 0.0;
             //conveyorPower = 0.0;
             //leftWheel.setPower(0);
             //rightWheel.setPower(0);
@@ -323,64 +306,25 @@ public class redTeleOp2 extends LinearOpMode {
 
 
         // Actually apply powers
-        intakeMotor.setPower(intakePower);
+        intakeMotor1.setPower(maxIntakePower1);
+        intakeMotor2.setPower(maxIntakePower2);
+        moveParkingPlate(parkingPlatePower);
         //conveyorMove(conveyorPower);
 
 
-        telemetry.addData("Intake power", intakePower);
+        telemetry.addData("Intake power 1", maxIntakePower1);
+        telemetry.addData("Intake power 2", maxIntakePower2);
+
         //telemetry.addData("Conveyor power", conveyorPower);
     }
 
 
-    // Conveyor helper
-    public void conveyorMove(double power) {
-        //double maxConveyorPower = 0.7;
-        //conveyor.setPower(power * maxConveyorPower);
-
-
+    public void moveParkingPlate(double power) {
+        double maxConveyorPower = 0.7;
+        parkingPlate.setPower(power * maxConveyorPower);
 
 
     }
-
-
-    // Servo control
-   /*
-   public void outtakeAngleControl() {
-       if (gamepad2.a && !lastA) {
-           axonPosition += step;
-       } else if (gamepad2.y && !lastY) {
-           axonPosition -= step;
-       }
-
-
-       axonPosition = Math.max(0, Math.min(1, axonPosition));
-       //outtakeAngle.setPosition(axonPosition);
-
-
-       lastA = gamepad2.a;
-       lastY = gamepad2.y;
-   }
-   */
-
-
-
-
-    public void openCloseLid() {
-        if (gamepad2.x && !lastX) {
-            axonPosition += step;
-        } else if (!gamepad2.x) {
-            axonPosition = 0.14;
-        }
-
-
-        axonPosition = Math.max(0, Math.min(1, axonPosition));
-        //outtakeAngle.setPosition(axonPosition);
-
-
-        lastX = gamepad2.x;
-        //lastY = gamepad2.y;
-    }
-
 
     // Start the path when B is first pressed
     public void checkStartPathWithB() {
