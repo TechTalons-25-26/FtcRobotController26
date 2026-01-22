@@ -36,7 +36,7 @@ private smallBluePaths paths = new smallBluePaths();
         switch ((smallEnum) pathState) {
             case INTAKE_START:
                 if (!follower.isBusy()) {
-                    intake.setIntake(false, 1, Double.POSITIVE_INFINITY);
+                    intake.runIntake(false, 1);
                     setPathState(smallEnum.START_PRELOAD);
                 }
             case START_PRELOAD:

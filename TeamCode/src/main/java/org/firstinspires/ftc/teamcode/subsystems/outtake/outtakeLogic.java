@@ -1,29 +1,25 @@
 package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.subsystems.intake.intakeLogic;
+
 public class outtakeLogic {
     private DcMotorEx outtakeMotor;
-    private Servo gateServo;
+    private DcMotorEx stageMotor;
+    private intakeLogic intake = new intakeLogic();
     private ElapsedTime outtakeTimer = new ElapsedTime();
     OuttakeState outtakeState;
 
     public enum OuttakeState {
         IDLE,
-        SPIN_UP,
         LAUNCH,
-        RESET_GATE
+        RESET
     }
-
-    //TODO: TUNE THESE
-    //----------- Gate Constants ----------
-    private double gateCloseAngle = 0;
-    private double gateOpenAngle = 90;
-    private double gateOpenTime = 0.5;
-    private double gateCloseTime = 0.5;
 
     //TODO: TUNE THESE
     //----------- Outtake Constants--------
@@ -31,57 +27,49 @@ public class outtakeLogic {
     private double outtakeVelocity = 0;
     private double minOuttakeRPM = 800;
     private double targetOuttakeRPM = 1100;
-    private double maxOuttakeSpinupTime = 2;
 
     public void init(HardwareMap hardwareMap) {
         outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtake");
-        gateServo = hardwareMap.get(Servo.class, "gate");
+        stageMotor = hardwareMap.get(DcMotorEx.class, "stage");
+
 
         setOuttakeState(OuttakeState.IDLE);
 
         outtakeMotor.setPower(0);
-        gateServo.setPosition(gateCloseAngle);
-
+        stageMotor.setPower(0);
     }
 
     public void update() {
         switch (outtakeState) {
             case IDLE:
+                outtakeMotor.setVelocity(outtakeVelocity);
+                outtakeMotor.setPower(targetOuttakeRPM);
+
                 if (shotsRemaining > 0) {
-                    gateServo.setPosition(gateCloseAngle);
                     outtakeTimer.reset();
-                    //set velocity
-                    outtakeMotor.setPower(targetOuttakeRPM);
-                    setOuttakeState(OuttakeState.SPIN_UP);
-                }
-                break;
-
-            case SPIN_UP:
-                //set velocity
-                outtakeTimer.reset();
-                if (outtakeVelocity > minOuttakeRPM || outtakeTimer.seconds() > maxOuttakeSpinupTime) {
-                    gateServo.setPosition(gateOpenAngle);
-                    outtakeTimer.reset();
-
                     setOuttakeState(OuttakeState.LAUNCH);
                 }
                 break;
 
             case LAUNCH:
-                if (outtakeTimer.seconds() > gateOpenTime) {
-                    shotsRemaining--; //increment by 1
-                    gateServo.setPosition(gateCloseAngle);
+                outtakeTimer.reset();
+                if (outtakeVelocity > minOuttakeRPM) {
+                    stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
                     outtakeTimer.reset();
-
-                    setOuttakeState(OuttakeState.RESET_GATE);
+                    intake.setIntakeState(intakeLogic.IntakeState.SHOOT);
+                    setOuttakeState(OuttakeState.RESET);
                 }
                 break;
 
-            case RESET_GATE:
-                if (outtakeTimer.seconds() > gateCloseTime) {
+            case RESET:
+                if (outtakeTimer.seconds() > intake.stagePowerTime) {
+                    shotsRemaining--; //increment by 1
+                    stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
+                    outtakeTimer.reset();
+
                     if (shotsRemaining > 0) {
                         outtakeTimer.reset();
-                        setOuttakeState(OuttakeState.SPIN_UP);
+                        setOuttakeState(OuttakeState.LAUNCH);
                     } else {
                         outtakeMotor.setPower(0);
                         setOuttakeState(OuttakeState.IDLE);

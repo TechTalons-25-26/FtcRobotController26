@@ -36,7 +36,7 @@ public class smallBlue2 extends baseAuto {
         switch ((bigAndSmall2Enum) pathState) {
             case INTAKE_START:
                 if (!follower.isBusy()) {
-                    intake.setIntake(false, 1, Double.POSITIVE_INFINITY);
+                    intake.runIntake(false, 1);
                     setPathState(bigAndSmall2Enum.START_SHOOT);
                 }
             case START_SHOOT:

@@ -8,66 +8,54 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class intakeLogic {
     IntakeState intakeState;
     public DcMotor intakeMotor;
-    private ElapsedTime intakeTimer = new ElapsedTime();
+    private DcMotor stageMotor;
     public double intakePower = 0;
     public boolean intakeIsRunning = false;
-    public double intakeRunTime = 0;
+    public double stagePowerTime = 0;
     public boolean intakeIsReversed;
 
     public void init(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intake");
+        stageMotor = hardwareMap.get(DcMotor.class, "stage");
 
         setIntakeState(IntakeState.IDLE);
 
         intakeMotor.setPower(0);
+        stageMotor.setPower(0);
 
     }
 
     public void update() {
         switch (intakeState) {
             case IDLE:
-                if (intakeIsRunning) {
-                    intakeTimer.reset();
-                    if (!intakeIsReversed) {
-                        setIntakeState(IntakeState.FORWARD);
-                    } else if (intakeIsReversed) {
-                        setIntakeState(IntakeState.REVERSE);
-                    }
-                }
+                intakeMotor.setPower(0);
+                stageMotor.setPower(0);
                 break;
 
             case FORWARD:
                 if (intakeIsRunning) {
                     intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+                    stageMotor.setDirection(DcMotor.Direction.REVERSE);
                     intakeMotor.setPower(intakePower);
-                    if (intakeTimer.seconds() > intakeRunTime) {
-                        intakeMotor.setPower(0);
-                        intakeTimer.reset();
-                        intakeIsRunning = false;
-                        setIntakeState(IntakeState.IDLE);
-                    }
+                    stageMotor.setPower(intakePower);
                 }
                 break;
 
             case REVERSE:
                 if (intakeIsRunning) {
                     intakeMotor.setDirection(DcMotor.Direction.REVERSE);
+                    stageMotor.setDirection(DcMotor.Direction.REVERSE);
                     intakeMotor.setPower(intakePower);
-                    if (intakeTimer.seconds() > intakeRunTime) {
-                        intakeMotor.setPower(0);
-                        intakeTimer.reset();
-                        intakeIsRunning = false;
-                        setIntakeState(IntakeState.IDLE);
-                    }
+                    stageMotor.setPower(intakePower);
+                }
+
+            case SHOOT:
+                if (intakeIsRunning) {
+                    stageMotor.setDirection(DcMotor.Direction.FORWARD);
+                    intakeMotor.setPower(0);
+                    stageMotor.setPower(intakePower);
                 }
         }
-    }
-
-    public void setIntake(boolean reversed, double power, double seconds) {
-        intakeIsRunning = true;
-        intakeIsReversed = reversed;
-        intakeRunTime = seconds;
-        intakePower = power;
     }
 
     public void runIntake(boolean reversed, double power) {
@@ -91,6 +79,7 @@ public class intakeLogic {
     public enum IntakeState {
         IDLE,
         FORWARD,
-        REVERSE
+        REVERSE,
+        SHOOT
     }
 }
