@@ -1,86 +1,75 @@
 package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.subsystems.intake.intakeLogic;
+
 public class outtakeLogic {
-    private DcMotor outtakeMotor;
-    private Servo gateServo;
-    private ElapsedTime stateTimer = new ElapsedTime();
+    private DcMotorEx outtakeMotor;
+    private DcMotorEx stageMotor;
+    private intakeLogic intake = new intakeLogic();
+    private ElapsedTime outtakeTimer = new ElapsedTime();
     OuttakeState outtakeState;
+
     public enum OuttakeState {
         IDLE,
-        SPIN_UP,
         LAUNCH,
-        RESET_GATE
+        RESET
     }
-    
-    //TODO: TUNE ALL OF THESE
-    //----------- Gate Constants ----------
-    private double gateCloseAngle = 0;
-    private double gateOpenAngle = 90;
-    private double gateOpenTime = 0.5;
-    private double gateCloseTime = 0.5;
 
-    //TODO: TUNE ALL OF THESE
+    //TODO: TUNE THESE
     //----------- Outtake Constants--------
     private int shotsRemaining = 0;
     private double outtakeVelocity = 0;
     private double minOuttakeRPM = 800;
     private double targetOuttakeRPM = 1100;
-    private double maxOuttakeSpinupTime = 2;
 
     public void init(HardwareMap hardwareMap) {
-        outtakeMotor = hardwareMap.get(DcMotor.class, "outtake");
-        gateServo = hardwareMap.get(Servo.class, "gate");
+        outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtake");
+        stageMotor = hardwareMap.get(DcMotorEx.class, "stage");
+
 
         setOuttakeState(OuttakeState.IDLE);
 
         outtakeMotor.setPower(0);
-        gateServo.setPosition(gateCloseAngle);
-
+        stageMotor.setPower(0);
     }
 
     public void update() {
-        switch (outtakeState){
+        switch (outtakeState) {
             case IDLE:
+                outtakeMotor.setVelocity(outtakeVelocity);
+                outtakeMotor.setPower(targetOuttakeRPM);
+
                 if (shotsRemaining > 0) {
-                    gateServo.setPosition(gateCloseAngle);
-                    stateTimer.reset();
-
-                    //set velocity
-                    outtakeMotor.setPower(targetOuttakeRPM);
-                    setOuttakeState(OuttakeState.SPIN_UP);
-                }
-                break;
-
-            case SPIN_UP:
-                //set velocity
-                if (outtakeVelocity > minOuttakeRPM || stateTimer.seconds() > maxOuttakeSpinupTime) {
-                    gateServo.setPosition(gateOpenAngle);
-                    stateTimer.reset();
-
+                    outtakeTimer.reset();
                     setOuttakeState(OuttakeState.LAUNCH);
                 }
                 break;
 
             case LAUNCH:
-                if (stateTimer.seconds() > gateOpenTime) {
-                    shotsRemaining--; //increment by 1
-                    gateServo.setPosition(gateCloseAngle);
-                    stateTimer.reset();
-
-                    setOuttakeState(OuttakeState.RESET_GATE);
+                outtakeTimer.reset();
+                if (outtakeVelocity > minOuttakeRPM) {
+                    stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
+                    outtakeTimer.reset();
+                    intake.setIntakeState(intakeLogic.IntakeState.SHOOT);
+                    setOuttakeState(OuttakeState.RESET);
                 }
                 break;
 
-            case RESET_GATE:
-                if (stateTimer.seconds() > gateCloseTime) {
+            case RESET:
+                if (outtakeTimer.seconds() > intake.stagePowerTime) {
+                    shotsRemaining--; //increment by 1
+                    stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
+                    outtakeTimer.reset();
+
                     if (shotsRemaining > 0) {
-                        stateTimer.reset();
-                        setOuttakeState(OuttakeState.SPIN_UP);
+                        outtakeTimer.reset();
+                        setOuttakeState(OuttakeState.LAUNCH);
                     } else {
                         outtakeMotor.setPower(0);
                         setOuttakeState(OuttakeState.IDLE);
@@ -105,6 +94,4 @@ public class outtakeLogic {
     }
 
 
-
 }
-
