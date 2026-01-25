@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleOp.qt2TeleOp;
+package org.firstinspires.ftc.teamcode.teleOp.blue;
 
 
 //import org.firstinspires.ftc.teamcode.pedroPathing;
@@ -17,12 +17,10 @@ import com.pedropathing.paths.Path;
 
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.PoseStorage;
-
+import org.firstinspires.ftc.teamcode.subsystems.path.poseStorage;
 
 @TeleOp(name = "blueTeleOp2")
 public class blueTeleOp2 extends LinearOpMode {
-
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     //private DcMotor leftWheel, rightWheel;
@@ -31,7 +29,7 @@ public class blueTeleOp2 extends LinearOpMode {
     private DcMotor intakeMotor1;
     //INTAKE MOTOR 2 IS FOR THE FIRST STAGE OKAY
     private DcMotor intakeMotor2;
-
+    private poseStorage poseStorage = new poseStorage();
 
     //private Servo parkingPlate;
 
@@ -61,7 +59,7 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
     // target pose for pressing B (make sure units match your field config)
-    private final Pose targetPose = new Pose(83.959, 86.004, Math.toRadians(-2.226)); // example target
+    private final Pose targetPose = new Pose(60, 84,130);
 
 
     @Override
@@ -69,13 +67,10 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
         // Hardware mapping
-        outtakeWheel = hardwareMap.get(DcMotor.class, "outtakeWheel");
-        //leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
-        //rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
-        intakeMotor1 = hardwareMap.get(DcMotor.class, "intakeMotor1");
-        intakeMotor2 = hardwareMap.get(DcMotor.class, "intakeMotor2");
-        //conveyor = hardwareMap.get(CRServo.class, "conveyor");
-        parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
+        outtakeWheel = hardwareMap.get(DcMotor.class, "outtake");
+        intakeMotor1 = hardwareMap.get(DcMotor.class, "intake");
+        intakeMotor2 = hardwareMap.get(DcMotor.class, "stage");
+        //parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -101,10 +96,10 @@ public class blueTeleOp2 extends LinearOpMode {
         // Initialize PedroPathing follower
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(PoseStorage.currentPose);
-        telemetry.addData("Starting X", PoseStorage.currentPose.getX());
-        telemetry.addData("Starting Y", PoseStorage.currentPose.getY());
-        telemetry.addData("Starting Heading", PoseStorage.currentPose.getHeading());
+        follower.setStartingPose(poseStorage.currentPose);
+        telemetry.addData("Starting X", poseStorage.currentPose.getX());
+        telemetry.addData("Starting Y", poseStorage.currentPose.getY());
+        telemetry.addData("Starting Heading", poseStorage.currentPose.getHeading());
         telemetry.update();// initial pose (only set ONCE)
 
 
@@ -255,8 +250,8 @@ public class blueTeleOp2 extends LinearOpMode {
         //double parking = gamepad1.right_trigger;
 
         double intakePower = 0.0;
-        double parkingPlatePower = gamepad1.right_trigger;
-        double outtakeWheelPower = 0.0;
+        //double parkingPlatePower = gamepad1.right_trigger;
+        //double outtakeWheelPower = 0.0;
 
         if (rt > 0.05) {
             // INTAKE IN: intake motor + conveyor reverse
@@ -308,7 +303,7 @@ public class blueTeleOp2 extends LinearOpMode {
         // Actually apply powers
         intakeMotor1.setPower(maxIntakePower1);
         intakeMotor2.setPower(maxIntakePower2);
-        moveParkingPlate(parkingPlatePower);
+        //moveParkingPlate(parkingPlatePower);
         //conveyorMove(conveyorPower);
 
 
@@ -321,7 +316,7 @@ public class blueTeleOp2 extends LinearOpMode {
 
     public void moveParkingPlate(double power) {
         double maxConveyorPower = 0.7;
-        parkingPlate.setPower(power * maxConveyorPower);
+        //parkingPlate.setPower(power * maxConveyorPower);
 
 
     }

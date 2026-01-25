@@ -32,12 +32,12 @@ public class blueTeleOp extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startingPose == null ? new Pose(36.700, 71.900,180) : startingPose); //TODO
+        follower.setStartingPose(/*startingPose == null ? */new Pose(36.700, 71.900, 180)/* : startingPose*/); //TODO
         follower.update();
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
         pathChain = () -> follower.pathBuilder() // lazy curve stuff
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(60, 84,130))))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(60, 84, 130))))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
                 .build();
 
@@ -58,23 +58,17 @@ public class blueTeleOp extends OpMode {
 
         if (!automatedDrive) {
             follower.setTeleOpDrive(
-                    -gamepad1.left_stick_y * slowModeMultiplier,
-                    -gamepad1.left_stick_x * slowModeMultiplier,
+                    gamepad1.left_stick_y * slowModeMultiplier,
+                    gamepad1.left_stick_x * slowModeMultiplier,
                     -gamepad1.right_stick_x * slowModeMultiplier,
                     false // True: Robot Centric
             );
 
-            double intakeForwardPower = gamepad2.right_trigger;
-            double intakeReversePower = gamepad2.left_trigger;
+            double intakePower = gamepad2.right_trigger;
 
-            // Intake buttons
-            if (intakeForwardPower > 0.05 && (intakeForwardPower > intakeReversePower)) {
-                robot.intake.runIntake(false, intakeForwardPower);
-            }
-            if (intakeReversePower > 0.05 && !(intakeForwardPower >= intakeReversePower)) {
-                robot.intake.runIntake(true, intakeReversePower);
-            }
-
+            if (intakePower > 0) {
+                robot.intake.intakeMotor.setPower(intakePower);
+            } else robot.intake.intakeMotor.setPower(0);
             // Outtake buttons
             if (gamepad2.dpadLeftWasPressed()) robot.outtake.fireShots(1);
             if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(2);

@@ -32,12 +32,12 @@ public class redTeleOp extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startingPose == null ? new Pose(107.300, 71.900,0) : startingPose); //TODO
+        follower.setStartingPose(/*startingPose == null ? */new Pose(107.300, 71.9000,0)/* : startingPose*/); //TODO
         follower.update();
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
         pathChain = () -> follower.pathBuilder() // lazy curve stuff
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(84, 84,50))))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(60, 84,130))))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
                 .build();
 
