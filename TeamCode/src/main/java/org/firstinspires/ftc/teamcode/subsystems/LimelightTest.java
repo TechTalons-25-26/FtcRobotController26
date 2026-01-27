@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
@@ -15,13 +17,14 @@ public class LimelightTest extends OpMode {
 
     private Limelight3A limelight;
     private IMU imu;
+    private double distance;
 
     @Override
     public void init() {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
         // ⚠ Choose ONE pipeline (last call wins)
-        limelight.pipelineSwitch(3);
+        limelight.pipelineSwitch(5);
 
         imu = hardwareMap.get(IMU.class, "imu");
 
@@ -36,26 +39,28 @@ public class LimelightTest extends OpMode {
 
     @Override
     public void start() {
-        limelight.setPollRateHz(100);
+        //limelight.setPollRateHz(100);
         limelight.start();
     }
 
     @Override
     public void loop() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        limelight.updateRobotOrientation(orientation.getYaw());
+        limelight.updateRobotOrientation(orientation.getYaw(AngleUnit.RADIANS));
 
         LLResult llResult = limelight.getLatestResult();
 
         if (llResult != null && llResult.isValid()) {
             Pose3D botPose = llResult.getBotpose();
-
-            telemetry.addData("Tx", llResult.getTx());
-            telemetry.addData("Ty", llResult.getTy());
-            telemetry.addData("Ta", llResult.getTa());
-
+            telemetry.addData("Calculated Distance", distance);
+            telemetry.addData("Target X", llResult.getTx());
+            telemetry.addData("Target Y", llResult.getTy());
+            telemetry.addData("Target Area", llResult.getTa());
+            /*
             telemetry.addData("X", botPose.getPosition().x);
             telemetry.addData("Y", botPose.getPosition().y);
+            */
+            telemetry.addData("Bot Pose", botPose.toString());
             telemetry.addData("Heading", botPose.getOrientation().getYaw());
         } else {
             telemetry.addLine("No valid Limelight data");

@@ -14,24 +14,28 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.Path;
+import com.sun.tools.javac.tree.DCTree;
 
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.robot;
 import org.firstinspires.ftc.teamcode.subsystems.path.poseStorage;
+
 
 @TeleOp(name = "blueTeleOp2")
 public class blueTeleOp2 extends LinearOpMode {
 
+
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     //private DcMotor leftWheel, rightWheel;
-    private DcMotor outtakeWheel;
+    private DcMotor outtake;
     //INTAKE MOTOR 1 IS FOR THE FIRST STAGE OKAY
-    private DcMotor intakeMotor1;
+    private DcMotor intake;
     //INTAKE MOTOR 2 IS FOR THE FIRST STAGE OKAY
-    private DcMotor intakeMotor2;
-    private poseStorage poseStorage = new poseStorage();
+    private DcMotor stage;
 
-    //private Servo parkingPlate;
+
+    private CRServo parkingPlate;
 
 
     //private CRServo conveyor;
@@ -39,7 +43,7 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
     //private Servo lid;
-    private CRServo parkingPlate;
+    // private CRServo parkingPlate;
 
 
 
@@ -59,7 +63,7 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
     // target pose for pressing B (make sure units match your field config)
-    private final Pose targetPose = new Pose(60, 84,130);
+    private final Pose targetPose = new Pose(83.959, 86.004, Math.toRadians(-2.226)); // example target
 
 
     @Override
@@ -67,10 +71,13 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
         // Hardware mapping
-        outtakeWheel = hardwareMap.get(DcMotor.class, "outtake");
-        intakeMotor1 = hardwareMap.get(DcMotor.class, "intake");
-        intakeMotor2 = hardwareMap.get(DcMotor.class, "stage");
-        //parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
+        outtake = hardwareMap.get(DcMotor.class, "outtake");
+        //leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
+        //rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        stage = hardwareMap.get(DcMotor.class, "stage");
+        //conveyor = hardwareMap.get(CRServo.class, "conveyor");
+        parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -79,7 +86,7 @@ public class blueTeleOp2 extends LinearOpMode {
 
         // Motor directions
         //rightWheel.setDirection(DcMotor.Direction.REVERSE);
-        outtakeWheel.setDirection(DcMotor.Direction.REVERSE);
+        outtake.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -106,8 +113,8 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
 
-        intakeMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        intakeMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        stage.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //parkingPlate.setPosition(axonPosition);
 
 
@@ -120,7 +127,7 @@ public class blueTeleOp2 extends LinearOpMode {
 
         while (opModeIsActive()) {
             //follower.update();
-            outtakeWheel.setPower(outtakePower);
+            //outtakeWheel.setPower(outtakePower);
 
 
             // ALWAYS keep follower/localizer updated
@@ -180,6 +187,7 @@ public class blueTeleOp2 extends LinearOpMode {
             // Mechanisms can run in both modes
             handleIntakeAndOuttake();
             //outtakeAngleControl();
+            //outtakeTest();
             //openCloseLid();
             checkStartPathWithB();
 
@@ -239,8 +247,8 @@ public class blueTeleOp2 extends LinearOpMode {
 
     // Intake / outtake
     public void handleIntakeAndOuttake() {
-        double maxIntakePower1 = 0.7;
-        double maxIntakePower2 = 0.5;
+        double maxIntakePower1 = 1.0;
+        double maxIntakePower2 = 1.0;
 
 
         double rt = gamepad2.right_trigger;   // intake in
@@ -250,8 +258,8 @@ public class blueTeleOp2 extends LinearOpMode {
         //double parking = gamepad1.right_trigger;
 
         double intakePower = 0.0;
-        //double parkingPlatePower = gamepad1.right_trigger;
-        //double outtakeWheelPower = 0.0;
+        double parkingPlatePower = gamepad1.right_trigger;
+        double outtakeWheelPower = 0.0;
 
         if (rt > 0.05) {
             // INTAKE IN: intake motor + conveyor reverse
@@ -301,9 +309,9 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
         // Actually apply powers
-        intakeMotor1.setPower(maxIntakePower1);
-        intakeMotor2.setPower(maxIntakePower2);
-        //moveParkingPlate(parkingPlatePower);
+        intake.setPower(maxIntakePower1);
+        stage.setPower(maxIntakePower2);
+        //  moveParkingPlate(parkingPlatePower);
         //conveyorMove(conveyorPower);
 
 
@@ -313,10 +321,16 @@ public class blueTeleOp2 extends LinearOpMode {
         //telemetry.addData("Conveyor power", conveyorPower);
     }
 
+    public void outtakeTest (){
+        if (gamepad2.right_trigger > 0.05){
+            outtake.setPower(1.0);
+        }
+    }
 
-    public void moveParkingPlate(double power) {
+
+   public void moveParkingPlate(double power) {
         double maxConveyorPower = 0.7;
-        //parkingPlate.setPower(power * maxConveyorPower);
+        parkingPlate.setPower(power * maxConveyorPower);
 
 
     }

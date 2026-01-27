@@ -26,7 +26,7 @@ public class redTeleOp2 extends LinearOpMode {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     //private DcMotor leftWheel, rightWheel;
-    private DcMotor outtakeWheel;
+    private DcMotor outtake;
     //INTAKE MOTOR 1 IS FOR THE FIRST STAGE OKAY
     private DcMotor intakeMotor1;
     //INTAKE MOTOR 2 IS FOR THE FIRST STAGE OKAY
@@ -69,7 +69,7 @@ public class redTeleOp2 extends LinearOpMode {
 
 
         // Hardware mapping
-        outtakeWheel = hardwareMap.get(DcMotor.class, "outtakeWheel");
+        outtake = hardwareMap.get(DcMotor.class, "outtake");
         //leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
         //rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
         intakeMotor1 = hardwareMap.get(DcMotor.class, "intake");
@@ -84,7 +84,7 @@ public class redTeleOp2 extends LinearOpMode {
 
         // Motor directions
         //rightWheel.setDirection(DcMotor.Direction.REVERSE);
-        outtakeWheel.setDirection(DcMotor.Direction.REVERSE);
+        outtake.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -125,7 +125,7 @@ public class redTeleOp2 extends LinearOpMode {
 
         while (opModeIsActive()) {
             //follower.update();
-            outtakeWheel.setPower(outtakePower);
+            outtake.setPower(outtakePower);
 
 
             // ALWAYS keep follower/localizer updated
