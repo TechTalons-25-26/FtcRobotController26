@@ -187,6 +187,7 @@ public class blueTeleOp2 extends LinearOpMode {
             // Mechanisms can run in both modes
             handleIntakeAndOuttake();
             //outtakeAngleControl();
+            //outtakeTest();
             //openCloseLid();
             checkStartPathWithB();
 
