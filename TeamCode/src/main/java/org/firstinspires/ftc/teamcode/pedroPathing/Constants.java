@@ -25,7 +25,7 @@ public class Constants {
             .centripetalScaling(0.00042);
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 100, 10);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 50, 5);
     public static Object pinpoint;
 
     public static Follower createFollower(HardwareMap hardwareMap) {
