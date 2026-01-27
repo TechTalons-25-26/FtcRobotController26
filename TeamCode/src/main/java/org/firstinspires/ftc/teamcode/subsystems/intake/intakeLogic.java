@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class intakeLogic {
-    IntakeState intakeState;
     public DcMotor intakeMotor;
-    private DcMotor stageMotor;
     public double intakePower = 0;
     public boolean intakeIsRunning = false;
     public double stagePowerTime = 0;
     public boolean intakeIsReversed;
+    IntakeState intakeState;
+    private DcMotor stageMotor;
 
     public void init(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intake");
@@ -59,12 +59,14 @@ public class intakeLogic {
     }
 
     public void runIntake(boolean reversed, double power) {
-        if (reversed) {
-            intakeMotor.setDirection(DcMotor.Direction.REVERSE);
-            intakeMotor.setPower(power);
-        } else {
-            intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-            intakeMotor.setPower(power);
+        if (power != 0) {
+            if (reversed) {
+                intakeMotor.setDirection(DcMotor.Direction.REVERSE);
+                intakeMotor.setPower(power);
+            } else {
+                intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+                intakeMotor.setPower(power);
+            }
         }
     }
 

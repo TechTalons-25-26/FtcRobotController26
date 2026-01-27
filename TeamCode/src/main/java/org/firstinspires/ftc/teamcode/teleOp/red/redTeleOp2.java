@@ -31,7 +31,7 @@ public class redTeleOp2 extends LinearOpMode {
     private DcMotor intakeMotor1;
     //INTAKE MOTOR 2 IS FOR THE FIRST STAGE OKAY
     private DcMotor intakeMotor2;
-
+    private poseStorage poseStorage = new poseStorage();
 
     //private Servo parkingPlate;
 
@@ -61,7 +61,7 @@ public class redTeleOp2 extends LinearOpMode {
 
 
     // target pose for pressing B (make sure units match your field config)
-    private final Pose targetPose = new Pose(83.959, 86.004, Math.toRadians(-2.226)); // example target
+    private final Pose targetPose = new Pose(84, 84,50);
 
 
     @Override
@@ -72,8 +72,8 @@ public class redTeleOp2 extends LinearOpMode {
         outtake = hardwareMap.get(DcMotor.class, "outtake");
         //leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
         //rightWheel = hardwareMap.get(DcMotor.class, "rightWheel");
-        intakeMotor1 = hardwareMap.get(DcMotor.class, "intakeMotor1");
-        intakeMotor2 = hardwareMap.get(DcMotor.class, "intakeMotor2");
+        intakeMotor1 = hardwareMap.get(DcMotor.class, "intake");
+        intakeMotor2 = hardwareMap.get(DcMotor.class, "stage");
         //conveyor = hardwareMap.get(CRServo.class, "conveyor");
         parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");

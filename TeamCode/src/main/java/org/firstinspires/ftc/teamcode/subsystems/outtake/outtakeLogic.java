@@ -24,7 +24,7 @@ public class outtakeLogic {
     //TODO: TUNE THESE
     //----------- Outtake Constants--------
     private int shotsRemaining = 0;
-    private double outtakeVelocity = 0;
+    private double outtakeVelocity = 800d;
     private double minOuttakeRPM = 800;
     private double targetOuttakeRPM = 1100;
 
