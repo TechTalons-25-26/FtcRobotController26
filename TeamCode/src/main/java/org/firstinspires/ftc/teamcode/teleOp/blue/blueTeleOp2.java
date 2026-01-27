@@ -35,7 +35,7 @@ public class blueTeleOp2 extends LinearOpMode {
     private DcMotor stage;
 
 
-    //private Servo parkingPlate;
+    private CRServo parkingPlate;
 
 
     //private CRServo conveyor;
@@ -77,7 +77,7 @@ public class blueTeleOp2 extends LinearOpMode {
         intake = hardwareMap.get(DcMotor.class, "intake");
         stage = hardwareMap.get(DcMotor.class, "stage");
         //conveyor = hardwareMap.get(CRServo.class, "conveyor");
-        //parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
+        parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -327,12 +327,12 @@ public class blueTeleOp2 extends LinearOpMode {
     }
 
 
- /*   public void moveParkingPlate(double power) {
+   public void moveParkingPlate(double power) {
         double maxConveyorPower = 0.7;
         parkingPlate.setPower(power * maxConveyorPower);
 
 
-    }*/
+    }
 
     // Start the path when B is first pressed
     public void checkStartPathWithB() {
