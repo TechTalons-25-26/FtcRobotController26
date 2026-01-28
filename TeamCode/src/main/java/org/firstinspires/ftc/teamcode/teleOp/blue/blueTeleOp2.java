@@ -187,7 +187,7 @@ public class blueTeleOp2 extends LinearOpMode {
             // Mechanisms can run in both modes
             handleIntakeAndOuttake();
             //outtakeAngleControl();
-            //outtakeTest();
+            outtakeTest();
             //openCloseLid();
             checkStartPathWithB();
 
@@ -264,7 +264,7 @@ public class blueTeleOp2 extends LinearOpMode {
         if (rt > 0.05) {
             // INTAKE IN: intake motor + conveyor reverse
             maxIntakePower1 = rt * maxIntakePower1; // full speed from trigger
-            maxIntakePower2 = rt * -(maxIntakePower2);
+            maxIntakePower2 = rt * (-maxIntakePower2);
             //conveyorPower = -rt;
 
 
@@ -281,6 +281,8 @@ public class blueTeleOp2 extends LinearOpMode {
             maxIntakePower1 = lt * maxIntakePower1;
 
             maxIntakePower2 = lt * maxIntakePower2;
+
+
         }else if (rb) {
             // INTAKE OUT (reverse)
             maxIntakePower1 = -maxIntakePower1; // constant speed out
@@ -322,8 +324,11 @@ public class blueTeleOp2 extends LinearOpMode {
     }
 
     public void outtakeTest (){
-        if (gamepad2.right_trigger > 0.05){
+        if (gamepad2.left_trigger > 0.05){
             outtake.setPower(1.0);
+        }
+        else{
+            outtake.setPower(0);
         }
     }
 
