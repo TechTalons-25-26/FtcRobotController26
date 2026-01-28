@@ -2,88 +2,86 @@ package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-@TeleOp(name= "outtakeTuner")
+@TeleOp(name = "Auto PIDF Tuner")
 public class outtakeTuner extends OpMode {
 
-    public DcMotorEx outtakeMotor;
+    private DcMotorEx outtake;
 
-    public double highVelocity = 1500;
-    public double lowVelocity = 900;
-    public double currentTargetVelocity = highVelocity;
+    private static final double TICKS_PER_REV = 28.0;
 
-    double F = 0;
-    double P = 0;
+    private double targetRPM = 1100;
+    private double currentTargetRPM = targetRPM;
 
-    double[] stepSizes = {10.0, 1.0, 0.1, 0.01, 0.001, 0.0001};
+    // PIDF values
+    private double P = 0.0;
+    private double F = 0.0;
 
-    int stepIndex = 1;
+    // Step sizes
+    private final double[] steps = {10, 1, 0.1, 0.01, 0.001};
+    private int stepIndex = 1;
 
     @Override
     public void init() {
-        outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtake");
-        outtakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        outtakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F);
-        outtakeMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
-        telemetry.addLine("Init Complete!");
+        outtake = hardwareMap.get(DcMotorEx.class, "outtake");
+
+        outtake.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        outtake.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        // Automatic starting F estimate
+        double targetTicksPerSec = targetRPM * TICKS_PER_REV / 60.0;
+        F = 32767 / targetTicksPerSec;
+
+        applyPIDF();
+        setVelocityRPM(targetRPM);
     }
 
     @Override
     public void loop() {
-        //get gamepad commands
-        //set target velocity
-        //update telemetry
 
-        if (gamepad1.yWasPressed()) {
-            if (currentTargetVelocity == highVelocity) {
-                currentTargetVelocity = lowVelocity;
-            } else {
-                currentTargetVelocity = highVelocity;
-            }
-        }
+        // -------- Adjust target RPM --------
+        if (gamepad1.a) currentTargetRPM = 500;   // idle
+        if (gamepad1.y) currentTargetRPM = targetRPM;
 
-        if (gamepad1.bWasPressed()) {
-            stepIndex = (stepIndex + 1) % stepSizes.length;
-        }
+        setVelocityRPM(currentTargetRPM);
 
-        if (gamepad1.dpadLeftWasPressed()) {
-            F -= stepSizes[stepIndex];
-        }
+        // -------- Adjust PIDF --------
+        if (gamepad1.right_bumper) stepIndex = (stepIndex + 1) % steps.length;
+        if (gamepad1.left_bumper) stepIndex = (stepIndex - 1 + steps.length) % steps.length;
 
-        if (gamepad1.dpadRightWasPressed()) {
-            F += stepSizes[stepIndex];
-        }
+        if (gamepad1.dpad_up) P += steps[stepIndex];
+        if (gamepad1.dpad_down) P -= steps[stepIndex];
+        if (gamepad1.dpad_right) F += steps[stepIndex];
+        if (gamepad1.dpad_left) F -= steps[stepIndex];
 
-        if (gamepad1.dpadUpWasPressed()) {
-            P += stepSizes[stepIndex];
-        }
+        applyPIDF();
 
-        if (gamepad1.dpadDownWasPressed()) {
-            P -= stepSizes[stepIndex];
-        }
+        // -------- Telemetry --------
+        double currentRPM = outtake.getVelocity() * 60.0 / TICKS_PER_REV;
+        double error = currentTargetRPM - currentRPM;
 
-        //set up new pidf coefficients
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F);
-        outtakeMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+        telemetry.addData("Target RPM", currentTargetRPM);
+        telemetry.addData("Current RPM", "%.1f", currentRPM);
+        telemetry.addData("Error", "%.1f", error);
+        telemetry.addLine("------------------------");
+        telemetry.addData("P", "%.5f", P);
+        telemetry.addData("F", "%.5f", F);
+        telemetry.addData("Step", steps[stepIndex]);
+        telemetry.addLine("A = Idle | Y = Target");
+        telemetry.addLine("Dpad = Adjust P/F | Bumpers = Step");
+        telemetry.update();
+    }
 
-        //set velocity
-        outtakeMotor.setVelocity(currentTargetVelocity);
+    // ---------------- Helpers ----------------
+    private void setVelocityRPM(double rpm) {
+        double ticksPerSecond = rpm * TICKS_PER_REV / 60.0;
+        outtake.setVelocity(ticksPerSecond);
+    }
 
-        double currentVelocity = outtakeMotor.getVelocity();
-        double error = currentTargetVelocity = currentVelocity;
-
-        telemetry.addData("Target Velocity", currentTargetVelocity);
-        telemetry.addData("Current Velocity", "%.2f", currentVelocity);
-        telemetry.addData("Error", "%.2f", error);
-        telemetry.addLine("-------------------------");
-        telemetry.addData("Tuning P","%.4f (D-Pad U/D)", P);
-        telemetry.addData("Tuning F","%.4f (D-Pad L/R)", F);
-        telemetry.addData("Step Size","%.4f (B Button)", stepSizes[stepIndex]);
-
+    private void applyPIDF() {
+        outtake.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,
+                new PIDFCoefficients(P, 0, 0, F));
     }
 }

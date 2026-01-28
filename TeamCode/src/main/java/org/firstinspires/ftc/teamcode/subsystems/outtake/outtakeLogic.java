@@ -1,77 +1,101 @@
 package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.subsystems.intake.intakeLogic;
-
 public class outtakeLogic {
+
     private DcMotorEx outtakeMotor;
     private DcMotorEx stageMotor;
-    private intakeLogic intake = new intakeLogic();
+
     private ElapsedTime outtakeTimer = new ElapsedTime();
-    OuttakeState outtakeState;
+    private OuttakeState outtakeState = OuttakeState.IDLE;
 
     public enum OuttakeState {
         IDLE,
+        SPIN_UP,
         LAUNCH,
-        RESET
+        RESET_STAGE
     }
 
-    //TODO: TUNE THESE
-    //----------- Outtake Constants--------
+    // ---------------- Constants ----------------
+    private static final double TICKS_PER_REV = 28.0;
+
     private int shotsRemaining = 0;
-    private double outtakeVelocity = 800d;
-    private double minOuttakeRPM = 800;
-    private double targetOuttakeRPM = 1100;
+
+    private double idleRPM = 500;     // you will tune this
+    private double targetRPM = 1100;
+    private double minRPM = 800;
+
+    private double maxSpinupTime = 2.0;
+    private double stageShootTime = 0.25;
+    private double stageResetTime = 0.25;
+
+    // PIDF (tune later)
+    private double P = 0.0;
+    private double F = 6.4;
 
     public void init(HardwareMap hardwareMap) {
         outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtake");
         stageMotor = hardwareMap.get(DcMotorEx.class, "stage");
 
+        outtakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        outtakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        setOuttakeState(OuttakeState.IDLE);
+        stageMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        outtakeMotor.setPower(0);
         stageMotor.setPower(0);
+        setVelocityRPM(0);
+
+        outtakeMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(P, 0, 0, F));
+        setOuttakeState(OuttakeState.IDLE);
     }
 
     public void update() {
+
+        double currentRPM =
+                (outtakeMotor.getVelocity() * 60.0) / TICKS_PER_REV;
+
         switch (outtakeState) {
+
             case IDLE:
-                outtakeMotor.setVelocity(outtakeVelocity);
-                outtakeMotor.setPower(targetOuttakeRPM);
+                stageMotor.setPower(-1.0);
+                setVelocityRPM(idleRPM);
 
                 if (shotsRemaining > 0) {
+                    setVelocityRPM(targetRPM);
+                    outtakeTimer.reset();
+                    setOuttakeState(OuttakeState.SPIN_UP);
+                }
+                break;
+
+            case SPIN_UP:
+                if (currentRPM >= minRPM || outtakeTimer.seconds() >= maxSpinupTime) {
+                    stageMotor.setPower(1.0);
                     outtakeTimer.reset();
                     setOuttakeState(OuttakeState.LAUNCH);
                 }
                 break;
 
             case LAUNCH:
-                outtakeTimer.reset();
-                if (outtakeVelocity > minOuttakeRPM) {
-                    stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
+                if (outtakeTimer.seconds() >= stageShootTime) {
+                    shotsRemaining--;
+                    stageMotor.setPower(-1.0);
                     outtakeTimer.reset();
-                    intake.setIntakeState(intakeLogic.IntakeState.SHOOT);
-                    setOuttakeState(OuttakeState.RESET);
+                    setOuttakeState(OuttakeState.RESET_STAGE);
                 }
                 break;
 
-            case RESET:
-                if (outtakeTimer.seconds() > intake.stagePowerTime) {
-                    shotsRemaining--; //increment by 1
-                    stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
-                    outtakeTimer.reset();
-
+            case RESET_STAGE:
+                if (outtakeTimer.seconds() >= stageResetTime) {
                     if (shotsRemaining > 0) {
                         outtakeTimer.reset();
-                        setOuttakeState(OuttakeState.LAUNCH);
+                        setOuttakeState(OuttakeState.SPIN_UP);
                     } else {
-                        outtakeMotor.setPower(0);
+                        setVelocityRPM(idleRPM);
                         setOuttakeState(OuttakeState.IDLE);
                     }
                 }
@@ -79,8 +103,9 @@ public class outtakeLogic {
         }
     }
 
+    // ---------------- API ----------------
     public void fireShots(int numShots) {
-        if (outtakeState.equals(OuttakeState.IDLE)) {
+        if (outtakeState == OuttakeState.IDLE && numShots > 0) {
             shotsRemaining = numShots;
         }
     }
@@ -89,9 +114,14 @@ public class outtakeLogic {
         return outtakeState != OuttakeState.IDLE;
     }
 
-    public void setOuttakeState(OuttakeState newState) {
-        outtakeState = newState;
+    // ---------------- Helpers ----------------
+    private void setVelocityRPM(double rpm) {
+        double ticksPerSecond = (rpm * TICKS_PER_REV) / 60.0;
+        outtakeMotor.setVelocity(ticksPerSecond);
     }
 
 
+    private void setOuttakeState(OuttakeState newState) {
+        outtakeState = newState;
+    }
 }

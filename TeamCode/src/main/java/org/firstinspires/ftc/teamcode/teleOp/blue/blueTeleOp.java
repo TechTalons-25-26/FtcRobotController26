@@ -32,7 +32,7 @@ public class blueTeleOp extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(/*startingPose == null ? */new Pose(36.700, 71.900, 180)/* : startingPose*/); //TODO
+        follower.setStartingPose(startingPose == null ? new Pose(36.700, 71.900, 180) : startingPose); //TODO
         follower.update();
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
