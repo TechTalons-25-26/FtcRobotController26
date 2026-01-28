@@ -34,11 +34,6 @@ public class bigBlue extends baseAuto {
     protected void pathStateUpdate() {
         switch ((bigAndSmall2Enum) pathState) {
 
-            case INTAKE_START:
-                if (!follower.isBusy()) {
-                    intake.runIntake(false, 1);
-                    setPathState(bigAndSmall2Enum.START_SHOOT);
-                }
             case START_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.bigBlueStart_blueShoot, true);
@@ -67,15 +62,25 @@ public class bigBlue extends baseAuto {
             case TOPSTART_TOPEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueTopStart_blueTopEnd, true);
-                    setPathState(bigAndSmall2Enum.TOPEND_TOPSTART);
+                    setPathState(bigAndSmall2Enum.INTAKESTART_TOP);
                 }
                 break;
+
+                case INTAKESTART_TOP:
+                    intake.runIntake(false, 1);
+                    setPathState(bigAndSmall2Enum.TOPEND_TOPSTART);
+                    break;
 
             case TOPEND_TOPSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueTopEnd_blueTopStart, true);
-                    setPathState(bigAndSmall2Enum.TOPSTART_SHOOT);
+                    setPathState(bigAndSmall2Enum.INTAKEEND_TOP);
                 }
+                break;
+
+            case INTAKEEND_TOP:
+                intake.runIntake(false, 0);
+                setPathState(bigAndSmall2Enum.TOPSTART_SHOOT);
                 break;
 
             case TOPSTART_SHOOT:
@@ -106,15 +111,25 @@ public class bigBlue extends baseAuto {
             case MIDDLESTART_MIDDLEEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueMiddleStart_blueMiddleEnd, true);
-                    setPathState(bigAndSmall2Enum.MIDDLEEND_MIDDLESTART);
+                    setPathState(bigAndSmall2Enum.INTAKESTART_MIDDLE);
                 }
+                break;
+
+            case INTAKESTART_MIDDLE:
+                intake.runIntake(false, 1);
+                setPathState(bigAndSmall2Enum.MIDDLEEND_MIDDLESTART);
                 break;
 
             case MIDDLEEND_MIDDLESTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueMiddleEnd_blueMiddleStart, true);
-                    setPathState(bigAndSmall2Enum.MIDDLESTART_SHOOT);
+                    setPathState(bigAndSmall2Enum.INTAKEEND_MIDDLE);
                 }
+                break;
+
+            case INTAKEEND_MIDDLE:
+                intake.runIntake(false, 0);
+                setPathState(bigAndSmall2Enum.MIDDLESTART_SHOOT);
                 break;
 
             case MIDDLESTART_SHOOT:
@@ -145,15 +160,25 @@ public class bigBlue extends baseAuto {
             case BOTTOMSTART_BOTTOMEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueBottom_blueBottomEnd, true);
-                    setPathState(bigAndSmall2Enum.BOTTOMEND_BOTTOMSTART);
+                    setPathState(bigAndSmall2Enum.INTAKESTART_BOTTOM);
                 }
+                break;
+
+            case INTAKESTART_BOTTOM:
+                intake.runIntake(false, 1);
+                setPathState(bigAndSmall2Enum.BOTTOMEND_BOTTOMSTART);
                 break;
 
             case BOTTOMEND_BOTTOMSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueBottomEnd_blueBottomStart, true);
-                    setPathState(bigAndSmall2Enum.BOTTOMSTART_SHOOT);
+                    setPathState(bigAndSmall2Enum.INTAKEEND_BOTTOM);
                 }
+                break;
+
+            case INTAKEEND_BOTTOM:
+                intake.runIntake(false, 0);
+                setPathState(bigAndSmall2Enum.BOTTOMSTART_SHOOT);
                 break;
 
             case BOTTOMSTART_SHOOT:

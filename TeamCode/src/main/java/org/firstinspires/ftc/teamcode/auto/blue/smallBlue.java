@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallEnum;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallEnum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.blue.smallBluePaths;
 
 @Autonomous(name = "smallBlue")
@@ -16,7 +17,7 @@ private smallBluePaths paths = new smallBluePaths();
 
     @Override
     protected Enum<?> getInitialState() {
-        return smallEnum.INTAKE_START;
+        return smallEnum.START_PRELOAD;
     }
 
     // ---------------- REQUIRED OVERRIDES ----------------
@@ -34,11 +35,7 @@ private smallBluePaths paths = new smallBluePaths();
     @Override
     protected void pathStateUpdate() {
         switch ((smallEnum) pathState) {
-            case INTAKE_START:
-                if (!follower.isBusy()) {
-                    intake.runIntake(false, 1);
-                    setPathState(smallEnum.START_PRELOAD);
-                }
+
             case START_PRELOAD:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.smallBlueStart_smallBluePreload, true);
@@ -67,15 +64,25 @@ private smallBluePaths paths = new smallBluePaths();
             case BOTTOMSTART_BOTTOMEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueBottomStart_blueBottomEnd, true);
-                    setPathState(smallEnum.BOTTOMEND_BOTTOMSTART);
+                    setPathState(smallEnum.INTAKESTART_BOTTOM);
                 }
+                break;
+
+            case INTAKESTART_BOTTOM:
+                intake.runIntake(false, 1);
+                setPathState(smallEnum.BOTTOMEND_BOTTOMSTART);
                 break;
 
             case BOTTOMEND_BOTTOMSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueBottomEnd_blueBottomStart, true);
-                    setPathState(smallEnum.BOTTOMSTART_SHOOT);
+                    setPathState(smallEnum.INTAKEEND_BOTTOM);
                 }
+                break;
+
+            case INTAKEEND_BOTTOM:
+                intake.runIntake(false, 0);
+                setPathState(smallEnum.BOTTOMSTART_SHOOT);
                 break;
 
             case BOTTOMSTART_SHOOT:
@@ -106,15 +113,25 @@ private smallBluePaths paths = new smallBluePaths();
             case MIDDLESTART_MIDDLEEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueMiddleStart_blueMiddleEnd, true);
-                    setPathState(smallEnum.MIDDLEEND_MIDDLESTART);
+                    setPathState(smallEnum.INTAKESTART_MIDDLE);
                 }
+                break;
+
+            case INTAKESTART_MIDDLE:
+                intake.runIntake(false, 1);
+                setPathState(smallEnum.MIDDLEEND_MIDDLESTART);
                 break;
 
             case MIDDLEEND_MIDDLESTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueMiddleEnd_blueMiddleStart, true);
-                    setPathState(smallEnum.MIDDLESTART_SHOOT);
+                    setPathState(smallEnum.INTAKEEND_MIDDLE);
                 }
+                break;
+
+            case INTAKEEND_MIDDLE:
+                intake.runIntake(false, 0);
+                setPathState(smallEnum.MIDDLESTART_SHOOT);
                 break;
 
             case MIDDLESTART_SHOOT:
@@ -145,15 +162,25 @@ private smallBluePaths paths = new smallBluePaths();
             case TOPSTART_TOPEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueTopStart_blueTopEnd, true);
-                    setPathState(smallEnum.TOPEND_TOPSTART);
+                    setPathState(smallEnum.INTAKESTART_TOP);
                 }
+                break;
+
+            case INTAKESTART_TOP:
+                intake.runIntake(false, 1);
+                setPathState(smallEnum.TOPEND_TOPSTART);
                 break;
 
             case TOPEND_TOPSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueTopEnd_blueTopStart, true);
-                    setPathState(smallEnum.TOPSTART_SHOOT);
+                    setPathState(smallEnum.INTAKEEND_TOP);
                 }
+                break;
+                
+            case INTAKEEND_TOP:
+                intake.runIntake(false, 0);
+                setPathState(smallEnum.TOPSTART_SHOOT);
                 break;
 
             case TOPSTART_SHOOT:
