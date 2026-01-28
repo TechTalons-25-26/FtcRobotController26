@@ -38,6 +38,9 @@ public class robot {
         path = new pathFollower(hardwareMap);
     }
 
+    public void start() {
+        outtake.start();
+    }
 
     // -------------------------
     // Update all subsystems
