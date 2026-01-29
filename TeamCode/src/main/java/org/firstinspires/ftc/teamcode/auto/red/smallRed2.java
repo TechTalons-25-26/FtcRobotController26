@@ -15,7 +15,7 @@ public class smallRed2 extends baseAuto {
 
     @Override
     protected Enum<?> getInitialState() {
-        return bigAndSmall2Enum.INTAKE_START;
+        return bigAndSmall2Enum.START_SHOOT;
     }
 
     // ---------------- REQUI OVERRIDES ----------------
@@ -33,15 +33,11 @@ public class smallRed2 extends baseAuto {
     @Override
     protected void pathStateUpdate() {
         switch ((bigAndSmall2Enum) pathState) {
-            case INTAKE_START:
-                if (!follower.isBusy()) {
-                    intake.runIntake(false, 1);
-                    setPathState(bigAndSmall2Enum.START_SHOOT);
-                }
+
             case START_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.smallRedStart_redShoot, true);
-                    setPathState(bigAndSmall2Enum.SHOOT_TOPSTART);
+                    setPathState(bigAndSmall2Enum.OUTTAKE_PRELOAD);
                 }
                 break;
 
@@ -66,15 +62,25 @@ public class smallRed2 extends baseAuto {
             case TOPSTART_TOPEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redTopStart_redTopEnd, true);
-                    setPathState(bigAndSmall2Enum.TOPEND_TOPSTART);
+                    setPathState(bigAndSmall2Enum.INTAKESTART_TOP);
                 }
+                break;
+
+            case INTAKESTART_TOP:
+                intake.runIntake(false, 1);
+                setPathState(bigAndSmall2Enum.TOPEND_TOPSTART);
                 break;
 
             case TOPEND_TOPSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redTopEnd_redTopStart, true);
-                    setPathState(bigAndSmall2Enum.TOPSTART_SHOOT);
+                    setPathState(bigAndSmall2Enum.INTAKEEND_TOP);
                 }
+                break;
+
+            case INTAKEEND_TOP:
+                intake.runIntake(false, 0);
+                setPathState(bigAndSmall2Enum.TOPSTART_SHOOT);
                 break;
 
             case TOPSTART_SHOOT:
@@ -105,15 +111,25 @@ public class smallRed2 extends baseAuto {
             case MIDDLESTART_MIDDLEEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redMiddleStart_redMiddleEnd, true);
-                    setPathState(bigAndSmall2Enum.MIDDLEEND_MIDDLESTART);
+                    setPathState(bigAndSmall2Enum.INTAKESTART_MIDDLE);
                 }
+                break;
+
+            case INTAKESTART_MIDDLE:
+                intake.runIntake(false, 1);
+                setPathState(bigAndSmall2Enum.MIDDLEEND_MIDDLESTART);
                 break;
 
             case MIDDLEEND_MIDDLESTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redMiddleEnd_redMiddleStart, true);
-                    setPathState(bigAndSmall2Enum.MIDDLESTART_SHOOT);
+                    setPathState(bigAndSmall2Enum.INTAKEEND_MIDDLE);
                 }
+                break;
+
+            case INTAKEEND_MIDDLE:
+                intake.runIntake(false, 0);
+                setPathState(bigAndSmall2Enum.MIDDLESTART_SHOOT);
                 break;
 
             case MIDDLESTART_SHOOT:
@@ -144,15 +160,25 @@ public class smallRed2 extends baseAuto {
             case BOTTOMSTART_BOTTOMEND:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redBottomStart_redBottomEnd, true);
-                    setPathState(bigAndSmall2Enum.BOTTOMEND_BOTTOMSTART);
+                    setPathState(bigAndSmall2Enum.INTAKESTART_BOTTOM);
                 }
+                break;
+
+            case INTAKESTART_BOTTOM:
+                intake.runIntake(false, 1);
+                setPathState(bigAndSmall2Enum.BOTTOMEND_BOTTOMSTART);
                 break;
 
             case BOTTOMEND_BOTTOMSTART:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redBottomEnd_redBottomStart, true);
-                    setPathState(bigAndSmall2Enum.BOTTOMSTART_SHOOT);
+                    setPathState(bigAndSmall2Enum.INTAKEEND_BOTTOM);
                 }
+                break;
+
+            case INTAKEEND_BOTTOM:
+                intake.runIntake(false, 0);
+                setPathState(bigAndSmall2Enum.BOTTOMSTART_SHOOT);
                 break;
 
             case BOTTOMSTART_SHOOT:
