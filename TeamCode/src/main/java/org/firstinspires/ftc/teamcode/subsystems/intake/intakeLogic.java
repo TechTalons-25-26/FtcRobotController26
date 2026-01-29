@@ -18,10 +18,10 @@ public class intakeLogic {
         intakeMotor = hardwareMap.get(DcMotor.class, "intake");
         stageMotor = hardwareMap.get(DcMotor.class, "stage");
 
-        setIntakeState(IntakeState.IDLE);
+        //setIntakeState(IntakeState.IDLE);
 
         intakeMotor.setPower(0);
-        stageMotor.setPower(0);
+        //stageMotor.setPower(0);
 
     }
 
@@ -59,15 +59,9 @@ public class intakeLogic {
     }
 
     public void runIntake(boolean reversed, double power) {
-        if (power != 0) {
-            if (reversed) {
-                intakeMotor.setDirection(DcMotor.Direction.REVERSE);
-                intakeMotor.setPower(power);
-            } else {
-                intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-                intakeMotor.setPower(power);
-            }
-        }
+
+        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+        intakeMotor.setPower(power);
     }
 
     public boolean isBusy() {
