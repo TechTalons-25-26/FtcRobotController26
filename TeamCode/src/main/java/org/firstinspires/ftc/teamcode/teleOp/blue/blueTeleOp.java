@@ -55,7 +55,7 @@ public class blueTeleOp extends OpMode {
     @Override
     public void loop() {
         // ---------------- Manual Drive ----------------
-        robot.outtake.update();
+        robot.update();
         follower.update();
         telemetryM.update();
 

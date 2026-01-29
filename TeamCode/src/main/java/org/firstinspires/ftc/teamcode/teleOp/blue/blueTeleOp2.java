@@ -254,7 +254,7 @@ public class blueTeleOp2 extends LinearOpMode {
         double rt = gamepad2.right_trigger;   // intake in
         boolean rb = gamepad2.right_bumper;   // intake out
         double lt = gamepad2.left_trigger;    // outtake
-        //boolean lb = gamepad2.left_bumper;    // outtake
+        boolean lb = gamepad2.left_bumper;    // outtake ramp
         //double parking = gamepad1.right_trigger;
 
         double intakePower = 0.0;
@@ -296,7 +296,15 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
             telemetry.addData("Mode", "INTAKE OUT (RB)");
-        } else {
+        } else if (lb) {
+
+            maxIntakePower1 = +maxIntakePower1;
+
+            maxIntakePower2 = -maxIntakePower2;
+
+
+        }
+        else {
             // NOTHING PRESSED: stop everything
             maxIntakePower1 = 0.0;
             maxIntakePower2 = 0.0;

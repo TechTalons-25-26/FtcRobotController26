@@ -46,7 +46,6 @@ public class robot {
     // Update all subsystems
     // -------------------------
     public void update() {
-        intake.update();
         outtake.update();
         path.update();
     }
