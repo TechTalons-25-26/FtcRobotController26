@@ -48,7 +48,6 @@ public abstract class baseAuto extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         outtake.init(hardwareMap);
-        intake.init(hardwareMap);
 
         buildPaths();
         follower.setStartingPose(getStartingPose());
@@ -65,7 +64,6 @@ public abstract class baseAuto extends OpMode {
         follower.update();
         pathStateUpdate();
         outtake.update();
-        intake.update();
 
         panelsTelemetry.debug("Path State", pathState);
         panelsTelemetry.debug("X", follower.getPose().getX());

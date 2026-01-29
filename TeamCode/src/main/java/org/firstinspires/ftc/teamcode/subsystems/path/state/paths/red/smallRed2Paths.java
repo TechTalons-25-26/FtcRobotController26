@@ -30,7 +30,6 @@ public class smallRed2Paths {
                         new Pose(84.000, 84.000)
                 ))
                 .setTangentHeadingInterpolation()
-                .setReversed()
                 .build();
 
         redShoot_redTopStart = follower.pathBuilder()
