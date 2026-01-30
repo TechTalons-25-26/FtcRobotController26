@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
 import org.firstinspires.ftc.teamcode.subsystems.path.poseStorage;
 
 import java.util.function.Supplier;
@@ -22,7 +23,6 @@ import java.util.function.Supplier;
 @TeleOp
 public class blueTeleOp extends OpMode {
 
-    public static Pose startingPose = poseStorage.currentPose;
     private Follower follower;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
@@ -76,12 +76,12 @@ public class blueTeleOp extends OpMode {
 
             // Intake control
             double intakePower = gamepad2.right_trigger;
-            robot.intake.intakeMotor.setPower(intakePower);
-
-            // ---------------- Outtake: Using bWasPressed() style ----------------
+            if (robot.outtake.outtakeState.equals(outtakeLogic.OuttakeState.IDLE)) {
+                robot.intake.intakeMotor.setPower(intakePower);
+            }
+            // ---------------- Outtake: ---------------------------
             if (gamepad2.dpadLeftWasPressed()) robot.outtake.fireShots(1);
             if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(2);
-            if (gamepad2.dpadRightWasPressed()) robot.outtake.fireShots(3);
         }
 
         // ---------------- Automated PathFollowing ----------------

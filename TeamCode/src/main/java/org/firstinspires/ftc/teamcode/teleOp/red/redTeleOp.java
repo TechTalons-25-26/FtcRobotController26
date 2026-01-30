@@ -22,7 +22,6 @@ import java.util.function.Supplier;
 @TeleOp
 public class redTeleOp extends OpMode {
 
-    public static Pose startingPose = poseStorage.currentPose;
     private Follower follower;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;

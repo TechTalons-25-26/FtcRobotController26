@@ -47,6 +47,7 @@ public class bigBlue extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
+                        shotsTriggered = false;
                         setPathState(bigAndSmall2Enum.SHOOT_TOPSTART);
                     }
                 }
@@ -96,6 +97,7 @@ public class bigBlue extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
+                        shotsTriggered = false;
                         setPathState(bigAndSmall2Enum.SHOOT_MIDDLESTART);
                     }
                 }
@@ -145,6 +147,7 @@ public class bigBlue extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
+                        shotsTriggered = false;
                         setPathState(bigAndSmall2Enum.SHOOT_BOTTOMSTART);
                     }
                 }
@@ -194,6 +197,7 @@ public class bigBlue extends baseAuto {
                         outtake.fireShots(3);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
+                        shotsTriggered = false;
                         setPathState(bigAndSmall2Enum.SHOOT_END);
                     }
                 }
