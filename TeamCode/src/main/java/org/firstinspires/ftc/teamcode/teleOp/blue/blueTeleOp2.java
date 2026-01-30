@@ -283,7 +283,7 @@ public class blueTeleOp2 extends LinearOpMode {
             maxIntakePower2 = lt * maxIntakePower2;
 
 
-        }else if (rb) {
+        }  else if (rb) {
             // INTAKE OUT (reverse)
             maxIntakePower1 = -maxIntakePower1; // constant speed out
             //conveyorPower = 1.0;           // spit pieces out
@@ -296,13 +296,6 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
             telemetry.addData("Mode", "INTAKE OUT (RB)");
-        } else if (lb) {
-
-            maxIntakePower1 = +maxIntakePower1;
-
-            maxIntakePower2 = -maxIntakePower2;
-
-
         }
         else {
             // NOTHING PRESSED: stop everything
@@ -333,6 +326,9 @@ public class blueTeleOp2 extends LinearOpMode {
 
     public void outtakeTest (){
         if (gamepad2.left_trigger > 0.05){
+            outtake.setPower(1.0);
+        }
+        else if (gamepad2.left_bumper){
             outtake.setPower(1.0);
         }
         else{

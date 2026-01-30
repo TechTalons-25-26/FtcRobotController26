@@ -26,6 +26,8 @@ public class blueTeleOp extends OpMode {
     private Follower follower;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
+
+    private Supplier<PathChain> pathChain2;
     private TelemetryManager telemetryM;
     private double slowModeMultiplier = 0.5;
     private robot robot;
@@ -39,6 +41,11 @@ public class blueTeleOp extends OpMode {
 
         pathChain = () -> follower.pathBuilder()
                 .addPath(new Path(new BezierLine(follower::getPose, new Pose(60, 84, 130))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
+                .build();
+
+        pathChain2 = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(60, 84, 130)))) //CHANGE
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
                 .build();
 
@@ -83,8 +90,13 @@ public class blueTeleOp extends OpMode {
             automatedDrive = true;
         }
 
+        if (gamepad1.xWasPressed()) {
+            follower.followPath(pathChain2.get());
+            automatedDrive = true;
+        }
+
         // Stop automated following if done OR manual override
-        if (automatedDrive && (gamepad1.xWasPressed() || !follower.isBusy())) {
+        if (automatedDrive && (gamepad1.yWasPressed() || !follower.isBusy())) {
             follower.startTeleopDrive();
             automatedDrive = false;
         }
