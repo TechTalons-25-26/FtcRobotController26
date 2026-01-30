@@ -59,7 +59,6 @@ public class intakeLogic {
     }
 
     public void runIntake(boolean reversed, double power) {
-
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
         intakeMotor.setPower(power);
     }
