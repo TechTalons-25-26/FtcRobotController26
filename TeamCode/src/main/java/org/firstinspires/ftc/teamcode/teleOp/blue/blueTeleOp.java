@@ -35,13 +35,12 @@ public class blueTeleOp extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(/*startingPose == null ? */new Pose(36.700, 71.900, 180)/* : startingPose*/);
         follower.update();
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
         pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(60, 84, 130))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-12.2, -23.3))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(-50), 0.8))
                 .build();
 
         pathChain2 = () -> follower.pathBuilder()
@@ -57,6 +56,7 @@ public class blueTeleOp extends OpMode {
     public void start() {
         robot.start();
         follower.startTeleopDrive();
+        follower.setStartingPose(new Pose(0, 0, 0));
     }
 
     @Override
@@ -68,10 +68,10 @@ public class blueTeleOp extends OpMode {
 
         if (!automatedDrive) {
             follower.setTeleOpDrive(
-                    gamepad1.left_stick_y * slowModeMultiplier,
-                    gamepad1.left_stick_x * slowModeMultiplier,
+                    -gamepad1.left_stick_y * slowModeMultiplier,
+                    -gamepad1.left_stick_x * slowModeMultiplier,
                     -gamepad1.right_stick_x * slowModeMultiplier,
-                    false // Robot-centric
+                    false // Robot-centric = true
             );
 
             // Intake control
@@ -85,6 +85,7 @@ public class blueTeleOp extends OpMode {
         }
 
         // ---------------- Automated PathFollowing ----------------
+
         if (gamepad1.bWasPressed()) {
             follower.followPath(pathChain.get());
             automatedDrive = true;
@@ -102,6 +103,7 @@ public class blueTeleOp extends OpMode {
         }
 
         // ---------------- Telemetry ----------------
+        telemetry.addData("Position", follower.getPose());
         telemetry.addData("Outtake State", robot.outtake.getState());
         telemetry.addData("Shots Remaining", robot.outtake.getShotsRemaining());
         telemetry.addData("Current RPM", "%.1f", robot.outtake.getCurrentRPM());
