@@ -191,6 +191,8 @@ public class blueTeleOp2 extends LinearOpMode {
             //openCloseLid();
             checkStartPathWithB();
 
+            moveParkingPlate();
+
 
             telemetry.update();
         }
@@ -337,10 +339,11 @@ public class blueTeleOp2 extends LinearOpMode {
     }
 
 
-   public void moveParkingPlate(double power) {
-        double maxConveyorPower = 0.7;
-        parkingPlate.setPower(power * maxConveyorPower);
-
+   public void moveParkingPlate() {
+        if (gamepad1.right_trigger > 0.05) {
+            double maxConveyorPower = 0.7;
+            parkingPlate.setPower(maxConveyorPower);
+        }
 
     }
 
