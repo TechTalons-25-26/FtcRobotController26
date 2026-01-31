@@ -65,7 +65,6 @@ public abstract class baseAuto extends OpMode {
         follower.update();
         pathStateUpdate();
         outtake.update();
-        intake.update();
 
         panelsTelemetry.debug("Path State", pathState);
         panelsTelemetry.debug("X", follower.getPose().getX());

@@ -30,7 +30,6 @@ public class smallBlue2Paths {
                         new Pose(60.000, 84.000)
                 ))
                 .setTangentHeadingInterpolation()
-                .setReversed()
                 .build();
 
         blueShoot_blueTopStart = follower.pathBuilder()
