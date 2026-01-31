@@ -88,7 +88,7 @@ private smallBluePaths paths = new smallBluePaths();
             case BOTTOMSTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueBottomStart_blueShoot, true);
-                    setPathState(smallEnum.SHOOT_MIDDLESTART);
+                    setPathState(smallEnum.OUTTAKE_BOTTOM);
                 }
                 break;
 
@@ -137,7 +137,7 @@ private smallBluePaths paths = new smallBluePaths();
             case MIDDLESTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueMiddleStart_blueShoot, true);
-                    setPathState(smallEnum.SHOOT_TOPSTART);
+                    setPathState(smallEnum.OUTTAKE_MIDDLE);
                 }
                 break;
 
@@ -186,7 +186,7 @@ private smallBluePaths paths = new smallBluePaths();
             case TOPSTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueTopStart_blueShoot, true);
-                    setPathState(smallEnum.SHOOT_END);
+                    setPathState(smallEnum.OUTTAKE_TOP);
                 }
                 break;
 

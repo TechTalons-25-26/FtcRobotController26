@@ -41,7 +41,7 @@ public class outtakeTuner extends OpMode {
 
         intake.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         stage.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        
+
         applyPIDF();
         setVelocityRPM(idleRPM);
     }

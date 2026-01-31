@@ -87,7 +87,7 @@ public class smallBlue2 extends baseAuto {
             case TOPSTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueTopStart_blueShoot, true);
-                    setPathState(bigAndSmall2Enum.SHOOT_MIDDLESTART);
+                    setPathState(bigAndSmall2Enum.OUTTAKE_TOP);
                 }
                 break;
 
@@ -136,7 +136,7 @@ public class smallBlue2 extends baseAuto {
             case MIDDLESTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueMiddleStart_blueShoot, true);
-                    setPathState(bigAndSmall2Enum.SHOOT_BOTTOMSTART);
+                    setPathState(bigAndSmall2Enum.OUTTAKE_MIDDLE);
                 }
                 break;
 
@@ -185,7 +185,7 @@ public class smallBlue2 extends baseAuto {
             case BOTTOMSTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.blueBottomStart_blueShoot, true);
-                    setPathState(bigAndSmall2Enum.SHOOT_END);
+                    setPathState(bigAndSmall2Enum.OUTTAKE_BOTTOM);
                 }
                 break;
 

@@ -86,7 +86,7 @@ public class smallRed2 extends baseAuto {
             case TOPSTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redTopStart_redShoot, true);
-                    setPathState(bigAndSmall2Enum.SHOOT_MIDDLESTART);
+                    setPathState(bigAndSmall2Enum.OUTTAKE_TOP);
                 }
                 break;
 
@@ -135,7 +135,7 @@ public class smallRed2 extends baseAuto {
             case MIDDLESTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redMiddleStart_redShoot, true);
-                    setPathState(bigAndSmall2Enum.SHOOT_BOTTOMSTART);
+                    setPathState(bigAndSmall2Enum.OUTTAKE_MIDDLE);
                 }
                 break;
 
@@ -184,7 +184,7 @@ public class smallRed2 extends baseAuto {
             case BOTTOMSTART_SHOOT:
                 if (!follower.isBusy()) {
                     follower.followPath(paths.redBottomStart_redShoot, true);
-                    setPathState(bigAndSmall2Enum.SHOOT_END);
+                    setPathState(bigAndSmall2Enum.OUTTAKE_BOTTOM);
                 }
                 break;
 
