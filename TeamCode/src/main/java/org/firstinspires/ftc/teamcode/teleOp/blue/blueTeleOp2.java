@@ -35,7 +35,7 @@ public class blueTeleOp2 extends LinearOpMode {
     private DcMotor stage;
 
 
-    private CRServo parkingPlate;
+    private Servo parkingPlate;
 
 
     //private CRServo conveyor;
@@ -77,7 +77,7 @@ public class blueTeleOp2 extends LinearOpMode {
         intake = hardwareMap.get(DcMotor.class, "intake");
         stage = hardwareMap.get(DcMotor.class, "stage");
         //conveyor = hardwareMap.get(CRServo.class, "conveyor");
-        parkingPlate = hardwareMap.get(CRServo.class, "parkingPlate");
+        parkingPlate = hardwareMap.get(Servo.class, "parkingPlate");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -343,9 +343,11 @@ public class blueTeleOp2 extends LinearOpMode {
 
 
    public void moveParkingPlate() {
-        if (gamepad1.right_trigger > 0.05) {
-            double maxConveyorPower = 0.7;
-            parkingPlate.setPower(maxConveyorPower);
+        if (gamepad1.y) {
+            parkingPlate.setPosition(0.8); //Change
+        }
+        else {
+            parkingPlate.setPosition(0.4); //Change
         }
 
     }
