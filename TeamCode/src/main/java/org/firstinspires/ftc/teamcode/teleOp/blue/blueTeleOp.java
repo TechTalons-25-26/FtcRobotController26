@@ -39,8 +39,8 @@ public class blueTeleOp extends OpMode {
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
         pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-12.2, -23.3))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(-50), 0.8))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-39, -14, -43))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(-43), 0.8))
                 .build();
 
         pathChain2 = () -> follower.pathBuilder()

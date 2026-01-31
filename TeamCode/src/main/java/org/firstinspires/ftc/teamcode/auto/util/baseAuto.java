@@ -19,7 +19,8 @@ public abstract class baseAuto extends OpMode {
     protected Follower follower;
     protected Timer pathTimer, opModeTimer;
 
-    protected robot robot;
+    protected outtakeLogic outtake = new outtakeLogic();
+    protected intakeLogic intake = new intakeLogic();
     protected boolean shotsTriggered = false;
 
     // Each auto will define its own PathState enum
@@ -47,7 +48,8 @@ public abstract class baseAuto extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        robot.init();
+        outtake.init(hardwareMap);
+        intake.init(hardwareMap);
 
         buildPaths();
         follower.setStartingPose(getStartingPose());
@@ -63,7 +65,7 @@ public abstract class baseAuto extends OpMode {
     public void loop() {
         follower.update();
         pathStateUpdate();
-        robot.outtake.update();
+        outtake.update();
 
         panelsTelemetry.debug("Path State", pathState);
         panelsTelemetry.debug("X", follower.getPose().getX());

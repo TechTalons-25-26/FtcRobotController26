@@ -23,16 +23,17 @@ public class smallBluePaths {
 
     public void buildPaths(Follower follower) {
         smallBlueStart_smallBluePreload = follower.pathBuilder()
-                .addPath(new BezierLine(
+                .addPath(new BezierCurve(
                         new Pose(56.000, 8.000),
-                        new Pose(56.000, 16.000)
+                        new Pose(87.000, 4.000),
+                        new Pose(70.000, 30.000)
                 ))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(110))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(120))
                 .build();
 
         smallBluePreload_blueBottomStart = follower.pathBuilder()
                 .addPath(new BezierCurve(
-                        new Pose(56.000, 16.000),
+                        new Pose(70.000, 30.000),
                         new Pose(48.000, 38.000),
                         new Pose(49.100, 36.000),
                         new Pose(42.000, 36.000)
@@ -73,23 +74,23 @@ public class smallBluePaths {
                         new Pose(60.000, 84.000),
                         new Pose(51.800, 93.100),
                         new Pose(55.500, 60.400),
-                        new Pose(42.000, 60.000)
+                        new Pose(42.000, 58.000)
                 ))
                 .setTangentHeadingInterpolation()
                 .build();
 
         blueMiddleStart_blueMiddleEnd = follower.pathBuilder()
                 .addPath(new BezierLine(
-                        new Pose(42.000, 60.000),
-                        new Pose(8.000, 60.000)
+                        new Pose(42.000, 58.000),
+                        new Pose(8.000, 58.000)
                 ))
                 .setTangentHeadingInterpolation()
                 .build();
 
         blueMiddleEnd_blueMiddleStart = follower.pathBuilder()
                 .addPath(new BezierLine(
-                        new Pose(8.000, 60.000),
-                        new Pose(42.000, 60.000)
+                        new Pose(8.000, 58.000),
+                        new Pose(42.000, 58.000)
                 ))
                 .setTangentHeadingInterpolation()
                 .setReversed()
@@ -97,7 +98,7 @@ public class smallBluePaths {
 
         blueMiddleStart_blueShoot = follower.pathBuilder()
                 .addPath(new BezierCurve(
-                        new Pose(42.000, 60.000),
+                        new Pose(42.000, 58.000),
                         new Pose(55.500, 60.400),
                         new Pose(51.800, 93.100),
                         new Pose(60.000, 84.000)
