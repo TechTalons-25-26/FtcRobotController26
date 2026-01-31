@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.intake.intakeLogic;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.manualOuttake;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
 import org.firstinspires.ftc.teamcode.subsystems.path.poseStorage;
 
@@ -18,6 +19,7 @@ public abstract class baseAuto extends OpMode {
     protected Follower follower;
     protected Timer pathTimer, opModeTimer;
 
+    protected manualOuttake outtake = new manualOuttake();
     protected intakeLogic intake = new intakeLogic();
     protected boolean shotsTriggered = false;
 
@@ -46,6 +48,7 @@ public abstract class baseAuto extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
+        outtake.init(hardwareMap);
         intake.init(hardwareMap);
 
         buildPaths();

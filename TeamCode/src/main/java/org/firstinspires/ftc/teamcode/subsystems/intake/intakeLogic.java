@@ -3,16 +3,16 @@ package org.firstinspires.ftc.teamcode.subsystems.intake;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.subsystems.outtake.manualOuttake;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
 
 public class intakeLogic {
     public DcMotorEx intakeMotor;
-    private DcMotorEx stageMotor;
-
     public double intakePower = 0;
     public boolean intakeIsRunning = false;
     IntakeState intakeState;
-    private outtakeLogic outtake = new outtakeLogic();
+    private DcMotorEx stageMotor;
+    private manualOuttake outtake = new manualOuttake();
 
     public void init(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
@@ -57,20 +57,17 @@ public class intakeLogic {
     }
 
     public void runIntake(boolean reversed, double power) {
-        if (!outtake.isBusy()) {
-            if (!reversed) {
-                intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
-                stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        if (!reversed) {
+            intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+            stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
-            }
-            else {
-                intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
-                stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        } else {
+            intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
+            stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
-            }
-            intakeMotor.setPower(power);
-            stageMotor.setPower(power);
         }
+        intakeMotor.setPower(power);
+        stageMotor.setPower(power);
     }
 
     public boolean isBusy() {

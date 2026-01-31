@@ -45,14 +45,9 @@ private smallBluePaths paths = new smallBluePaths();
 
             case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(2);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(smallEnum.PRELOAD_BOTTOMSTART);
-                    }
+                    outtake.run();
+                    break;
                 }
-                break;
 
             case PRELOAD_BOTTOMSTART:
                 if (!follower.isBusy()) {
@@ -94,14 +89,9 @@ private smallBluePaths paths = new smallBluePaths();
 
             case OUTTAKE_BOTTOM:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(2);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(smallEnum.SHOOT_MIDDLESTART);
-                    }
+                    outtake.run();
+                    break;
                 }
-                break;
 
             case SHOOT_MIDDLESTART:
                 if (!follower.isBusy()) {
@@ -143,14 +133,9 @@ private smallBluePaths paths = new smallBluePaths();
 
             case OUTTAKE_MIDDLE:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(2);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(smallEnum.SHOOT_TOPSTART);
-                    }
+                    outtake.run();
+                    break;
                 }
-                break;
 
             case SHOOT_TOPSTART:
                 if (!follower.isBusy()) {
@@ -192,14 +177,9 @@ private smallBluePaths paths = new smallBluePaths();
 
             case OUTTAKE_TOP:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(2);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(smallEnum.SHOOT_END);
-                    }
+                    outtake.run();
+                    break;
                 }
-                break;
 
             case SHOOT_END:
                 if (!follower.isBusy()) {
