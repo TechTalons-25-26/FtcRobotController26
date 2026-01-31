@@ -50,7 +50,7 @@ public class blueTeleOp2 extends LinearOpMode {
 
     private Follower follower;
 
-    double outtakePower = 0.4;
+    double outtakePower = 1.0;
     double wheelSpeed = 0.4;
     double axonPosition = 0.14; // start centered
     double step = 0.01; // servo step
@@ -115,6 +115,7 @@ public class blueTeleOp2 extends LinearOpMode {
 
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         stage.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //outtake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //parkingPlate.setPosition(axonPosition);
 
 
@@ -285,6 +286,7 @@ public class blueTeleOp2 extends LinearOpMode {
             maxIntakePower2 = lt * maxIntakePower2;
 
 
+
         }  else if (rb) {
             // INTAKE OUT (reverse)
             maxIntakePower1 = -maxIntakePower1; // constant speed out
@@ -326,12 +328,13 @@ public class blueTeleOp2 extends LinearOpMode {
         //telemetry.addData("Conveyor power", conveyorPower);
     }
 
-    public void outtakeTest (){
+    public void outtakeTest(){
         if (gamepad2.left_trigger > 0.05){
             outtake.setPower(1.0);
         }
         else if (gamepad2.left_bumper){
             outtake.setPower(1.0);
+            //outtake.setPower(1.0);
         }
         else{
             outtake.setPower(0);
