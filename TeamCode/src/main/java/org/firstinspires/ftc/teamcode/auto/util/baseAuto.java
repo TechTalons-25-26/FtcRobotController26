@@ -49,8 +49,8 @@ public abstract class baseAuto extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
+        manualOuttake.init(hardwareMap);
         intake.init(hardwareMap);
-        outtake.init(hardwareMap);
 
         buildPaths();
         follower.setStartingPose(getStartingPose());

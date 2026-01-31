@@ -6,13 +6,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class manualOuttake {
 
-    private DcMotorEx outtakeMotor;
-    private DcMotorEx intakeMotor;
-    private DcMotorEx stageMotor;
-
+    private DcMotorEx outtakeMotor, intakeMotor, stageMotor;
     private ElapsedTime timer = new ElapsedTime();
-    public boolean outtakeRunning;
-
+    private State state = State.IDLE;
 
     public void init(HardwareMap hardwareMap) {
         outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtake");
@@ -20,35 +16,55 @@ public class manualOuttake {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
 
         outtakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
-        outtakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         outtakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
         stageMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    // BLOCKING — for Auto only
-    public void run() {
-        outtakeRunning = true;
+    // call once to start
+    public void start() {
         timer.reset();
-        outtakeMotor.setPower(1);
-
-        intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
-        intakeMotor.setPower(1);
-        stageMotor.setPower(1);
-        while (timer.seconds() < 2) {}
-        intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        intakeMotor.setPower(1);
-        stageMotor.setPower(1);
-        while (timer.seconds() < 4) {}
-        outtakeMotor.setPower(0);
-        intakeMotor.setPower(0);
-        stageMotor.setPower(0);
-        outtakeRunning = false;
+        state = State.SPIN_UP;
     }
 
-    public void runOuttake(double power) {
+    // call every loop
+    public void update() {
+        switch (state) {
+
+            case IDLE:
+                break;
+
+            case SPIN_UP:
+                outtakeMotor.setPower(1);
+                intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+                stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
+                intakeMotor.setPower(1);
+                stageMotor.setPower(1);
+
+                if (timer.seconds() > 2) {
+                    timer.reset();
+                    state = State.FEED_FORWARD;
+                }
+                break;
+
+            case FEED_FORWARD:
+                intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+                stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
+
+                if (timer.seconds() > 2) {
+                    state = State.DONE;
+                }
+                break;
+
+            case DONE:
+                outtakeMotor.setPower(0);
+                intakeMotor.setPower(0);
+                stageMotor.setPower(0);
+                state = State.IDLE;
+                break;
+        }
+    }
+
+    public void runOuttake(float power) {
         outtakeMotor.setPower(power);
         intakeMotor.setPower(power);
         stageMotor.setPower(power);
@@ -56,5 +72,17 @@ public class manualOuttake {
 
     public void ramp() {
         outtakeMotor.setPower(1);
+    }
+
+    public boolean isBusy() {
+        return state != State.IDLE;
+    }
+
+    private enum State {
+        IDLE,
+        SPIN_UP,
+        FEED_REVERSE,
+        FEED_FORWARD,
+        DONE
     }
 }
