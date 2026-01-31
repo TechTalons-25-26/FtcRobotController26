@@ -25,7 +25,6 @@ import org.firstinspires.ftc.teamcode.subsystems.path.poseStorage;
 @TeleOp(name = "blueTeleOp2")
 public class blueTeleOp2 extends LinearOpMode {
 
-
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     //private DcMotor leftWheel, rightWheel;
     private DcMotor outtake;
