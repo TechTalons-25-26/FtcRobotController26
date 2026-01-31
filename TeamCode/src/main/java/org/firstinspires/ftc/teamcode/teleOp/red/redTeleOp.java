@@ -44,7 +44,7 @@ public class redTeleOp extends OpMode {
                 .build();
 
         pathChain2 = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(51.3,))))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(51.3, -39.63))))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(70), 0.8))
                 .build();
 
