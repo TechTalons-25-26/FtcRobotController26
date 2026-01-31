@@ -20,7 +20,7 @@ public abstract class baseAuto extends OpMode {
     protected Timer pathTimer, opModeTimer;
     protected outtakeLogic outtake = new outtakeLogic();
 
-    protected manualOuttake manualOuttake;
+    protected manualOuttake manualOuttake = new manualOuttake();
     protected intakeLogic intake = new intakeLogic();
     protected boolean shotsTriggered = false;
 
