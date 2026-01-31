@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
 import org.firstinspires.ftc.teamcode.subsystems.path.poseStorage;
 
 import java.util.function.Supplier;
@@ -25,6 +26,8 @@ public class redTeleOp extends OpMode {
     private Follower follower;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
+
+    private Supplier<PathChain> pathChain2;
     private TelemetryManager telemetryM;
     private double slowModeMultiplier = 0.5;
     private robot robot;
@@ -36,8 +39,13 @@ public class redTeleOp extends OpMode {
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
         pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-12.2, 23.3))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(50), 0.8))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-43, 12.8, 40.3))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(40), 0.8))
+                .build();
+
+        pathChain2 = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-53.39, -39.63, 62)))) //CHANGE
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(62), 0.8))
                 .build();
 
         robot = new robot(hardwareMap);
@@ -73,10 +81,11 @@ public class redTeleOp extends OpMode {
                 robot.intake.runIntake(true,gamepad2.left_trigger);
             }
 
-            // ---------------- Outtake: Using bWasPressed() style ----------------
+            // ---------------- Outtake: ---------------------------
             if (gamepad2.dpadLeftWasPressed()) robot.outtake.fireShots(1);
             if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(2);
-            if (gamepad2.dpadRightWasPressed()) robot.outtake.fireShots(3);
+            if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(3);
+
         }
 
         // ---------------- Automated PathFollowing ----------------
@@ -86,8 +95,13 @@ public class redTeleOp extends OpMode {
             automatedDrive = true;
         }
 
+        if (gamepad1.xWasPressed()) {
+            follower.followPath(pathChain2.get());
+            automatedDrive = true;
+        }
+
         // Stop automated following if done OR manual override
-        if (automatedDrive && (gamepad1.xWasPressed() || !follower.isBusy())) {
+        if (automatedDrive && (gamepad1.yWasPressed() || !follower.isBusy())) {
             follower.startTeleopDrive();
             automatedDrive = false;
         }

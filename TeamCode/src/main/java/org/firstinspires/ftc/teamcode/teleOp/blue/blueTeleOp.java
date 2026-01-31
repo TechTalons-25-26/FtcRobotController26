@@ -44,8 +44,8 @@ public class blueTeleOp extends OpMode {
                 .build();
 
         pathChain2 = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-56.9, 39.7, -67.6)))) //CHANGE
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-51.53, 39.66, -55.79)))) //CHANGE
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(-55), 0.8))
                 .build();
 
         robot = new robot(hardwareMap);
