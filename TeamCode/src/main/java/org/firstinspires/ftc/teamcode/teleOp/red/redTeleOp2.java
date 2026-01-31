@@ -308,7 +308,7 @@ public class redTeleOp2 extends LinearOpMode {
         // Actually apply powers
         intakeMotor1.setPower(maxIntakePower1);
         intakeMotor2.setPower(maxIntakePower2);
-        moveParkingPlate(parkingPlatePower);
+//        moveParkingPlate(parkingPlatePower);
         //conveyorMove(conveyorPower);
 
 
@@ -319,12 +319,12 @@ public class redTeleOp2 extends LinearOpMode {
     }
 
 
-    public void moveParkingPlate(double power) {
-        double maxConveyorPower = 0.7;
-        parkingPlate.setPower(power * maxConveyorPower);
-
-
-    }
+//    public void moveParkingPlate(double power) {
+//        double maxConveyorPower = 0.7;
+//        parkingPlate.setPower(power * maxConveyorPower);
+//
+//
+//    }
 
     // Start the path when B is first pressed
     public void checkStartPathWithB() {

@@ -192,7 +192,7 @@ public class blueTeleOp2 extends LinearOpMode {
             //openCloseLid();
             checkStartPathWithB();
 
-            moveParkingPlate();
+//            moveParkingPlate();
 
 
             telemetry.update();
@@ -342,15 +342,15 @@ public class blueTeleOp2 extends LinearOpMode {
     }
 
 
-   public void moveParkingPlate() {
-        if (gamepad1.y) {
-            parkingPlate.setPosition(0.8); //Change
-        }
-        else {
-            parkingPlate.setPosition(0.4); //Change
-        }
-
-    }
+//   public void moveParkingPlate() {
+//        if (gamepad1.y) {
+//            parkingPlate.setPosition(0.8); //Change
+//        }
+//        else {
+//            parkingPlate.setPosition(0.4); //Change
+//        }
+//
+//    }
 
     // Start the path when B is first pressed
     public void checkStartPathWithB() {

@@ -8,15 +8,6 @@ public class manualOuttake {
 
     private DcMotorEx outtakeMotor, intakeMotor, stageMotor;
     private ElapsedTime timer = new ElapsedTime();
-
-    private enum State {
-        IDLE,
-        SPIN_UP,
-        FEED_REVERSE,
-        FEED_FORWARD,
-        DONE
-    }
-
     private State state = State.IDLE;
 
     public void init(HardwareMap hardwareMap) {
@@ -73,7 +64,25 @@ public class manualOuttake {
         }
     }
 
+    public void runOuttake(float power) {
+        outtakeMotor.setPower(power);
+        intakeMotor.setPower(power);
+        stageMotor.setPower(power);
+    }
+
+    public void ramp() {
+        outtakeMotor.setPower(1);
+    }
+
     public boolean isBusy() {
         return state != State.IDLE;
+    }
+
+    private enum State {
+        IDLE,
+        SPIN_UP,
+        FEED_REVERSE,
+        FEED_FORWARD,
+        DONE
     }
 }
