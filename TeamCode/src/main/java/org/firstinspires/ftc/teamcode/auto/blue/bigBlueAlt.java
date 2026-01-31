@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.altEnum;
-import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigAndSmall2Enum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.blue.bigBlueAltPaths;
 
 @Autonomous(name = "bigBlueAlt")
@@ -43,8 +42,8 @@ public class bigBlueAlt extends baseAuto {
 
             case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
-                    outtake.run();
-                    while (outtake.outtakeRunning) {}
+                    manualOuttake.run();
+                    while (manualOuttake.outtakeRunning) {}
                     setPathState(altEnum.SHOOT_END);
                     break;
                 }

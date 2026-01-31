@@ -39,13 +39,13 @@ public class redTeleOp extends OpMode {
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
         pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-43, 12.8, 40.3))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(40), 0.8))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-12.1, 24.3))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(50), 0.8))
                 .build();
 
         pathChain2 = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(-53.39, -39.63, 62)))) //CHANGE
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(62), 0.8))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(51.3,))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(70), 0.8))
                 .build();
 
         robot = new robot(hardwareMap);
@@ -74,17 +74,18 @@ public class redTeleOp extends OpMode {
                     false // Robot-centric = true
             );
 
-            // Intake control
+            // Intake & outtake control
             if (gamepad2.right_trigger > gamepad2.left_trigger) {
-                robot.intake.runIntake(false,gamepad2.right_trigger);
-            } else {
-                robot.intake.runIntake(true,gamepad2.left_trigger);
+                robot.intake.runIntake(false, gamepad2.right_trigger);
+            } else if ((gamepad2.right_trigger < gamepad2.left_trigger)){
+                robot.manualOuttake.runOuttake(gamepad2.left_trigger);
+            } else if ((gamepad2.right_trigger == 0) && (gamepad2.left_trigger == 0)) {
+                if (gamepad2.right_bumper) {
+                    robot.intake.rb();
+                }
+            } else if (gamepad2.left_bumper) {
+                robot.manualOuttake.ramp();
             }
-
-            // ---------------- Outtake: ---------------------------
-            if (gamepad2.dpadLeftWasPressed()) robot.outtake.fireShots(1);
-            if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(2);
-            if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(3);
 
         }
 

@@ -44,8 +44,8 @@ public class smallBlue2 extends baseAuto {
 
             case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
-                    outtake.run();
-                    while (outtake.outtakeRunning) {}
+                    manualOuttake.run();
+                    while (manualOuttake.outtakeRunning) {}
                     setPathState(bigAndSmall2Enum.SHOOT_TOPSTART);
                     break;
                 }
@@ -90,8 +90,8 @@ public class smallBlue2 extends baseAuto {
 
             case OUTTAKE_TOP:
                 if (!follower.isBusy()) {
-                    outtake.run();
-                    while (outtake.outtakeRunning) {}
+                    manualOuttake.run();
+                    while (manualOuttake.outtakeRunning) {}
                     setPathState(bigAndSmall2Enum.SHOOT_MIDDLESTART);
                     break;
                 }
@@ -136,8 +136,8 @@ public class smallBlue2 extends baseAuto {
 
             case OUTTAKE_MIDDLE:
                 if (!follower.isBusy()) {
-                    outtake.run();
-                    while (outtake.outtakeRunning) {}
+                    manualOuttake.run();
+                    while (manualOuttake.outtakeRunning) {}
                     setPathState(bigAndSmall2Enum.SHOOT_BOTTOMSTART);
                     break;
                 }
@@ -182,8 +182,8 @@ public class smallBlue2 extends baseAuto {
 
             case OUTTAKE_BOTTOM:
                 if (!follower.isBusy()) {
-                    outtake.run();
-                    while (outtake.outtakeRunning) {}
+                    manualOuttake.run();
+                    while (manualOuttake.outtakeRunning) {}
                     setPathState(bigAndSmall2Enum.SHOOT_END);
                     break;
                 }
