@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.subsystems.drive.mecanum;
 import org.firstinspires.ftc.teamcode.subsystems.intake.intakeLogic;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.manualOuttake;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
 
 public class robot {
@@ -14,6 +15,7 @@ public class robot {
     public mecanum drive;
     public intakeLogic intake;
     public outtakeLogic outtake;
+    public manualOuttake manualOuttake;
 
     private final HardwareMap hardwareMap;
 
@@ -32,6 +34,9 @@ public class robot {
 
         outtake = new outtakeLogic();
         outtake.init(hardwareMap);
+
+        manualOuttake = new manualOuttake();
+        manualOuttake.init(hardwareMap);
 
     }
 

@@ -49,7 +49,9 @@ public class blueTeleOp extends OpMode {
                 .build();
 
         robot = new robot(hardwareMap);
-        robot.init();
+        robot.outtake.init(hardwareMap);
+        robot.intake.init(hardwareMap);
+
     }
 
     @Override
@@ -74,17 +76,24 @@ public class blueTeleOp extends OpMode {
                     false // Robot-centric = true
             );
 
-            // Intake control
+            // Intake & outtake control
             if (gamepad2.right_trigger > gamepad2.left_trigger) {
-                robot.intake.runIntake(false,gamepad2.right_trigger);
-            } else {
-                robot.intake.runIntake(true,gamepad2.left_trigger);
+                robot.intake.runIntake(false, gamepad2.right_trigger);
+            } else if ((gamepad2.right_trigger < gamepad2.left_trigger)){
+                robot.manualOuttake.runOuttake(gamepad2.left_trigger);
+            } else if ((gamepad2.right_trigger == 0) && (gamepad2.left_trigger == 0)) {
+                if (gamepad2.right_bumper) {
+                    robot.intake.rb();
+                }
+            } else if (gamepad2.left_bumper) {
+                robot.manualOuttake.ramp();
             }
 
             // ---------------- Outtake: ---------------------------
-            if (gamepad2.dpadLeftWasPressed()) robot.outtake.fireShots(1);
-            if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(2);
-            if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(3);
+            // rt is intake in 2nd stage out no outtake
+            // lt is intake in 2nd stage in outtake in
+            // rb is intake out 2nd stage out no outtake
+            // lb is outtake ramp up
 
         }
 

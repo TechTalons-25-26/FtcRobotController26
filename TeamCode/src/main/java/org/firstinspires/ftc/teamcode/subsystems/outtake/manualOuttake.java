@@ -11,6 +11,7 @@ public class manualOuttake {
     private DcMotorEx stageMotor;
 
     private ElapsedTime timer = new ElapsedTime();
+    public boolean outtakeRunning;
 
 
     public void init(HardwareMap hardwareMap) {
@@ -27,26 +28,33 @@ public class manualOuttake {
 
     // BLOCKING — for Auto only
     public void run() {
+        outtakeRunning = true;
         timer.reset();
         outtakeMotor.setPower(1);
 
-        while (timer.seconds() < 4) {
-            while (timer.seconds() < 2) {
-                intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
-                stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
-                intakeMotor.setPower(1);
-                stageMotor.setPower(1);
-            }
-            intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
-            stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
-            intakeMotor.setPower(1);
-            stageMotor.setPower(1);
-
-        }
-
+        intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        intakeMotor.setPower(1);
+        stageMotor.setPower(1);
+        while (timer.seconds() < 2) {}
+        intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        intakeMotor.setPower(1);
+        stageMotor.setPower(1);
+        while (timer.seconds() < 4) {}
         outtakeMotor.setPower(0);
         intakeMotor.setPower(0);
         stageMotor.setPower(0);
+        outtakeRunning = false;
     }
 
+    public void runOuttake(double power) {
+        outtakeMotor.setPower(power);
+        intakeMotor.setPower(power);
+        stageMotor.setPower(power);
+    }
+
+    public void ramp() {
+        outtakeMotor.setPower(1);
+    }
 }

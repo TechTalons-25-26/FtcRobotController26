@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.intake;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.subsystems.outtake.manualOuttake;
@@ -68,6 +69,13 @@ public class intakeLogic {
         }
         intakeMotor.setPower(power);
         stageMotor.setPower(power);
+    }
+
+    public void rb() {
+        intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        intakeMotor.setPower(1);
+        stageMotor.setPower(1);
     }
 
     public boolean isBusy() {

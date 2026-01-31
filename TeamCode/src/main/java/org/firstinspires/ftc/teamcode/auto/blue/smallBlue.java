@@ -5,6 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigAndSmall2Enum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallEnum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallEnum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.blue.smallBluePaths;
@@ -46,6 +47,8 @@ private smallBluePaths paths = new smallBluePaths();
             case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
                     outtake.run();
+                    while (outtake.outtakeRunning) {}
+                    setPathState(smallEnum.PRELOAD_BOTTOMSTART);
                     break;
                 }
 
@@ -90,6 +93,8 @@ private smallBluePaths paths = new smallBluePaths();
             case OUTTAKE_BOTTOM:
                 if (!follower.isBusy()) {
                     outtake.run();
+                    while (outtake.outtakeRunning) {}
+                    setPathState(smallEnum.SHOOT_MIDDLESTART);
                     break;
                 }
 
@@ -134,6 +139,8 @@ private smallBluePaths paths = new smallBluePaths();
             case OUTTAKE_MIDDLE:
                 if (!follower.isBusy()) {
                     outtake.run();
+                    while (outtake.outtakeRunning) {}
+                    setPathState(smallEnum.SHOOT_TOPSTART);
                     break;
                 }
 
@@ -178,6 +185,8 @@ private smallBluePaths paths = new smallBluePaths();
             case OUTTAKE_TOP:
                 if (!follower.isBusy()) {
                     outtake.run();
+                    while (outtake.outtakeRunning) {}
+                    setPathState(smallEnum.SHOOT_END);
                     break;
                 }
 
