@@ -7,53 +7,35 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class outtakeLogic {
 
+    // ---------------- Constants ----------------
+    private static final double TICKS_PER_REV = 28.0;
+    public OuttakeState outtakeState = OuttakeState.IDLE;
     // ---------------- Hardware ----------------
     private DcMotorEx outtakeMotor;
     private DcMotorEx stageMotor;
     private DcMotorEx intakeMotor;
-
     private ElapsedTime outtakeTimer = new ElapsedTime();
-    public OuttakeState outtakeState = OuttakeState.IDLE;
-
-    public enum OuttakeState {
-        IDLE,
-        SPIN_UP,
-        LAUNCH,
-        RESET_STAGE
-    }
-
-    // ---------------- Constants ----------------
-    private static final double TICKS_PER_REV = 28.0;
-
     private int shotsRemaining = 0;
-
     private double idleRPM = 500;     // flywheel RPM when idle
     private double targetRPM = 3000;  // flywheel target RPM
     private double minRPM = 2700;      // minimum RPM to start firing
-
     private double maxSpinupTime = 2.0;    // max wait for flywheel spinup
     private double stageShootTime = 0.5;  // stage forward time
     private double stageResetTime = 0.5;  // stage reverse time
-
     // ---------------- PIDF ----------------
-    private double P = 0;  // small initial P for testing
-    private double F = 24;  // feedforward for 1100 RPM
+    private double P = 0;
+    private double F = 24;
 
     public void init(HardwareMap hardwareMap) {
         outtakeMotor = hardwareMap.get(DcMotorEx.class, "outtake");
         stageMotor = hardwareMap.get(DcMotorEx.class, "stage");
-        intakeMotor = hardwareMap.get(DcMotorEx.class,"intake");
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
 
         outtakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         outtakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         stageMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        // Remove these lines from init():
-        // stageMotor.setPower(-1.0);
-        // setVelocityRPM(idleRPM);
-
-        // PIDF setup is fine (does not spin the motor)
         outtakeMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,
                 new PIDFCoefficients(P, 0, 0, F));
 
@@ -78,6 +60,8 @@ public class outtakeLogic {
 
                 // Immediately transition if shots are requested
                 if (shotsRemaining > 0) {
+                    intakeMotor.setPower(1);
+                    stageMotor.setPower(-1);
                     setVelocityRPM(targetRPM);
                     outtakeTimer.reset();
                     outtakeState = OuttakeState.SPIN_UP;
@@ -85,10 +69,6 @@ public class outtakeLogic {
                 break;
 
             case SPIN_UP:
-                // Keep stage reverse until we are ready to shoot
-                intakeMotor.setPower(0.6);
-                stageMotor.setPower(-0.5);
-
                 // Wait for flywheel to reach minRPM or max spinup time
                 if (currentRPM >= minRPM || outtakeTimer.seconds() >= maxSpinupTime) {
                     intakeMotor.setPower(1);
@@ -104,24 +84,20 @@ public class outtakeLogic {
 
                 if (outtakeTimer.seconds() >= stageShootTime) {
                     shotsRemaining--;
-                    stageMotor.setPower(-0.5); // reset stage
                     outtakeTimer.reset();
                     outtakeState = OuttakeState.RESET_STAGE;
                 }
                 break;
 
             case RESET_STAGE:
-                setVelocityRPM(targetRPM); // keep flywheel spinning
-
-                if (outtakeTimer.seconds() >= stageResetTime) {
-                    if (shotsRemaining > 0) {
-                        outtakeTimer.reset();
-                        outtakeState = OuttakeState.SPIN_UP;
-                    } else {
-                        setVelocityRPM(idleRPM);
-                        stageMotor.setPower(-0.5);
-                        outtakeState = OuttakeState.IDLE;
-                    }
+                if (shotsRemaining > 0) {
+                    outtakeTimer.reset();
+                    outtakeState = OuttakeState.SPIN_UP;
+                } else {
+                    intakeMotor.setPower(0);
+                    stageMotor.setPower(0);
+                    setVelocityRPM(idleRPM);
+                    outtakeState = OuttakeState.IDLE;
                 }
                 break;
         }
@@ -134,11 +110,11 @@ public class outtakeLogic {
         shotsRemaining = numShots;
 
         // Immediately start SPIN_UP if currently idle
-        if (outtakeState == OuttakeState.IDLE) {
-            setVelocityRPM(targetRPM);
-            outtakeTimer.reset();
-            outtakeState = OuttakeState.SPIN_UP;
-        }
+//        if (outtakeState == OuttakeState.IDLE) {
+//            setVelocityRPM(targetRPM);
+//            outtakeTimer.reset();
+//            outtakeState = OuttakeState.SPIN_UP;
+//        }
     }
 
     public boolean isBusy() {
@@ -165,5 +141,12 @@ public class outtakeLogic {
 
     public double getTargetVelocity() {
         return (targetRPM * TICKS_PER_REV) / 60.0;
+    }
+
+    public enum OuttakeState {
+        IDLE,
+        SPIN_UP,
+        LAUNCH,
+        RESET_STAGE
     }
 }

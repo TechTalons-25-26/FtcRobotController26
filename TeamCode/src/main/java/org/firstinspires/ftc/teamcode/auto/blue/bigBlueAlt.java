@@ -43,7 +43,7 @@ public class bigBlueAlt extends baseAuto {
             case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
-                        outtake.fireShots(3);
+                        outtake.fireShots(2);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
                         setPathState(altEnum.SHOOT_END);

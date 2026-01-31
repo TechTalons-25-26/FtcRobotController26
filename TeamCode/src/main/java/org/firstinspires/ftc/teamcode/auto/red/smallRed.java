@@ -45,7 +45,7 @@ public class smallRed extends baseAuto {
             case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
-                        outtake.fireShots(3);
+                        outtake.fireShots(2);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
                         setPathState(smallEnum.PRELOAD_BOTTOMSTART);
@@ -94,7 +94,7 @@ public class smallRed extends baseAuto {
             case OUTTAKE_BOTTOM:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
-                        outtake.fireShots(3);
+                        outtake.fireShots(2);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
                         setPathState(smallEnum.SHOOT_MIDDLESTART);
@@ -143,7 +143,7 @@ public class smallRed extends baseAuto {
             case OUTTAKE_MIDDLE:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
-                        outtake.fireShots(3);
+                        outtake.fireShots(2);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
                         setPathState(smallEnum.SHOOT_TOPSTART);
@@ -192,7 +192,7 @@ public class smallRed extends baseAuto {
             case OUTTAKE_TOP:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
-                        outtake.fireShots(3);
+                        outtake.fireShots(2);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
                         setPathState(smallEnum.SHOOT_END);

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@TeleOp(name = "LimelightTest", group = "Limelight")
+//@TeleOp(name = "LimelightTest", group = "Limelight")
 public class LimelightTest extends OpMode {
 
     private Limelight3A limelight;

@@ -46,7 +46,7 @@ private smallBluePaths paths = new smallBluePaths();
             case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
-                        outtake.fireShots(3);
+                        outtake.fireShots(2);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
                         setPathState(smallEnum.PRELOAD_BOTTOMSTART);
@@ -95,7 +95,7 @@ private smallBluePaths paths = new smallBluePaths();
             case OUTTAKE_BOTTOM:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
-                        outtake.fireShots(3);
+                        outtake.fireShots(2);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
                         setPathState(smallEnum.SHOOT_MIDDLESTART);
@@ -144,7 +144,7 @@ private smallBluePaths paths = new smallBluePaths();
             case OUTTAKE_MIDDLE:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
-                        outtake.fireShots(3);
+                        outtake.fireShots(2);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
                         setPathState(smallEnum.SHOOT_TOPSTART);
@@ -193,7 +193,7 @@ private smallBluePaths paths = new smallBluePaths();
             case OUTTAKE_TOP:
                 if (!follower.isBusy()) {
                     if (!shotsTriggered) {
-                        outtake.fireShots(3);
+                        outtake.fireShots(2);
                         shotsTriggered = true;
                     } else if (shotsTriggered && !outtake.isBusy()) {
                         setPathState(smallEnum.SHOOT_END);
