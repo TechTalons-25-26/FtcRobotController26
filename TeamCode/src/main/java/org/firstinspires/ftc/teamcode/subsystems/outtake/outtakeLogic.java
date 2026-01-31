@@ -39,10 +39,10 @@ public class outtakeLogic {
 
         stageMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        outtakeMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,
-                new PIDFCoefficients(P, 0, 0, F));
+        //outtakeMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,
+               // new PIDFCoefficients(P, 0, 0, F));
 
-        outtakeState = OuttakeState.IDLE;
+       /// outtakeState = OuttakeState.IDLE;
     }
 
     public void start() {
