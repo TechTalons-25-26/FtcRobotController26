@@ -67,8 +67,11 @@ public class redTeleOp extends OpMode {
             );
 
             // Intake control
-            double intakePower = gamepad2.right_trigger;
-            robot.intake.intakeMotor.setPower(intakePower);
+            if (gamepad2.right_trigger > gamepad2.left_trigger) {
+                robot.intake.runIntake(false,gamepad2.right_trigger);
+            } else {
+                robot.intake.runIntake(true,gamepad2.left_trigger);
+            }
 
             // ---------------- Outtake: Using bWasPressed() style ----------------
             if (gamepad2.dpadLeftWasPressed()) robot.outtake.fireShots(1);

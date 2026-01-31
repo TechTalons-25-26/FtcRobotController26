@@ -1,27 +1,25 @@
 package org.firstinspires.ftc.teamcode.subsystems.intake;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.subsystems.outtake.outtakeLogic;
 
 public class intakeLogic {
-    public DcMotor intakeMotor;
+    public DcMotorEx intakeMotor;
+    private DcMotorEx stageMotor;
+
     public double intakePower = 0;
     public boolean intakeIsRunning = false;
-    public double stagePowerTime = 0;
-    public boolean intakeIsReversed;
     IntakeState intakeState;
-    private DcMotor stageMotor;
+    private outtakeLogic outtake = new outtakeLogic();
 
     public void init(HardwareMap hardwareMap) {
-        intakeMotor = hardwareMap.get(DcMotor.class, "intake");
-        stageMotor = hardwareMap.get(DcMotor.class, "stage");
-
-        //setIntakeState(IntakeState.IDLE);
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
+        stageMotor = hardwareMap.get(DcMotorEx.class, "stage");
 
         intakeMotor.setPower(0);
-        //stageMotor.setPower(0);
+        stageMotor.setPower(0);
 
     }
 
@@ -34,8 +32,8 @@ public class intakeLogic {
 
             case FORWARD:
                 if (intakeIsRunning) {
-                    intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-                    stageMotor.setDirection(DcMotor.Direction.REVERSE);
+                    intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+                    stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
                     intakeMotor.setPower(intakePower);
                     stageMotor.setPower(intakePower);
                 }
@@ -43,15 +41,15 @@ public class intakeLogic {
 
             case REVERSE:
                 if (intakeIsRunning) {
-                    intakeMotor.setDirection(DcMotor.Direction.REVERSE);
-                    stageMotor.setDirection(DcMotor.Direction.REVERSE);
+                    intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
+                    stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
                     intakeMotor.setPower(intakePower);
                     stageMotor.setPower(intakePower);
                 }
 
             case SHOOT:
                 if (intakeIsRunning) {
-                    stageMotor.setDirection(DcMotor.Direction.FORWARD);
+                    stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
                     intakeMotor.setPower(0);
                     stageMotor.setPower(intakePower);
                 }
@@ -59,8 +57,20 @@ public class intakeLogic {
     }
 
     public void runIntake(boolean reversed, double power) {
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-        intakeMotor.setPower(power);
+        if (!outtake.isBusy()) {
+            if (!reversed) {
+                intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+                stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
+
+            }
+            else {
+                intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
+                stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
+
+            }
+            intakeMotor.setPower(power);
+            stageMotor.setPower(power);
+        }
     }
 
     public boolean isBusy() {

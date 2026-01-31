@@ -75,13 +75,17 @@ public class blueTeleOp extends OpMode {
             );
 
             // Intake control
-            double intakePower = gamepad2.right_trigger;
-            if (robot.outtake.outtakeState.equals(outtakeLogic.OuttakeState.IDLE)) {
-                robot.intake.intakeMotor.setPower(intakePower);
+            if (gamepad2.right_trigger > gamepad2.left_trigger) {
+                robot.intake.runIntake(false,gamepad2.right_trigger);
+            } else {
+                robot.intake.runIntake(true,gamepad2.left_trigger);
             }
+
             // ---------------- Outtake: ---------------------------
             if (gamepad2.dpadLeftWasPressed()) robot.outtake.fireShots(1);
             if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(2);
+            if (gamepad2.dpadDownWasPressed()) robot.outtake.fireShots(3);
+
         }
 
         // ---------------- Automated PathFollowing ----------------

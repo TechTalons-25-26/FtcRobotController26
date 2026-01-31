@@ -20,8 +20,8 @@ public class outtakeLogic {
     private double targetRPM = 3000;  // flywheel target RPM
     private double minRPM = 2700;      // minimum RPM to start firing
     private double maxSpinupTime = 2.0;    // max wait for flywheel spinup
-    private double stageShootTime = 0.5;  // stage forward time
-    private double stageResetTime = 0.5;  // stage reverse time
+    private double stageShootTime = 0.25;  // stage forward time
+
     // ---------------- PIDF ----------------
     private double P = 0;
     private double F = 24;
