@@ -5,6 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.util.baseAuto;
+import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.bigAndSmall2Enum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.enums.smallEnum;
 import org.firstinspires.ftc.teamcode.subsystems.path.state.paths.red.smallRedPaths;
 
@@ -43,12 +44,15 @@ public class smallRed extends baseAuto {
                 break;
 
             case OUTTAKE_PRELOAD:
-                if (!follower.isBusy()) {
-                    manualOuttake.run();
-                    while (manualOuttake.outtakeRunning) {}
-                    setPathState(smallEnum.PRELOAD_BOTTOMSTART);
-                    break;
+                if (!shotsTriggered) {
+                    manualOuttake.start();
+                    shotsTriggered = true;
                 }
+
+                if (!manualOuttake.isBusy()) {
+                    setPathState(smallEnum.PRELOAD_BOTTOMSTART);
+                }
+                break;
 
             case PRELOAD_BOTTOMSTART:
                 if (!follower.isBusy()) {
@@ -89,12 +93,15 @@ public class smallRed extends baseAuto {
                 break;
 
             case OUTTAKE_BOTTOM:
-                if (!follower.isBusy()) {
-                    manualOuttake.run();
-                    while (manualOuttake.outtakeRunning) {}
-                    setPathState(smallEnum.SHOOT_MIDDLESTART);
-                    break;
+                if (!shotsTriggered) {
+                    manualOuttake.start();
+                    shotsTriggered = true;
                 }
+
+                if (!manualOuttake.isBusy()) {
+                    setPathState(smallEnum.SHOOT_MIDDLESTART);
+                }
+                break;
 
             case SHOOT_MIDDLESTART:
                 if (!follower.isBusy()) {
@@ -135,12 +142,15 @@ public class smallRed extends baseAuto {
                 break;
 
             case OUTTAKE_MIDDLE:
-                if (!follower.isBusy()) {
-                    manualOuttake.run();
-                    while (manualOuttake.outtakeRunning) {}
-                    setPathState(smallEnum.SHOOT_TOPSTART);
-                    break;
+                if (!shotsTriggered) {
+                    manualOuttake.start();
+                    shotsTriggered = true;
                 }
+
+                if (!manualOuttake.isBusy()) {
+                    setPathState(smallEnum.SHOOT_TOPSTART);
+                }
+                break;
 
             case SHOOT_TOPSTART:
                 if (!follower.isBusy()) {
@@ -181,12 +191,15 @@ public class smallRed extends baseAuto {
                 break;
 
             case OUTTAKE_TOP:
-                if (!follower.isBusy()) {
-                    manualOuttake.run();
-                    while (manualOuttake.outtakeRunning) {}
-                    setPathState(smallEnum.SHOOT_END);
-                    break;
+                if (!shotsTriggered) {
+                    manualOuttake.start();
+                    shotsTriggered = true;
                 }
+
+                if (!manualOuttake.isBusy()) {
+                    setPathState(smallEnum.SHOOT_END);
+                }
+                break;
 
             case SHOOT_END:
                 if (!follower.isBusy()) {

@@ -43,12 +43,15 @@ public class bigRed extends baseAuto {
                 break;
 
             case OUTTAKE_PRELOAD:
-                if (!follower.isBusy()) {
-                    manualOuttake.run();
-                    while (manualOuttake.outtakeRunning) {}
-                    setPathState(bigAndSmall2Enum.SHOOT_TOPSTART);
-                    break;
+                if (!shotsTriggered) {
+                    manualOuttake.start();
+                    shotsTriggered = true;
                 }
+
+                if (!manualOuttake.isBusy()) {
+                    setPathState(bigAndSmall2Enum.SHOOT_TOPSTART);
+                }
+                break;
 
             case SHOOT_TOPSTART:
                 if (!follower.isBusy()) {
@@ -89,12 +92,15 @@ public class bigRed extends baseAuto {
                 break;
 
             case OUTTAKE_TOP:
-                if (!follower.isBusy()) {
-                    manualOuttake.run();
-                    while (manualOuttake.outtakeRunning) {}
-                    setPathState(bigAndSmall2Enum.SHOOT_MIDDLESTART);
-                    break;
+                if (!shotsTriggered) {
+                    manualOuttake.start();
+                    shotsTriggered = true;
                 }
+
+                if (!manualOuttake.isBusy()) {
+                    setPathState(bigAndSmall2Enum.SHOOT_MIDDLESTART);
+                }
+                break;
 
             case SHOOT_MIDDLESTART:
                 if (!follower.isBusy()) {
@@ -135,12 +141,15 @@ public class bigRed extends baseAuto {
                 break;
 
             case OUTTAKE_MIDDLE:
-                if (!follower.isBusy()) {
-                    manualOuttake.run();
-                    while (manualOuttake.outtakeRunning) {}
-                    setPathState(bigAndSmall2Enum.SHOOT_BOTTOMSTART);
-                    break;
+                if (!shotsTriggered) {
+                    manualOuttake.start();
+                    shotsTriggered = true;
                 }
+
+                if (!manualOuttake.isBusy()) {
+                    setPathState(bigAndSmall2Enum.SHOOT_BOTTOMSTART);
+                }
+                break;
 
             case SHOOT_BOTTOMSTART:
                 if (!follower.isBusy()) {
@@ -181,12 +190,15 @@ public class bigRed extends baseAuto {
                 break;
 
             case OUTTAKE_BOTTOM:
-                if (!follower.isBusy()) {
-                    manualOuttake.run();
-                    while (manualOuttake.outtakeRunning) {}
-                    setPathState(bigAndSmall2Enum.SHOOT_END);
-                    break;
+                if (!shotsTriggered) {
+                    manualOuttake.start();
+                    shotsTriggered = true;
                 }
+
+                if (!manualOuttake.isBusy()) {
+                    setPathState(bigAndSmall2Enum.SHOOT_END);
+                }
+                break;
 
             case SHOOT_END:
                 if (!follower.isBusy()) {

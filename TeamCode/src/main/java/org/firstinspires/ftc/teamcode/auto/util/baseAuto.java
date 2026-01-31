@@ -18,10 +18,10 @@ public abstract class baseAuto extends OpMode {
     protected TelemetryManager panelsTelemetry;
     protected Follower follower;
     protected Timer pathTimer, opModeTimer;
-    protected outtakeLogic outtake = new outtakeLogic();
+    //protected outtakeLogic outtake = new outtakeLogic();
 
-    protected manualOuttake manualOuttake = new manualOuttake();
-    protected intakeLogic intake = new intakeLogic();
+    protected manualOuttake manualOuttake;
+    protected intakeLogic intake;
     protected boolean shotsTriggered = false;
 
     // Each auto will define its own PathState enum
@@ -48,6 +48,9 @@ public abstract class baseAuto extends OpMode {
 
         follower = Constants.createFollower(hardwareMap);
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+
+        manualOuttake = new manualOuttake();
+        intake = new intakeLogic();
 
         manualOuttake.init(hardwareMap);
         intake.init(hardwareMap);
