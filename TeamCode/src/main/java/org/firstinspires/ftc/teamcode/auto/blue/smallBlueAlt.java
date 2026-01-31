@@ -43,14 +43,9 @@ public class smallBlueAlt extends baseAuto {
 
             case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(2);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(altEnum.SHOOT_END);
-                    }
+                    outtake.run();
+                    break;
                 }
-                break;
 
             case SHOOT_END:
                 if (!follower.isBusy()) {

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,12 +16,13 @@ public class outtakeLogic {
     private DcMotorEx stageMotor;
     private DcMotorEx intakeMotor;
     private ElapsedTime outtakeTimer = new ElapsedTime();
+    private ElapsedTime manualTimer = new ElapsedTime();
     private int shotsRemaining = 0;
     private double idleRPM = 500;     // flywheel RPM when idle
     private double targetRPM = 3000;  // flywheel target RPM
     private double minRPM = 2700;      // minimum RPM to start firing
-    private double maxSpinupTime = 2.0;    // max wait for flywheel spinup
-    private double stageShootTime = 0.25;  // stage forward time
+    private double maxSpinupTime = 5.0;    // max wait for flywheel spinup
+    private double stageShootTime = 1;  // stage forward time
 
     // ---------------- PIDF ----------------
     private double P = 0;
@@ -31,6 +33,7 @@ public class outtakeLogic {
         stageMotor = hardwareMap.get(DcMotorEx.class, "stage");
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
 
+        outtakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
         outtakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         outtakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
@@ -60,8 +63,10 @@ public class outtakeLogic {
 
                 // Immediately transition if shots are requested
                 if (shotsRemaining > 0) {
+                    intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+                    stageMotor.setDirection(DcMotorEx.Direction.REVERSE);
                     intakeMotor.setPower(1);
-                    stageMotor.setPower(-1);
+                    stageMotor.setPower(1);
                     setVelocityRPM(targetRPM);
                     outtakeTimer.reset();
                     outtakeState = OuttakeState.SPIN_UP;
@@ -70,9 +75,11 @@ public class outtakeLogic {
 
             case SPIN_UP:
                 // Wait for flywheel to reach minRPM or max spinup time
-                if (currentRPM >= minRPM || outtakeTimer.seconds() >= maxSpinupTime) {
+                if (/*currentRPM >= minRPM ||*/ outtakeTimer.seconds() >= maxSpinupTime) {
+                    intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+                    stageMotor.setDirection(DcMotorEx.Direction.FORWARD);
                     intakeMotor.setPower(1);
-                    stageMotor.setPower(1);  // stage forward
+                    stageMotor.setPower(1);
                     outtakeTimer.reset();
                     outtakeState = OuttakeState.LAUNCH;
                 }

@@ -44,14 +44,9 @@ public class bigRed extends baseAuto {
 
             case OUTTAKE_PRELOAD:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(2);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(bigAndSmall2Enum.SHOOT_TOPSTART);
-                    }
+                    outtake.run();
+                    break;
                 }
-                break;
 
             case SHOOT_TOPSTART:
                 if (!follower.isBusy()) {
@@ -93,14 +88,9 @@ public class bigRed extends baseAuto {
 
             case OUTTAKE_TOP:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(2);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(bigAndSmall2Enum.SHOOT_MIDDLESTART);
-                    }
+                    outtake.run();
+                    break;
                 }
-                break;
 
             case SHOOT_MIDDLESTART:
                 if (!follower.isBusy()) {
@@ -142,14 +132,9 @@ public class bigRed extends baseAuto {
 
             case OUTTAKE_MIDDLE:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(2);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(bigAndSmall2Enum.SHOOT_BOTTOMSTART);
-                    }
+                    outtake.run();
+                    break;
                 }
-                break;
 
             case SHOOT_BOTTOMSTART:
                 if (!follower.isBusy()) {
@@ -191,14 +176,9 @@ public class bigRed extends baseAuto {
 
             case OUTTAKE_BOTTOM:
                 if (!follower.isBusy()) {
-                    if (!shotsTriggered) {
-                        outtake.fireShots(2);
-                        shotsTriggered = true;
-                    } else if (shotsTriggered && !outtake.isBusy()) {
-                        setPathState(bigAndSmall2Enum.SHOOT_END);
-                    }
+                    outtake.run();
+                    break;
                 }
-                break;
 
             case SHOOT_END:
                 if (!follower.isBusy()) {
