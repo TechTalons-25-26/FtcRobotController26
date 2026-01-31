@@ -32,7 +32,7 @@ public class outtakeTuner extends OpMode {
 
         // Automatic starting F estimate
         double targetTicksPerSec = targetRPM * TICKS_PER_REV / 60.0;
-        F = 32767 / targetTicksPerSec;
+        F = 20000 / targetTicksPerSec;
 
         applyPIDF();
         setVelocityRPM(targetRPM);
