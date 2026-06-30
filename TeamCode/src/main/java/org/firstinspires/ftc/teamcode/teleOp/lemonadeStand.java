@@ -10,7 +10,7 @@ public class lemonadeStand extends LinearOpMode {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     //private DcMotor leftWheel, rightWheel;
     private DcMotor intake;
-    //INTAKE MOTOR 2 IS FOR THE FIRST STAGE OKAY
+    //INTAKE MOTOR IS AT PORT TWO FOR CONFIG
 
     @Override
     public void runOpMode() {
