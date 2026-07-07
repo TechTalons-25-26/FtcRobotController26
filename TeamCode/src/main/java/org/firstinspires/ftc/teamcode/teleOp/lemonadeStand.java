@@ -131,6 +131,7 @@ public class lemonadeStand extends LinearOpMode {
 
         }  else if (rb) {
             // INTAKE OUT (reverse)
+            // Why not left trigger? To control speed? And make it uniform?
             maxIntakePower1 = -maxIntakePower1; // constant speed out
 
             telemetry.addData("Mode", "INTAKE OUT (RB)");
