@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Lemonade Stand Code (Wheels & Intake)")
-public class lemonadeStand extends LinearOpMode {
+public class lemonadeStand extends LinearOpMode
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     //private DcMotor leftWheel, rightWheel;
