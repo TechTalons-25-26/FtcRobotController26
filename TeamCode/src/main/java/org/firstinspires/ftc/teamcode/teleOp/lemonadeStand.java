@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(name = "Lemonade Stand Code (Wheels & Intake)")
 public class lemonadeStand extends LinearOpMode{
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
-    //private DcMotor leftWheel, rightWheel;
     private DcMotor intake;
+
     //INTAKE MOTOR IS AT PORT TWO FOR CONFIG
 
     @Override
@@ -18,11 +21,13 @@ public class lemonadeStand extends LinearOpMode{
 
         // Hardware mapping
         intake = hardwareMap.get(DcMotor.class, "intake");
+
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
+        IMU imu = hardwareMap.get(IMU.class, "imu");
 
         // Motor directions
         //rightWheel.setDirection(DcMotor.Direction.REVERSE);
@@ -38,11 +43,15 @@ public class lemonadeStand extends LinearOpMode{
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
-
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //stage.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        // IMU stuff for field centric
+
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+
+        imu.initialize(parameters);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -52,65 +61,40 @@ public class lemonadeStand extends LinearOpMode{
 
 
         while (opModeIsActive()) {
-            mecanumWheels();
+
+            double y = -gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x * 1.1;
+            double rx = gamepad1.right_stick_x;
+
+            if (gamepad1.options) {
+                imu.resetYaw();
+            }
+
+            double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+            double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+            double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+
+            rotX = rotX * 1.1;  // Counteract imperfect strafing
+
+            double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+            double frontLeftPower = (rotY + rotX + rx) / denominator;
+            double backLeftPower = (rotY - rotX + rx) / denominator;
+            double frontRightPower = (rotY - rotX - rx) / denominator;
+            double backRightPower = (rotY + rotX - rx) / denominator;
+
+            frontLeft.setPower(frontLeftPower);
+            frontRight.setPower(frontRightPower);
+            backLeft.setPower(backLeftPower);
+            backRight.setPower(backRightPower);
+
+
+
             handleIntake();
-
-
-
-
 
             telemetry.update();
         }
     }
-
-
-    // Mecanum drive
-    public void mecanumWheels() {
-        double y = -gamepad1.left_stick_y;
-        double x = gamepad1.left_stick_x * 1.1;
-        double rx = gamepad1.right_stick_x;
-
-
-        double frontLeftPower = y + x + rx;
-        double frontRightPower = y - x - rx;
-        double backLeftPower = y - x + rx;
-        double backRightPower = y + x - rx;
-
-
-        double maxPower = Math.max(Math.abs(frontLeftPower),
-                Math.max(Math.abs(frontRightPower),
-                        Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
-
-
-        if (maxPower > 1.0) {
-            frontLeftPower /= maxPower;
-            frontRightPower /= maxPower;
-            backLeftPower /= maxPower;
-            backRightPower /= maxPower;
-        }
-
-
-        // Clip to [-1, 1]
-        frontLeftPower = Math.max(-1, Math.min(1, frontLeftPower));
-        frontRightPower = Math.max(-1, Math.min(1, frontRightPower));
-        backLeftPower = Math.max(-1, Math.min(1, backLeftPower));
-        backRightPower = Math.max(-1, Math.min(1, backRightPower));
-
-
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
-        frontLeft.setPower(frontLeftPower);
-        frontRight.setPower(frontRightPower);
-        backLeft.setPower(backLeftPower);
-        backRight.setPower(backRightPower);
-    }
-
-
-
 
     // Intake
     public void handleIntake() {
@@ -147,8 +131,5 @@ public class lemonadeStand extends LinearOpMode{
 
         telemetry.addData("Intake power 1", maxIntakePower1);
     }
-
-
-
 
 }
