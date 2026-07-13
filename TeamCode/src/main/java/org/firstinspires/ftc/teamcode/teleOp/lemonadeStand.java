@@ -59,7 +59,6 @@ public class lemonadeStand extends LinearOpMode{
 
         waitForStart();
 
-
         while (opModeIsActive()) {
 
             double y = -gamepad1.left_stick_y;
